@@ -9,36 +9,51 @@
   <div id="app" name="app">
     <el-container>
       <!-- 顶部导航栏 -->
-      <div class="topbar">
+      <div class="topbar" v-show="$route.meta.showMenu!==false">
         <div class="nav">
           <ul>
             <li v-if="!this.$store.getters.getUser">
-              <el-button type="text" @click="login">登录</el-button>
-              <span class="sep">|</span>
-              <el-button type="text" @click="register">注册</el-button>
+              <div style="margin-top:5px;font-size:16px">
+                <router-link to="/login">登录</router-link>
+              </div>
             </li>
-            <li v-else>
-              欢迎
-              <el-popover placement="top" width="180" v-model="visible">
-                <p>确定退出登录吗？</p>
-                <div style="text-align: right; margin: 10px 0 0">
-                  <el-button size="mini" type="text" @click="visible = false">取消</el-button>
-                  <el-button type="primary" size="mini" @click="logout">确定</el-button>
-                </div>
-                <el-button type="text" slot="reference">{{this.$store.getters.getUser.nickname}}</el-button>
-              </el-popover>
+            <li v-else class="header-user-con">
+              <!-- 用户头像 -->
+              <div class="user-avator">
+                <img src="../public/img/admin.jpeg" />
+              </div>
+              <!-- 用户名下拉菜单 -->
+              <div class="user-name">
+              <el-dropdown  trigger="click" @command="handleCommand">
+                <span class="el-dropdown-link">
+                  {{this.$store.getters.getUser.nickname}}
+                  <i class="el-icon-caret-bottom"></i>
+                </span>
+                <el-dropdown-menu slot="dropdown">
+                  <a href="https://github.com/congz666/cmall-vue" target="_blank">
+                    <el-dropdown-item>项目仓库</el-dropdown-item>
+                  </a>
+                  <a @click="logout"> 
+                  <el-dropdown-item >退出登录</el-dropdown-item>
+                  </a>
+                </el-dropdown-menu>
+              </el-dropdown>
+              </div>
             </li>
-            <li>
+            <li class="font">
               <router-link to="/order">我的订单</router-link>
             </li>
-            <li>
+            <li class="font">
               <router-link to="/collect">我的收藏</router-link>
             </li>
+            
             <li :class="getNum > 0 ? 'shopCart-full' : 'shopCart'">
+              <div style="margin-top:5px">
               <router-link to="/shoppingCart">
                 <i class="el-icon-shopping-cart-full"></i> 购物车
-                <span class="num">({{getNum}})</span>
+                <span>({{getNum}})</span>
               </router-link>
+              </div>
             </li>
           </ul>
         </div>
@@ -46,17 +61,18 @@
       <!-- 顶部导航栏END -->
 
       <!-- 顶栏容器 -->
-      <el-header>
+      <el-header v-show="$route.meta.showMenu!==false">
         <el-menu
           :default-active="activeIndex"
           class="el-menu-demo"
           mode="horizontal"
           active-text-color="#409eff"
+          background-color="#f2f2f2"
           router
         >
           <div class="logo">
             <router-link to="/">
-              <img src="./assets/imgs/logo.png" alt />
+              <img src="./assets/imgs/clogo.png" alt />
             </router-link>
           </div>
           <el-menu-item index="/">首页</el-menu-item>
@@ -94,7 +110,7 @@
             </div>
           </div>
           <div class="github">
-            <a href="https://github.com/hai-27/vue-store" target="_blank">
+            <a href="https://github.com/congz666/cmall-vue" target="_blank">
               <div class="github-but"></div>
             </a>
           </div>
@@ -128,8 +144,10 @@ export default {
     return {
       activeIndex: "", // 头部导航栏选中的标签
       search: "", // 搜索条件
-      visible: false // 是否退出登录
     };
+  },
+  beforeCreate () {
+    document.querySelector('body').setAttribute('style', 'background:#f2f2f2')
   },
   created() {
     // 获取浏览器localStorage，判断用户是否已经登录
@@ -137,18 +155,6 @@ export default {
       // 如果已经登录，设置vuex登录状态
       this.setUser(JSON.parse(localStorage.getItem("user")));
     }
-    /* window.setTimeout(() => {
-      this.$message({
-        duration: 0,
-        showClose: true,
-        message: `
-        <p>如果觉得这个项目还不错，</p>
-        <p style="padding:10px 0">您可以给项目源代码仓库点Star支持一下，谢谢！</p>
-        <p><a href="https://github.com/hai-27/vue-store" target="_blank">Github传送门</a></p>`,
-        dangerouslyUseHTMLString: true,
-        type: "success"
-      });
-    }, 1000 * 60); */
   },
   computed: {
     ...mapGetters(["getUser", "getNum"])
@@ -189,7 +195,6 @@ export default {
     },
     // 退出登录
     logout() {
-      this.visible = false;
       // 清空本地登录信息
       localStorage.setItem("user", "");
       // 清空vuex登录信息
@@ -222,6 +227,28 @@ export default {
   border: 0;
   list-style: none;
 }
+
+.header-user-con {
+    display: flex;
+    height: 50px;
+    align-items: center;
+}
+.user-name {
+    margin-left: 10px;   
+}
+.user-avator img {
+    display: block;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+}
+.el-dropdown-link {
+    color: #fff;
+    cursor: pointer;
+}
+.el-dropdown-menu__item {
+    text-align: center;
+}
 #app .el-header {
   padding: 0;
 }
@@ -240,8 +267,8 @@ a:hover {
 
 /* 顶部导航栏CSS */
 .topbar {
-  height: 40px;
-  background-color: #3d3d3d;
+  height: 50px;
+  background-color: #303643;
   margin-bottom: 20px;
 }
 .topbar .nav {
@@ -253,18 +280,21 @@ a:hover {
 }
 .topbar .nav li {
   float: left;
-  height: 40px;
+  height: 50px;
   color: #b0b0b0;
-  font-size: 14px;
+  font-size: 16px;
   text-align: center;
   line-height: 40px;
   margin-left: 20px;
 }
-.topbar .nav .sep {
-  color: #b0b0b0;
-  font-size: 12px;
-  margin: 0 5px;
+.topbar .nav li.font{
+  margin-top: 5px;
 }
+
+.topbar .nav li .router-link{
+  margin-top: 5px;
+}
+
 .topbar .nav li .el-button {
   color: #b0b0b0;
 }
@@ -294,6 +324,7 @@ a:hover {
 .topbar .nav .shopCart-full a {
   color: white;
 }
+
 /* 顶部导航栏CSS END */
 
 /* 顶栏容器CSS */
@@ -306,6 +337,9 @@ a:hover {
   width: 189px;
   float: left;
   margin-right: 100px;
+}
+.el-header .logo img{
+  height:60px;
 }
 .el-header .so {
   margin-top: 10px;

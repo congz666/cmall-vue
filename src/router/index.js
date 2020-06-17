@@ -15,22 +15,31 @@ const routes = [
   {
     path: '/',
     name: 'Home',
-    component: () => import('../views/Home.vue')
+    component: () => import('../views/Home.vue'),
+    meta:{
+      showMenu:true
+    }
   },
   {
     path: '/login',
     name: 'Login',
-    component: () => import('../views/Login.vue')
+    component: () => import('../views/Login.vue'),
+    meta:{
+      showMenu:false
+    }
   },
   {
     path: '/register',
     name: 'Register',
-    component: () => import('../views/Register.vue')
+    component: () => import('../views/Register.vue'),
+    meta:{
+      showMenu:false
+    }
   },
   {
     path: '/error',
     name: 'Error',
-    component: () => import('../components/Error.vue')
+    component: () => import('../components/Error.vue'),
   },
   {
     path: '/goods',

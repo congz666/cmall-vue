@@ -1,6 +1,6 @@
 <template>
 	<div>
-		<el-button type="primary" plain @click="btnClick" >{{message}}</el-button>
+		<el-button style="width:100%;margin-bottom:10px" plain @click="btnClick" >{{message}}</el-button>
 		<!-- isgt是一个布尔值，当前页面点击按钮，修改它，子组件监听数据变化，加载滑动模块 -->
 		<Geet :isGeet="isgt" @geetPath="GeetPath" @clickChange="GeetChange"></Geet>
 	</div>

@@ -222,7 +222,7 @@ export default {
 
 <style scoped>
 .goods {
-  background-color: #f5f5f5;
+  background-color: #f2f2f2;
 }
 /* 面包屑CSS */
 .el-tabs--card .el-tabs__header {
@@ -230,7 +230,7 @@ export default {
 }
 .goods .breadcrumb {
   height: 50px;
-  background-color: white;
+  background-color: #f2f2f2;
 }
 .goods .breadcrumb .el-breadcrumb {
   width: 1225px;
@@ -242,7 +242,7 @@ export default {
 
 /* 分类标签CSS */
 .goods .nav {
-  background-color: white;
+  background-color: #f2f2f2;
 }
 .goods .nav .product-nav {
   width: 1225px;

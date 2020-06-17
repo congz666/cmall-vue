@@ -56,11 +56,11 @@ export default {
 </script>
 <style>
 .collect {
-  background-color: #f5f5f5;
+  background-color: #f2f2f2;
 }
 .collect .collect-header {
   height: 64px;
-  background-color: #fff;
+  background-color: #f2f2f2;
   border-bottom: 2px solid #ff6700;
 }
 .collect .collect-header .collect-title {

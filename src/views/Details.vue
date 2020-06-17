@@ -233,7 +233,7 @@ export default {
   height: 64px;
   margin-top: -20px;
   z-index: 4;
-  background: #fff;
+  background: #f2f2f2ff;
   border-bottom: 1px solid #e0e0e0;
   -webkit-box-shadow: 0px 5px 5px rgba(0, 0, 0, 0.07);
   box-shadow: 0px 5px 5px rgba(0, 0, 0, 0.07);

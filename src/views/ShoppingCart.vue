@@ -206,14 +206,14 @@ export default {
 </script>
 <style scoped>
 .shoppingCart {
-  background-color: #f5f5f5;
+  background-color: #f2f2f2;
   padding-bottom: 20px;
 }
 /* 购物车头部CSS */
 .shoppingCart .cart-header {
   height: 64px;
   border-bottom: 2px solid #ff6700;
-  background-color: #fff;
+  background-color: #f2f2f2;
   margin-bottom: 20px;
 }
 .shoppingCart .cart-header .cart-header-content {

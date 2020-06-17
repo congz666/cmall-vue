@@ -113,14 +113,14 @@ export default {
 </script>
 <style scoped>
 .order {
-  background-color: #f5f5f5;
+  background-color: #f2f2f2;
   padding-bottom: 20px;
 }
 /* 我的订单头部CSS */
 .order .order-header {
   height: 64px;
   border-bottom: 2px solid #ff6700;
-  background-color: #fff;
+  background-color: #f2f2f2;
   margin-bottom: 20px;
 }
 .order .order-header .order-header-content {

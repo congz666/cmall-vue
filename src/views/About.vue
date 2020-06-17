@@ -28,11 +28,11 @@ export default {
 </script>
 <style scoped>
 .about {
-  background-color: #f5f5f5;
+  background-color: #f2f2f2;
 }
 .about .about-header {
   height: 64px;
-  background-color: #fff;
+  background-color: #f2f2f2;
   border-bottom: 2px solid #ff6700;
 }
 .about .about-header .about-title {

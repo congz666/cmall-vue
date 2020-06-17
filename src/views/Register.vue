@@ -1,34 +1,32 @@
 <template>
 	<div class="register">
-		<div class="main-contianer">
-      <el-card class="box-card">
-			<div class="mycard">
-				<div class="title">注册：</div>
-				<el-form ref="form" :model="form" label-width="80px">
-					<el-form-item label="用户昵称" :rules="[{ required: true, message: '账号不能为空'},]">
-						<el-input v-model="form.nickname"></el-input>
-					</el-form-item>
-					<el-form-item label="账号" :rules="[{ required: true, message: '账号不能为空'},]">
-						<el-input v-model="form.user_name"></el-input>
-					</el-form-item>
-
-					<el-form-item label="密码" :rules="[{ required: true, message: '密码不能为空'},]">
-						<el-input type="password" v-model="form.password"></el-input>
-					</el-form-item>
-					<el-form-item label="确认密码" :rules="[{ required: true, message: '密码不能为空'},]">
-						<el-input type="password" v-model="form.password_confirm"></el-input>
-					</el-form-item>
-          <el-form-item>
-						<GtPage @ok="ok"></GtPage>
-					</el-form-item>
-					<el-form-item>
-						<el-button type="primary" @click="onSubmit">注册</el-button>
-					</el-form-item>
-				</el-form>
-			</div>
-      </el-card>
-		</div>
-	</div>
+    <div>
+      <el-card class="box-card" shadow="hover">
+        <div slot="header" class="clearfix">
+          <span>注册</span>
+        </div>
+        <div class="item">
+          <el-form ref="form" :model="form">
+            <el-form-item>
+              <el-input v-model="form.nickname" placeholder="昵称"></el-input>
+            </el-form-item>
+            <el-form-item>
+              <el-input v-model="form.user_name" placeholder="用户名"></el-input>
+            </el-form-item>
+            <el-form-item>
+              <el-input v-model="form.password" placeholder="密码"></el-input>
+            </el-form-item>
+            <el-form-item>
+              <el-input v-model="form.password_confirm" placeholder="确认密码"></el-input>
+            </el-form-item>
+          </el-form>
+					<GtPage @ok="ok"></GtPage>
+          <el-button type="primary" style="width:300px;margin-bottom:10px;" @click="register">注册</el-button>
+          <el-link type="primary" href="/#/login" style="float:right;margin-bottom:20px;">已有账号？直接登录></el-link>
+        </div>
+      </el-card>    
+    </div>
+  </div>
 </template>
 <script>
   import * as userAPI from '@/api/users';
@@ -51,7 +49,7 @@
 			ok(val) {
 				this.okk = val;
 			},
-			onSubmit() {
+			register() {
 				if (this.okk == 1) {
 					userAPI.postUser(this.form).then((res) => {
 						if (res.status > 0) {
@@ -92,18 +90,26 @@
 	};
 </script>
 
-<style>
-	.title {
-		font-family: Microsoft Yahei;
-		font-weight: 500;
-		font-size: 30px;
-		padding: 20px;
-	}
-  .box-card {
-    width: 400px;
-    margin:0 auto;
-    margin-top: 40px;
-    border-radius: 10px;
-    margin-bottom: 251px;
-  }
+<style >
+.text {
+	font-size: 14px;
+}
+
+.item {
+	margin:0 auto;
+	width: 300px;
+}
+
+.clearfix{
+	font-size: 20px;
+}
+
+.box-card {
+	margin:0 auto;
+	text-align: center;
+	width: 400px;
+	margin-top:100px;
+	margin-bottom: 200px;
+	border-radius: 10px;
+}
 </style>

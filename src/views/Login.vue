@@ -1,28 +1,30 @@
 <template>
-	<div class="register">
-		<div class="main-contianer">
-      <el-card class="box-card">
-			<div class="mycard">
-				<div class="title">登录：</div>
-				<el-form ref="form" :model="form" label-width="80px">
-					<el-form-item label="账号" :rules="[{ required: true, message: '账号不能为空'},]">
-						<el-input v-model="form.user_name"></el-input>
-					</el-form-item>
-
-					<el-form-item label="密码" :rules="[{ required: true, message: '密码不能为空'},]">
-						<el-input type="password" v-model="form.password"></el-input>
-					</el-form-item>
-          <el-form-item>
-						<GtPage @ok="ok"></GtPage>
-					</el-form-item>
-					<el-form-item>
-						<el-button type="primary" @click="onSubmit">登录</el-button>
-					</el-form-item>
-				</el-form>
-			</div>
-      </el-card>
-		</div>
-	</div>
+	<div class="login">
+    <div>
+      <el-card class="box-card" shadow="hover">
+				<div>
+					<img src="../assets/imgs/clogo.png" alt />
+				</div>
+        <div  class="clearfix">
+          <span>使用CMall账号 登录网站</span>
+        </div>
+        <div class="item">
+          <el-form ref="form" :model="form">
+            <el-form-item>
+              <el-input v-model="form.user_name" placeholder="用户名"></el-input>
+            </el-form-item>
+            <el-form-item>
+              <el-input type="password" v-model="form.password" placeholder="密码"></el-input>
+            </el-form-item>
+          </el-form>
+					<GtPage @ok="ok"></GtPage>
+          <el-link type="primary" href="/#/register" style="float:right;margin-bottom:20px;">没有账号？请先注册></el-link>
+          <el-button type="primary" style="width:100px;margin-right:90px" @click="login">登录</el-button>
+          <el-button style="width:100px;" @click="goBack">返回</el-button>
+        </div>
+      </el-card>    
+    </div>
+  </div>
 </template>
 <script>
   import { mapActions } from "vuex";
@@ -43,8 +45,11 @@
 			ok(val) {
 				this.okk = val;
       },
-      ...mapActions(["setUser", "setShowLogin"]),
-			onSubmit() {
+			...mapActions(["setUser", "setShowLogin"]),
+			goBack(){
+				this.$router.go(-1);
+			},
+			login() {
 				if (this.okk == 1) {
 					userAPI.postLogin(this.form).then((res) => {
 						if (res.status > 0) {
@@ -87,19 +92,27 @@
 	};
 </script>
 
-<style>
-	.title {
-		font-family: Microsoft Yahei;
-		font-weight: 500;
-		font-size: 30px;
-		padding: 20px;
-	}
+<style scoped>
+.text {
+	font-size: 14px;
+}
 
-  .box-card {
-    width: 400px;
-    margin:0 auto;
-    margin-top: 40px;
-    border-radius: 10px;
-    margin-bottom: 251px;
-  }
+.item {
+	margin:0 auto;
+	width: 300px;
+}
+
+.clearfix{
+	font-size: 20px;
+	margin-bottom: 20px;
+}
+
+.box-card {
+	margin:0 auto;
+	text-align: center;
+	width: 400px;
+	margin-top:100px;
+	margin-bottom: 300px;
+	border-radius: 10px;
+}
 </style>
