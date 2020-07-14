@@ -9,13 +9,43 @@
 <template>
   <div class="shoppingCart">
     <!-- 购物车头部 -->
-    <div class="cart-header">
-      <div class="cart-header-content">
-        <p>
-          <i class="el-icon-shopping-cart-full" style="color:#ff6700; font-weight: 600;"></i>
-          我的购物车
-        </p>
-        <span>温馨提示：产品是否购买成功，以最终下单为准哦，请尽快结算</span>
+    <div class="top-header">
+      <div class="cart-header">
+        <div class="logo">
+          <router-link to="/">
+            <img src="../assets/imgs/clogo.png" alt />
+          </router-link>
+        </div>
+        <div class="cart-header-content">
+          <p>我的购物车</p>
+          <span>温馨提示：产品是否购买成功，以最终下单为准哦，请尽快结算</span>
+        </div>
+        <div class="cart-header-right">
+          <div class="cart-header-select">
+            <el-dropdown>
+              <router-link to class="href">
+                <span style="margin-right:5px">{{this.$store.getters.getUser.nickname}}</span>
+                <i class="el-icon-caret-bottom"></i>
+              </router-link>
+              <el-dropdown-menu slot="dropdown">
+                <router-link to="/center">
+                  <el-dropdown-item class="dropdown-menu">个人中心</el-dropdown-item>
+                </router-link>
+                <router-link to="/">
+                  <el-dropdown-item class="dropdown-menu">评价晒单</el-dropdown-item>
+                </router-link>
+                <router-link to="/favorite">
+                  <el-dropdown-item class="dropdown-menu">我的收藏</el-dropdown-item>
+                </router-link>
+              </el-dropdown-menu>
+            </el-dropdown>
+          </div>
+
+          <div class="cart-header-order">
+            <span>|</span>
+            <router-link to="/order" class="href">我的订单</router-link>
+          </div>
+        </div>
       </div>
     </div>
     <!-- 购物车头部END -->
@@ -73,7 +103,7 @@
                   @click="deleteItem($event,item.id,item.product_id)"
                 >确定</el-button>
               </div>
-              <i class="el-icon-error" slot="reference" style="font-size: 18px;"></i>
+              <i class="el-icon-error" slot="reference" style="font-size: 18px"></i>
             </el-popover>
           </div>
         </li>
@@ -118,124 +148,184 @@
   </div>
 </template>
 <script>
-import { mapActions } from "vuex";
-import { mapGetters } from "vuex";
-import * as cartsAPI from '@/api/carts';
+import { mapActions } from 'vuex'
+import { mapGetters } from 'vuex'
+import * as cartsAPI from '@/api/carts'
 
 export default {
   data() {
-    return {};
+    return {}
   },
   methods: {
-    ...mapActions(["updateShoppingCart", "deleteShoppingCart", "checkAll"]),
+    ...mapActions(['updateShoppingCart', 'deleteShoppingCart', 'checkAll']),
     // 修改商品数量的时候调用该函数
     handleChange(currentValue, key, productID) {
       // 当修改数量时，默认勾选
-      this.updateShoppingCart({ key: key, prop: "check", val: true });
+      this.updateShoppingCart({ key: key, prop: 'check', val: true })
       // 向后端发起更新购物车的数据库信息请求
-      var form ={
+      var form = {
         user_id: this.$store.getters.getUser.id,
         product_id: productID,
         num: currentValue
       }
-      cartsAPI.updateCart(form).then(res =>{
-        if(res.status===0){
-          // 更新vuex状态
-          this.updateShoppingCart({
-            key: key,
-            prop: "num",
-            val: currentValue
-          });
-        }else{
-          this.$notify.error({
-          title: '更新失败',
-          message: res.msg
-          });          
-        }
-      }).catch(err => {
-          return Promise.reject(err);
-        });
+      cartsAPI
+        .updateCart(form)
+        .then(res => {
+          if (res.status === 0) {
+            // 更新vuex状态
+            this.updateShoppingCart({
+              key: key,
+              prop: 'num',
+              val: currentValue
+            })
+          } else {
+            this.$notify.error({
+              title: '更新失败',
+              message: res.msg
+            })
+          }
+        })
+        .catch(err => {
+          return Promise.reject(err)
+        })
     },
     checkChange(val, key) {
       // 更新vuex中购物车商品是否勾选的状态
-      this.updateShoppingCart({ key: key, prop: "check", val: val });
+      this.updateShoppingCart({ key: key, prop: 'check', val: val })
     },
     // 向后端发起删除购物车的数据库信息请求
     deleteItem(e, id, productID) {
-      var form ={
+      var form = {
         user_id: this.$store.getters.getUser.id,
-        product_id: productID        
+        product_id: productID
       }
-      cartsAPI.deleteCart(form).then(res =>{
-        if(res.status===0){
-          // 更新vuex状态
-          this.deleteShoppingCart(productID);
-          this.$notify({
-						title: '删除成功',
-						message: 'success',
-						type: 'success',
-					});   
-        }else{
-          this.$notify.error({
-          title: '删除失败',
-          message: res.msg
-          });             
-        }
-      }).catch(err => {
-          return Promise.reject(err);
-        });
+      cartsAPI
+        .deleteCart(form)
+        .then(res => {
+          if (res.status === 0) {
+            // 更新vuex状态
+            this.deleteShoppingCart(productID)
+            this.$notify({
+              title: '删除成功',
+              message: 'success',
+              type: 'success'
+            })
+          } else {
+            this.$notify.error({
+              title: '删除失败',
+              message: res.msg
+            })
+          }
+        })
+        .catch(err => {
+          return Promise.reject(err)
+        })
     }
   },
   computed: {
     ...mapGetters([
-      "getShoppingCart",
-      "getCheckNum",
-      "getTotalPrice",
-      "getNum"
+      'getShoppingCart',
+      'getCheckNum',
+      'getTotalPrice',
+      'getNum'
     ]),
     isAllCheck: {
       get() {
-        return this.$store.getters.getIsAllCheck;
+        return this.$store.getters.getIsAllCheck
       },
       set(val) {
-        this.checkAll(val);
+        this.checkAll(val)
       }
     }
   }
-};
+}
 </script>
 <style scoped>
 .shoppingCart {
-  background-color: #f2f2f2;
-  padding-bottom: 20px;
+  background-color: #f5f5f5;
+  padding-bottom: 80px;
 }
 /* 购物车头部CSS */
-.shoppingCart .cart-header {
-  height: 64px;
+.shoppingCart .top-header {
+  width: 100%;
+  background-color: #ffffff;
+  margin-bottom: 30px;
   border-bottom: 2px solid #ff6700;
-  background-color: #f2f2f2;
-  margin-bottom: 20px;
 }
-.shoppingCart .cart-header .cart-header-content {
+.shoppingCart .top-header .cart-header {
+  display: flex;
+  height: 100px;
+  background-color: #ffffff;
+  margin-bottom: 20px;
   width: 1225px;
   margin: 0 auto;
+  position: relative;
 }
-.shoppingCart .cart-header p {
+.shoppingCart .top-header .cart-header .logo {
+  height: 60px;
+  width: 100px;
+  margin-top: 22px;
+  margin-right: 20px;
+}
+.shoppingCart .top-header .cart-header .logo img {
+  height: 60px;
+}
+
+.shoppingCart .top-header .cart-header p {
+  margin-top: 23px;
   font-size: 28px;
   line-height: 58px;
   float: left;
   font-weight: normal;
   color: #424242;
 }
-.shoppingCart .cart-header span {
+.shoppingCart .top-header .cart-header .cart-header-content span {
   color: #757575;
   font-size: 12px;
   float: left;
   height: 20px;
   line-height: 20px;
-  margin-top: 30px;
+  margin-top: 48px;
   margin-left: 15px;
 }
+.shoppingCart .top-header .cart-header .cart-header-right {
+  display: flex;
+  position: absolute;
+  right: 0px;
+  float: right;
+}
+
+.shoppingCart .top-header .cart-header .cart-header-select {
+  margin-top: 40px;
+}
+
+.shoppingCart .top-header .cart-header .cart-header-select .href {
+  font-size: 13px;
+  color: #757575;
+}
+.shoppingCart .top-header .cart-header .cart-header-select .href:hover {
+  color: #ff6700;
+}
+.dropdown-menu:hover {
+  color: #ff6700;
+  background-color: #f5f5f5;
+}
+.shoppingCart .top-header .cart-header .cart-header-order {
+  margin-top: 40px;
+}
+.shoppingCart .top-header .cart-header .cart-header-order span {
+  color: #c9c7c7;
+  margin-left: 20px;
+  margin-right: 20px;
+}
+.shoppingCart .top-header .cart-header .cart-header-order .href {
+  font-size: 13px;
+  color: #757575;
+}
+.shoppingCart .top-header .cart-header .cart-header-order .href:hover {
+  color: #ff6700;
+}
+
 /* 购物车头部CSS END */
 
 /* 购物车主要内容区CSS */
@@ -252,9 +342,11 @@ export default {
 }
 /* 购物车表头及CSS */
 .shoppingCart .content ul .header {
-  height: 85px;
+  height: 60px;
   padding-right: 26px;
   color: #424242;
+  display: flex;
+  align-items: center;
 }
 .shoppingCart .content ul .product-list {
   height: 85px;

@@ -45,100 +45,102 @@
       <div class="pagination">
         <el-pagination
           background
-          layout="prev, pager, next"
+          @current-change="handleCurrentChange"
           :page-size="pageSize"
+          layout="total, prev, pager, next, jumper"
           :total="total"
-          @current-change="currentChange"
         ></el-pagination>
-      </div> 
+      </div>
       <!-- 分页END -->
     </div>
     <!-- 主要内容区END -->
   </div>
 </template>
 <script>
-import * as productAPI from '@/api/products';
-import * as categoryAPI from '@/api/categories';
-import axios from 'axios';
+import * as productAPI from '@/api/products'
+import * as categoryAPI from '@/api/categories'
+import axios from 'axios'
 
 export default {
   data() {
     return {
-      categoryList: "", //分类列表
+      categoryList: '', //分类列表
       categoryID: [], // 分类id
-      product: "", // 商品列表
-      productList: "",
+      product: '', // 商品列表
+      productList: '',
       total: 0, // 商品总量
       pageSize: 15, // 每页显示的商品数量
       currentPage: 1, //当前页码
-      activeName: "-1", // 分类列表当前选中的id
-      search: "" // 搜索条件
-    };
+      activeName: '-1', // 分类列表当前选中的id
+      search: '', // 搜索条件
+      start: 0,
+      limit: 15
+    }
   },
   created() {
     // 获取分类列表
-    this.getCategory();
+    this.getCategory()
   },
   activated() {
-    this.activeName = "-1"; // 初始化分类列表当前选中的id为-1
-    this.total = 0; // 初始化商品总量为0
-    this.currentPage = 1; //初始化当前页码为1
+    this.activeName = '-1' // 初始化分类列表当前选中的id为-1
+    this.total = 0 // 初始化商品总量为0
+    this.currentPage = 1 //初始化当前页码为1
     // 如果路由没有传递参数，默认为显示全部商品
     if (Object.keys(this.$route.query).length == 0) {
-      this.categoryID = [];
-      this.activeName = "0";
-      return;
+      this.categoryID = []
+      this.activeName = '0'
+      return
     }
     // 如果路由传递了categoryID，则显示对应的分类商品
     if (this.$route.query.categoryID != undefined) {
-      this.categoryID = this.$route.query.categoryID;
+      this.categoryID = this.$route.query.categoryID
       if (this.categoryID.length == 1) {
-        this.activeName = "" + this.categoryID[0];
+        this.activeName = '' + this.categoryID[0]
       }
-      return;
+      return
     }
     // 如果路由传递了search，则为搜索，显示对应的分类商品
     if (this.$route.query.search != undefined) {
-      this.search = this.$route.query.search;
+      this.search = this.$route.query.search
     }
   },
   watch: {
     // 监听点击了哪个分类标签，通过修改分类id，响应相应的商品
     activeName: function(val) {
       if (val == 0) {
-        this.categoryID = [];
+        this.categoryID = []
       }
       if (val > 0) {
-        this.categoryID = [Number(val)];
+        this.categoryID = [Number(val)]
       }
       // 初始化商品总量和当前页码
-      this.total = 0;
-      this.currentPage = 1;
+      this.total = 0
+      this.currentPage = 1
       // 更新地址栏链接，方便刷新页面可以回到原来的页面
       this.$router.push({
-        path: "/goods",
+        path: '/goods',
         query: { categoryID: this.categoryID }
-      });
+      })
     },
     // 监听搜索条件，响应相应的商品
     search: function(val) {
-      if (val != "") {
-        this.getProductBySearch(val);
+      if (val != '') {
+        this.getProductBySearch(val)
       }
     },
     // 监听分类id，响应相应的商品
     categoryID: function() {
-      this.getData();
-      this.search = "";
+      this.getData()
+      this.search = ''
     },
     // 监听路由变化，更新路由传递了搜索条件
     $route: function(val) {
-      if (val.path == "/goods") {
+      if (val.path == '/goods') {
         if (val.query.search != undefined) {
-          this.activeName = "-1";
-          this.currentPage = 1;
-          this.total = 0;
-          this.search = val.query.search;
+          this.activeName = '-1'
+          this.currentPage = 1
+          this.total = 0
+          this.search = val.query.search
         }
       }
     }
@@ -147,77 +149,86 @@ export default {
     // 返回顶部
     backtop() {
       const timer = setInterval(function() {
-        const top = document.documentElement.scrollTop || document.body.scrollTop;
-        const speed = Math.floor(-top / 5);
+        const top =
+          document.documentElement.scrollTop || document.body.scrollTop
+        const speed = Math.floor(-top / 5)
         document.documentElement.scrollTop = document.body.scrollTop =
-          top + speed;
+          top + speed
 
         if (top === 0) {
-          clearInterval(timer);
+          clearInterval(timer)
         }
-      }, 20);
+      }, 20)
     },
-    // 页码变化调用currentChange方法
-    currentChange(currentPage) {
-      this.currentPage = currentPage;
-      if (this.search != "") {
-        this.getProductBySearch();
-      } else {
-        this.getData();
-      }
-      this.backtop();
+    handleCurrentChange(val) {
+      this.start = this.limit * (val - 1) // val 页面
+      this.getData()
     },
     // 向后端请求分类列表数据
     getCategory() {
-      categoryAPI.listCategories().then(res => {
-         if(res.status===0){
-          const val = {
-            category_id: 0,
-            category_name: "全部"
-          };
-          const cate = res.data;
-          cate.unshift(val);
-          this.categoryList = cate;
-         }else{
-          this.$notify.error({
-					title: '分类获取失败',
-					message: res.msg
-          });
-         }
-      }).catch(err => {
-          return Promise.reject(err);
-        });  
+      categoryAPI
+        .listCategories()
+        .then(res => {
+          if (res.status === 0) {
+            const val = {
+              category_id: 0,
+              category_name: '全部'
+            }
+            const cate = res.data
+            cate.unshift(val)
+            this.categoryList = cate
+          } else {
+            this.$notify.error({
+              title: '分类获取失败',
+              message: res.msg
+            })
+          }
+        })
+        .catch(err => {
+          return Promise.reject(err)
+        })
     },
     // 向后端请求全部商品或分类商品数据
     getData() {
       // 如果分类列表为空则请求全部商品数据，否则请求分类商品数据
-      if(this.categoryID.length===0){
-        productAPI.listProducts().then(res =>{
-          this.product = res.data;
-        }).catch(err => {
-          return Promise.reject(err);
-          });
-      }else{
-        categoryAPI.showCategory(this.categoryID).then(res =>{
-          this.product = res.data;
-        }).catch(err => {
-          return Promise.reject(err);
-          });
+      if (this.categoryID.length === 0) {
+        productAPI
+          .listProducts(this.start, this.limit)
+          .then(res => {
+            this.product = res.data.items
+            this.total = res.data.total
+          })
+          .catch(err => {
+            return Promise.reject(err)
+          })
+      } else {
+        categoryAPI
+          .showCategory(this.categoryID, this.start, this.limit)
+          .then(res => {
+            this.product = res.data.items
+            this.total = res.data.total
+          })
+          .catch(err => {
+            return Promise.reject(err)
+          })
       }
     },
     // 通过搜索条件向后端请求商品数据
     getProductBySearch() {
-      var form ={
-        search:this.search
+      var form = {
+        search: this.search
       }
-      productAPI.searchProducts(form).then(res =>{
-        this.product=res.data;
-      }).catch(err => {
-          return Promise.reject(err);
-        });
+      productAPI
+        .searchProducts(form)
+        .then(res => {
+          this.product = res.data
+        })
+        .catch(err => {
+          return Promise.reject(err)
+        })
     }
   }
-};
+}
 </script>
 
 <style scoped>

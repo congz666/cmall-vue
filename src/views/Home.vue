@@ -11,7 +11,7 @@
     <div class="block">
       <el-carousel height="460px">
         <el-carousel-item v-for="item in carousels" :key="item.id">
-          <img style="height:460px;" :src=" item.img_path"  />
+          <img style="height:460px;" :src=" item.img_path" />
         </el-carousel-item>
       </el-carousel>
     </div>
@@ -51,10 +51,14 @@
             <div class="promo-list">
               <ul>
                 <li>
-                  <img :src="'http://47.115.85.237:3000/public/imgs/appliance/appliance-promo1.png'" />
+                  <img
+                    :src="'http://47.115.85.237:3000/public/imgs/appliance/appliance-promo1.png'"
+                  />
                 </li>
                 <li>
-                  <img :src="'http://47.115.85.237:3000/public/imgs/appliance/appliance-promo2.png'" />
+                  <img
+                    :src="'http://47.115.85.237:3000/public/imgs/appliance/appliance-promo2.png'"
+                  />
                 </li>
               </ul>
             </div>
@@ -81,10 +85,16 @@
             <div class="promo-list">
               <ul>
                 <li>
-                  <img :src="'http://47.115.85.237:3000/public/imgs/accessory/accessory-promo1.png'" alt />
+                  <img
+                    :src="'http://47.115.85.237:3000/public/imgs/accessory/accessory-promo1.png'"
+                    alt
+                  />
                 </li>
                 <li>
-                  <img :src="'http://47.115.85.237:3000/public/imgs/accessory/accessory-promo2.png'" alt />
+                  <img
+                    :src="'http://47.115.85.237:3000/public/imgs/accessory/accessory-promo2.png'"
+                    alt
+                  />
                 </li>
               </ul>
             </div>
@@ -99,118 +109,120 @@
   </div>
 </template>
 <script>
-import * as carouselsAPI from '@/api/carousels/';
-import * as productsAPI from '@/api/products/';
+import * as carouselsAPI from '@/api/carousels/'
+import * as productsAPI from '@/api/products/'
 
 export default {
   data() {
     return {
-      carousels: "", // 轮播图数据
-      phonesList: "", // 手机商品列表
-      televisionsList: "", // 小米电视商品列表
-      applianceList: "", // 家电商品列表
-      applianceHotList: "", //热门家电商品列表
-      accessoryList: "", //配件商品列表
-      accessoryHotList: "", //热门配件商品列表
-      phoneShellsList: "", // 保护套商品列表
-      chargersList: "", //充电器商品列表
+      carousels: '', // 轮播图数据
+      phonesList: '', // 手机商品列表
+      televisionsList: '', // 小米电视商品列表
+      applianceList: '', // 家电商品列表
+      applianceHotList: '', //热门家电商品列表
+      accessoryList: '', //配件商品列表
+      accessoryHotList: '', //热门配件商品列表
+      phoneShellsList: '', // 保护套商品列表
+      chargersList: '', //充电器商品列表
       applianceActive: 1, // 家电当前选中的商品分类
-      accessoryActive: 1 // 配件当前选中的商品分类
-    };
+      accessoryActive: 1, // 配件当前选中的商品分类
+      start: 0,
+      limit: 7
+    }
   },
   watch: {
     // 家电当前选中的商品分类，响应不同的商品数据
     applianceActive: function(val) {
       // 页面初始化的时候把applianceHotList(热门家电商品列表)直接赋值给applianceList(家电商品列表)
       // 所以在切换商品列表时判断applianceHotList是否为空,为空则是第一次切换,把applianceList赋值给applianceHotList
-      if (this.applianceHotList == "") {
-        this.applianceHotList = this.applianceList;
+      if (this.applianceHotList == '') {
+        this.applianceHotList = this.applianceList
       }
       if (val == 1) {
         // 1为热门商品
-        this.applianceList = this.applianceHotList;
-        return;
+        this.applianceList = this.applianceHotList
+        return
       }
       if (val == 2) {
         // 2为电视商品
-        this.applianceList = this.televisionsList;
-        return;
+        this.applianceList = this.televisionsList
+        return
       }
     },
     accessoryActive: function(val) {
       // 页面初始化的时候把accessoryHotList(热门配件商品列表)直接赋值给accessoryList(配件商品列表)
       // 所以在切换商品列表时判断accessoryHotList是否为空,为空则是第一次切换,把accessoryList赋值给accessoryHotList
-      if (this.accessoryHotList == "") {
-        this.accessoryHotList = this.accessoryList;
+      if (this.accessoryHotList == '') {
+        this.accessoryHotList = this.accessoryList
       }
       if (val == 1) {
         // 1为热门商品
-        this.accessoryList = this.accessoryHotList;
-        return;
+        this.accessoryList = this.accessoryHotList
+        return
       }
       if (val == 2) {
         // 2为保护套商品
-        this.accessoryList = this.phoneShellsList;
-        return;
+        this.accessoryList = this.phoneShellsList
+        return
       }
       if (val == 3) {
         //3 为充电器商品
-        this.accessoryList = this.chargersList;
-        return;
+        this.accessoryList = this.chargersList
+        return
       }
     }
   },
   activated() {
     // 获取轮播图数据
-    this.load();
+    this.load()
     // 获取各类商品数据
     //this.getPromo("保护套", "protectingShellList");
   },
   methods: {
     load() {
-      carouselsAPI.listCarousels().then((res) => {
-        this.carousels = res.data;
-      });
+      carouselsAPI.listCarousels().then(res => {
+        this.carousels = res.data
+      })
       //获取手机列表
-      productsAPI.listCategories(1).then((res) => {
-        this.phonesList = res.data;
-      });
+      productsAPI.listCategories(1, this.start, this.limit).then(res => {
+        this.phonesList = res.data.items
+      })
       //获取电视列表
-      productsAPI.listCategories(2).then((res) => {
-        this.televisionsList = res.data;
-      });
-      productsAPI.listCategories(5).then((res) => {
-        this.phoneShellsList = res.data;
-      });
-      productsAPI.listCategories(7).then((res) => {
-        this.chargersList = res.data;
-      });
+      productsAPI.listCategories(2, this.start, this.limit).then(res => {
+        this.televisionsList = res.data.items
+      })
+      productsAPI.listCategories(5, this.start, this.limit).then(res => {
+        this.phoneShellsList = res.data.items
+      })
+      productsAPI.listCategories(7, this.start, this.limit).then(res => {
+        this.chargersList = res.data.items
+      })
     },
     // 获取家电模块子组件传过来的数据
     getChildMsg(val) {
-      this.applianceActive = val;
+      this.applianceActive = val
     },
     // 获取配件模块子组件传过来的数据
     getChildMsg2(val) {
-      this.accessoryActive = val;
+      this.accessoryActive = val
     },
     // 获取各类商品数据方法封装
     getPromo(categoryName, val, api) {
-      api = api != undefined ? api : "/api/product/getPromoProduct";
+      api = api != undefined ? api : '/api/product/getPromoProduct'
       this.$axios
         .post(api, {
           categoryName
         })
         .then(res => {
-          this[val] = res.data.Product;
+          this[val] = res.data.Product
         })
         .catch(err => {
-          return Promise.reject(err);
-        });
+          return Promise.reject(err)
+        })
     }
   }
-};
+}
 </script>
 <style scoped>
-@import "../assets/css/index.css";
+@import '../assets/css/index.css';
 </style>

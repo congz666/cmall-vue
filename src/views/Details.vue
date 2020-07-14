@@ -34,14 +34,11 @@
       <div class="block">
         <el-carousel height="560px" v-if="productPictures.length>1">
           <el-carousel-item v-for="item in productPictures" :key="item.id">
-            <img style="height:560px;" :src="item.img_path"  />
+            <img style="height:560px;" :src="item.img_path" />
           </el-carousel-item>
         </el-carousel>
         <div v-if="productPictures.length==1">
-          <img
-            style="height:560px;"
-            :src="productPictures[0].img_path"
-          />
+          <img style="height:560px;" :src="productPictures[0].img_path" />
         </div>
       </div>
       <!-- 左侧商品轮播图END -->
@@ -49,6 +46,10 @@
       <!-- 右侧内容区 -->
       <div class="content">
         <h1 class="name">{{productDetails.name}}</h1>
+        <li class="view">
+          <i class="el-icon-view"></i>
+          {{productDetails.view}}
+        </li>
         <p class="intro">{{productDetails.info}}</p>
         <p class="store">小米自营</p>
         <div class="price">
@@ -98,134 +99,140 @@
   </div>
 </template>
 <script>
-import { mapActions } from "vuex";
-import * as productsAPI from '@/api/products/';
-import * as favoritesAPI from '@/api/favorites/';
-import * as cartsAPI from '@/api/carts/';
+import { mapActions } from 'vuex'
+import * as productsAPI from '@/api/products/'
+import * as favoritesAPI from '@/api/favorites/'
+import * as cartsAPI from '@/api/carts/'
 export default {
   data() {
     return {
       dis: false, // 控制“加入购物车按钮是否可用”
-      productID: "", // 商品id
-      productDetails: "", // 商品详细信息
-      productPictures: "" // 商品图片
-    };
+      productID: '', // 商品id
+      productDetails: '', // 商品详细信息
+      productPictures: '' // 商品图片
+    }
   },
   // 通过路由获取商品id
   activated() {
     if (this.$route.query.productID != undefined) {
-      this.productID = this.$route.query.productID;
+      this.productID = this.$route.query.productID
     }
   },
   watch: {
     // 监听商品id的变化，请求后端获取商品数据
     productID: function() {
-      this.load();
+      this.load()
       //this.getDetailsPicture(val);
     }
   },
   methods: {
-    ...mapActions(["unshiftShoppingCart", "addShoppingCartNum"]),
+    ...mapActions(['unshiftShoppingCart', 'addShoppingCartNum']),
     // 获取商品详细信息
-     load() {
-      productsAPI.showProduct(this.productID).then((res) => {
-        this.productDetails = res.data;
-      });
-      productsAPI.showPictures(this.productID).then((res) => {
-        this.productPictures = res.data;
-      });
+    load() {
+      productsAPI.showProduct(this.productID).then(res => {
+        this.productDetails = res.data
+      })
+      productsAPI.showPictures(this.productID).then(res => {
+        this.productPictures = res.data
+      })
     },
     // 获取商品图片
     getDetailsPicture(val) {
       this.$axios
-        .post("/api/product/getDetailsPicture", {
+        .post('/api/product/getDetailsPicture', {
           productID: val
         })
         .then(res => {
-          this.productPicture = res.data.ProductPicture;
+          this.productPicture = res.data.ProductPicture
         })
         .catch(err => {
-          return Promise.reject(err);
-        });
+          return Promise.reject(err)
+        })
     },
     // 加入购物车
     addShoppingCart() {
       // 判断是否登录,没有登录则显示登录组件
       if (!this.$store.getters.getUser) {
-        this.$store.dispatch("setShowLogin", true);
-        return;
+        this.$store.dispatch('setShowLogin', true)
+        return
       }
-      var form ={
-        user_id:this.$store.getters.getUser.id,
-        product_id:this.productID
+      var form = {
+        user_id: this.$store.getters.getUser.id,
+        product_id: this.productID
       }
-      cartsAPI.postCart(form).then(res =>{
-        switch(res.status){
-          case 0:
-            //新加入购物车成功
-            this.unshiftShoppingCart(res.data);
-            this.$notify({
-								title: '添加购物车成功',
-								message: 'success',
-								type: 'success',
-            });
-            break;
-          case 1:
-            // 该商品已经在购物车，数量+1
-            this.addShoppingCartNum(this.productID);
-            this.$notify({
-							title: '该商品已在购物车，数量+1',
-							message: 'success',
-              type: 'success',
-            });    
-            break;
-          case "003":
-            // 商品数量达到限购数量
-            this.dis = true;
-            this.$notify.error({
-								title: '商品达到限购数量',
-								message: res.msg,
-							});
-            break;
-          default:
-            this.$notify.error({
-								title: '添加购物车失败',
-								message: res.msg,
-							});  
-        }
-      }).catch(err => {
-          return Promise.reject(err);
-        });
+      cartsAPI
+        .postCart(form)
+        .then(res => {
+          switch (res.status) {
+            case 0:
+              //新加入购物车成功
+              this.unshiftShoppingCart(res.data)
+              this.$notify({
+                title: '添加购物车成功',
+                message: 'success',
+                type: 'success'
+              })
+              break
+            case 1:
+              // 该商品已经在购物车，数量+1
+              this.addShoppingCartNum(this.productID)
+              this.$notify({
+                title: '该商品已在购物车，数量+1',
+                message: 'success',
+                type: 'success'
+              })
+              break
+            case '003':
+              // 商品数量达到限购数量
+              this.dis = true
+              this.$notify.error({
+                title: '商品达到限购数量',
+                message: res.msg
+              })
+              break
+            default:
+              this.$notify.error({
+                title: '添加购物车失败',
+                message: res.msg
+              })
+          }
+        })
+        .catch(err => {
+          return Promise.reject(err)
+        })
     },
     addFavorite() {
       // 判断是否登录,没有登录则显示登录组件
       if (!this.$store.getters.getUser) {
-        this.$router.push({name: 'Login'});
-        return;
+        this.$router.push({ name: 'Login' })
+        return
       }
-      var form={
-        user_id:this.$store.getters.getUser.id,
-        product_id:this.productID
+      var form = {
+        user_id: this.$store.getters.getUser.id,
+        product_id: this.productID
       }
-      favoritesAPI.postFavorite(form).then(res => {
-        if(res.status===0){
-          this.$notify({
-						title: '添加收藏夹成功',
-						message: 'success',
-						type: 'success',
-          });
-        } else{
-          this.$notify.error({
-					title: '添加失败',
-					message: res.msg
-          });
-        }
-      }).catch(err => {
-          return Promise.reject(err);
-        });
+      favoritesAPI
+        .postFavorite(form)
+        .then(res => {
+          if (res.status === 0) {
+            this.$notify({
+              title: '添加收藏夹成功',
+              message: 'success',
+              type: 'success'
+            })
+          } else {
+            this.$notify.error({
+              title: '添加失败',
+              message: res.msg
+            })
+          }
+        })
+        .catch(err => {
+          return Promise.reject(err)
+        })
     }
   }
-};
+}
 </script>
 <style>
 /* 头部CSS */
@@ -233,7 +240,7 @@ export default {
   height: 64px;
   margin-top: -20px;
   z-index: 4;
-  background: #f2f2f2ff;
+  background: #f5f5f5;
   border-bottom: 1px solid #e0e0e0;
   -webkit-box-shadow: 0px 5px 5px rgba(0, 0, 0, 0.07);
   box-shadow: 0px 5px 5px rgba(0, 0, 0, 0.07);
@@ -288,13 +295,22 @@ export default {
   margin-left: 25px;
   width: 640px;
 }
+
 #details .main .content .name {
-  height: 30px;
   line-height: 30px;
   font-size: 24px;
   font-weight: normal;
   color: #212121;
+  display: inline;
 }
+
+#details .main .content .view {
+  color: #b0b0b0;
+  float: right;
+  padding-top: 5px;
+  font-size: 18px;
+}
+
 #details .main .content .intro {
   color: #b0b0b0;
   padding-top: 10px;

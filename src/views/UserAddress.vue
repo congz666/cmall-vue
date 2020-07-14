@@ -1,15 +1,16 @@
 <template>
-  <div class="about" id="about" name="about">
-    <div class="about-layout">
+  <div class="address" id="address" name="address">
+    <div class="address-layout">
       <el-row :gutter="10">
         <div>
           <CenterMenu></CenterMenu>
         </div>
         <el-col :span="20">
-          <div class="about-content">
+          <div class="address-content">
             <div class="extra"></div>
-            <MyMarkdown></MyMarkdown>
-            <div class="extra1"></div>
+            <div class="address-title">
+              <p>收货地址</p>
+            </div>
           </div>
         </el-col>
       </el-row>
@@ -18,31 +19,35 @@
 </template>
 <script>
 import CenterMenu from '../components/CenterMenu'
-import MyMarkdown from '../components/MyMarkdown'
 export default {
-  name: 'About',
+  name: 'Details',
   data() {
     return {}
   },
   components: {
-    CenterMenu,
-    MyMarkdown
+    CenterMenu
   }
 }
 </script>
 <style scoped>
-.about-layout {
+.address-layout {
   max-width: 1225px;
   margin: 0 auto;
 }
-.about-content {
+.address-content {
   background-color: #ffffff;
 }
-
+.address-title {
+  height: 100px;
+  display: flex;
+  align-items: center;
+}
+.address-title p {
+  font-size: 30px;
+  color: #757575;
+  margin-left: 50px;
+}
 .extra {
   height: 10px;
-}
-.extra1 {
-  height: 50px;
 }
 </style>

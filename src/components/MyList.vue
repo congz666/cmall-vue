@@ -12,7 +12,7 @@
         <el-popover placement="top">
           <p>确定删除吗？</p>
           <div style="text-align: right; margin: 10px 0 0">
-            <el-button type="primary" size="mini" @click="deleteCollect(item.id)">确定</el-button>
+            <el-button type="primary" size="mini" @click="deleteFavorite(item.id)">确定</el-button>
           </div>
           <i class="el-icon-close delete" slot="reference" v-show="isDelete"></i>
         </el-popover>
@@ -22,15 +22,12 @@
           <h3>{{item.title}}</h3>
           <p>
             <span>{{item.discount_price}}元</span>
-            <span
-              v-show="item.price != item.discount_price"
-              class="del"
-            >{{item.price}}元</span>
+            <span v-show="item.price != item.discount_price" class="del">{{item.price}}元</span>
           </p>
         </router-link>
       </li>
       <li v-show="isMore && list.length>=1" id="more">
-        <router-link :to="{ path: '/goods', query: {category_id:category_id} }">
+        <router-link :to="{ path: '/goods', query: {categoryID:categoryID} }">
           浏览更多
           <i class="el-icon-d-arrow-right"></i>
         </router-link>
@@ -41,61 +38,62 @@
 <script>
 import * as favoriteAPI from '@/api/favorites'
 export default {
-  name: "MyList",
+  name: 'MyList',
   // list为父组件传过来的商品列表
   // isMore为是否显示“浏览更多”
-  props: ["list", "isMore", "isDelete"],
+  props: ['list', 'isMore', 'isDelete'],
   data() {
-    return {
-
-    };
+    return {}
   },
   computed: {
     // 通过list获取当前显示的商品的分类ID，用于“浏览更多”链接的参数
     categoryID: function() {
-      let categoryID = [];
-      if (this.list != "") {
+      let categoryID = []
+      if (this.list != '') {
         for (let i = 0; i < this.list.length; i++) {
-          const id = this.list[i].category_id;
+          const id = this.list[i].category_id
           if (!categoryID.includes(id)) {
-            categoryID.push(id);
+            categoryID.push(id)
           }
         }
       }
-      return categoryID;
+      return categoryID
     }
   },
   methods: {
-    deleteCollect(product_id) {
-      var form ={
-				user_id:this.$store.getters.getUser.id,
-				product_id: product_id,
-			}
-      favoriteAPI.deleteFavorite(form).then(res =>{
-        if (res.status===0){
-          for (let i = 0; i < this.list.length; i++) {
-            const temp = this.list[i];
-            if (temp.product_id == product_id) {
-            this.list.splice(i, 1);
+    deleteFavorite(product_id) {
+      var form = {
+        user_id: this.$store.getters.getUser.id,
+        product_id: product_id
+      }
+      favoriteAPI
+        .deleteFavorite(form)
+        .then(res => {
+          if (res.status === 0) {
+            for (let i = 0; i < this.list.length; i++) {
+              const temp = this.list[i]
+              if (temp.product_id == product_id) {
+                this.list.splice(i, 1)
+              }
             }
+            this.$notify({
+              title: '删除成功',
+              message: 'success',
+              type: 'success'
+            })
+          } else {
+            this.$notify.error({
+              title: '删除失败',
+              message: res.msg
+            })
           }
-          this.$notify({
-						title: '删除成功',
-						message: 'success',
-						type: 'success',
-          });
-        }else{
-          this.$notify.error({
-					title: '删除失败',
-					message: res.msg
-          });
-        }
-      }).catch(err => {
-          return Promise.reject(err);
-        });
+        })
+        .catch(err => {
+          return Promise.reject(err)
+        })
     }
   }
-};
+}
 </script>
 <style scoped>
 .myList ul li {
@@ -173,7 +171,7 @@ export default {
   display: none;
 }
 .myList ul li:hover .delete {
-  display: block
+  display: block;
 }
 .myList ul li .delete:hover {
   color: #ff6700;

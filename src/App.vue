@@ -20,39 +20,42 @@
             <li v-else class="header-user-con">
               <!-- 用户头像 -->
               <div class="user-avator">
-                <img src="../public/img/admin.jpeg" />
+                <img :src="this.$store.getters.getUser.avatar" />
               </div>
               <!-- 用户名下拉菜单 -->
               <div class="user-name">
-              <el-dropdown  trigger="click" @command="handleCommand">
-                <span class="el-dropdown-link">
-                  {{this.$store.getters.getUser.nickname}}
-                  <i class="el-icon-caret-bottom"></i>
-                </span>
-                <el-dropdown-menu slot="dropdown">
-                  <a href="https://github.com/congz666/cmall-vue" target="_blank">
-                    <el-dropdown-item>项目仓库</el-dropdown-item>
-                  </a>
-                  <a @click="logout"> 
-                  <el-dropdown-item >退出登录</el-dropdown-item>
-                  </a>
-                </el-dropdown-menu>
-              </el-dropdown>
+                <el-dropdown>
+                  <span class="el-dropdown-link">
+                    {{this.$store.getters.getUser.nickname}}
+                    <i class="el-icon-caret-bottom"></i>
+                  </span>
+                  <el-dropdown-menu slot="dropdown">
+                    <a href="https://github.com/congz666/cmall-vue" target="_blank">
+                      <el-dropdown-item>项目仓库</el-dropdown-item>
+                    </a>
+                    <router-link to="/center">
+                      <el-dropdown-item>个人中心</el-dropdown-item>
+                    </router-link>
+                    <a @click="logout">
+                      <el-dropdown-item>退出登录</el-dropdown-item>
+                    </a>
+                  </el-dropdown-menu>
+                </el-dropdown>
               </div>
+            </li>
+            <li class="font">
+              <router-link to="/favorite">我的收藏</router-link>
             </li>
             <li class="font">
               <router-link to="/order">我的订单</router-link>
             </li>
-            <li class="font">
-              <router-link to="/collect">我的收藏</router-link>
-            </li>
-            
+
             <li :class="getNum > 0 ? 'shopCart-full' : 'shopCart'">
               <div style="margin-top:5px">
-              <router-link to="/shoppingCart">
-                <i class="el-icon-shopping-cart-full"></i> 购物车
-                <span>({{getNum}})</span>
-              </router-link>
+                <router-link to="/cart">
+                  <i class="el-icon-shopping-cart-full"></i> 购物车
+                  <span>({{getNum}})</span>
+                </router-link>
               </div>
             </li>
           </ul>
@@ -61,13 +64,14 @@
       <!-- 顶部导航栏END -->
 
       <!-- 顶栏容器 -->
+
       <el-header v-show="$route.meta.showMenu!==false">
         <el-menu
           :default-active="activeIndex"
           class="el-menu-demo"
           mode="horizontal"
-          active-text-color="#409eff"
-          background-color="#f2f2f2"
+          active-text-color="#ff6700"
+          background-color="#ffffff"
           router
         >
           <div class="logo">
@@ -86,13 +90,13 @@
           </div>
         </el-menu>
       </el-header>
-      <!-- 顶栏容器END -->
 
+      <!-- 顶栏容器END -->
 
       <!-- 主要区域容器 -->
       <el-main>
         <keep-alive>
-          <router-view></router-view>
+          <router-view :key="key"></router-view>
         </keep-alive>
       </el-main>
       <!-- 主要区域容器END -->
@@ -132,91 +136,97 @@
 </template>
 
 <script>
-import { mapActions } from "vuex";
-import { mapGetters } from "vuex";
-import * as cartsAPI from '@/api/carts';
+import { mapActions } from 'vuex'
+import { mapGetters } from 'vuex'
+import * as cartsAPI from '@/api/carts'
 
 export default {
   beforeUpdate() {
-    this.activeIndex = this.$route.path;
+    this.activeIndex = this.$route.path
   },
   data() {
     return {
-      activeIndex: "", // 头部导航栏选中的标签
-      search: "", // 搜索条件
-    };
+      activeIndex: '', // 头部导航栏选中的标签
+      search: '' // 搜索条件
+    }
   },
-  beforeCreate () {
-    document.querySelector('body').setAttribute('style', 'background:#f2f2f2')
+  beforeCreate() {
+    document.querySelector('body').setAttribute('style', 'background:#f5f5f5')
   },
   created() {
     // 获取浏览器localStorage，判断用户是否已经登录
-    if (localStorage.getItem("user")) {
+    if (localStorage.getItem('user')) {
       // 如果已经登录，设置vuex登录状态
-      this.setUser(JSON.parse(localStorage.getItem("user")));
+      this.setUser(JSON.parse(localStorage.getItem('user')))
     }
   },
   computed: {
-    ...mapGetters(["getUser", "getNum"])
+    ...mapGetters(['getUser', 'getNum']),
+    key() {
+      return this.$route.path + Math.random()
+    }
   },
   watch: {
     // 获取vuex的登录状态
     getUser: function(val) {
-      if (val === "") {
+      if (val === '') {
         // 用户没有登录
-        this.setShoppingCart([]);
+        this.setShoppingCart([])
       } else {
         // 用户已经登录,获取该用户的购物车信息
-        cartsAPI.showCarts(val.id).then(res =>{
-          if (res.status === 0){
-            if(res.data===null){
-              this.setShoppingCart([]);
-            }else{
-              this.setShoppingCart(res.data);
+        cartsAPI
+          .showCarts(val.id)
+          .then(res => {
+            if (res.status === 0) {
+              if (res.data === null) {
+                this.setShoppingCart([])
+              } else {
+                this.setShoppingCart(res.data)
+              }
+            } else {
+              this.$notify.error({
+                title: '购物车获取失败',
+                message: res.msg
+              })
             }
-          } else {
-            this.$notify.error({
-            title: '购物车获取失败',
-            message: res.msg
-            });
-          }
-        }).catch(err => {
-            return Promise.reject(err);
-          });
+          })
+          .catch(err => {
+            return Promise.reject(err)
+          })
       }
     }
   },
   methods: {
-    ...mapActions(["setUser", "setShowLogin", "setShoppingCart"]),
+    ...mapActions(['setUser', 'setShowLogin', 'setShoppingCart']),
     login() {
-			this.$router.push({
-      name: 'Login'
-      });
+      this.$router.push({
+        name: 'Login'
+      })
     },
     // 退出登录
     logout() {
       // 清空本地登录信息
-      localStorage.setItem("user", "");
+      localStorage.setItem('user', '')
       // 清空vuex登录信息
-      this.setUser("");
-      this.notifySucceed("成功退出登录");
+      this.setUser('')
+      this.notifySucceed('成功退出登录')
     },
     //重定向
-    register() {						
-			this.$router.push({
-			name: 'Register'
-			});
+    register() {
+      this.$router.push({
+        name: 'Register'
+      })
     },
     // 点击搜索按钮
     searchClick() {
-      if (this.search != "") {
+      if (this.search != '') {
         // 跳转到全部商品页面,并传递搜索条件
-        this.$router.push({ path: "/goods", query: { search: this.search } });
-        this.search = "";
+        this.$router.push({ path: '/goods', query: { search: this.search } })
+        this.search = ''
       }
     }
   }
-};
+}
 </script>
 
 <style>
@@ -229,32 +239,37 @@ export default {
 }
 
 .header-user-con {
-    display: flex;
-    height: 50px;
-    align-items: center;
+  display: flex;
+  height: 50px;
+  align-items: center;
 }
 .user-name {
-    margin-left: 10px;   
+  margin-left: 10px;
 }
 .user-avator img {
-    display: block;
-    width: 40px;
-    height: 40px;
-    border-radius: 50%;
+  display: block;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
 }
 .el-dropdown-link {
-    color: #fff;
-    cursor: pointer;
+  color: #fff;
+  cursor: pointer;
 }
+
 .el-dropdown-menu__item {
-    text-align: center;
+  text-align: center;
 }
+.el-dropdown-item:hover {
+  color: #ff6700;
+}
+
 #app .el-header {
   padding: 0;
 }
 #app .el-main {
   min-height: 300px;
-  padding: 20px 0;
+  padding: 0;
 }
 #app .el-footer {
   padding: 0;
@@ -269,7 +284,6 @@ a:hover {
 .topbar {
   height: 50px;
   background-color: #303643;
-  margin-bottom: 20px;
 }
 .topbar .nav {
   width: 1225px;
@@ -287,11 +301,11 @@ a:hover {
   line-height: 40px;
   margin-left: 20px;
 }
-.topbar .nav li.font{
+.topbar .nav li.font {
   margin-top: 5px;
 }
 
-.topbar .nav li .router-link{
+.topbar .nav li .router-link {
   margin-top: 5px;
 }
 
@@ -328,23 +342,29 @@ a:hover {
 /* 顶部导航栏CSS END */
 
 /* 顶栏容器CSS */
+.el-header {
+  margin-bottom: 20px;
+  background-color: #ffffff;
+}
 .el-header .el-menu {
   max-width: 1225px;
   margin: 0 auto;
+  display: flex;
+  align-items: center;
 }
+
 .el-header .logo {
   height: 60px;
-  width: 189px;
+  width: 100px;
   float: left;
-  margin-right: 100px;
+  margin-right: 30px;
 }
-.el-header .logo img{
-  height:60px;
+.el-header .logo img {
+  height: 60px;
 }
 .el-header .so {
-  margin-top: 10px;
   width: 300px;
-  float: right;
+  margin-left: 537px;
 }
 /* 顶栏容器CSS END */
 
@@ -373,7 +393,7 @@ a:hover {
   display: inline-block;
   line-height: 40px;
   text-decoration: none;
-  background: url("./assets/imgs/us-icon.png") no-repeat left 0;
+  background: url('./assets/imgs/us-icon.png') no-repeat left 0;
 }
 .footer .github {
   height: 50px;
@@ -384,7 +404,7 @@ a:hover {
   width: 50px;
   height: 50px;
   margin: 0 auto;
-  background: url("./assets/imgs/github.png") no-repeat;
+  background: url('./assets/imgs/github.png') no-repeat;
 }
 .footer .mod_help {
   text-align: center;
