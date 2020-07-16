@@ -127,10 +127,31 @@ export default {
     getOrders() {
       // 获取订单数据
       ordersAPI
-        .showOrders(this.$store.getters.getUser.id, this.start, this.limit)
+        .showOrders(
+          this.$store.getters.getUser.id,
+          this.start,
+          this.limit,
+          this.$store.getters.getToken
+        )
         .then(res => {
-          this.orders = res.data.items
-          this.total = res.data.total
+          if (res.status === 0) {
+            this.orders = res.data.items
+            this.total = res.data.total
+          } else if (res.status === 20001) {
+            //token过期，需要重新登录
+            this.$notify.error({
+              title: '登录已过期，需重新登录',
+              message: res.msg
+            })
+            this.$router.push({
+              name: 'Login'
+            })
+          } else {
+            this.$notify.error({
+              title: '获取订单失败',
+              message: res.msg
+            })
+          }
         })
         .catch(err => {
           return Promise.reject(err)

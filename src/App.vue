@@ -139,6 +139,7 @@
 import { mapActions } from 'vuex'
 import { mapGetters } from 'vuex'
 import * as cartsAPI from '@/api/carts'
+import * as userAPI from '@/api/users'
 
 export default {
   beforeUpdate() {
@@ -155,13 +156,19 @@ export default {
   },
   created() {
     // 获取浏览器localStorage，判断用户是否已经登录
-    if (localStorage.getItem('user')) {
+    userAPI.checkToken(localStorage.getItem('token')).then(res => {
       // 如果已经登录，设置vuex登录状态
-      this.setUser(JSON.parse(localStorage.getItem('user')))
-    }
+      if (res.status == 200) {
+        this.setUser(JSON.parse(localStorage.getItem('user')))
+        this.setToken(localStorage.getItem('token'))
+      } else {
+        localStorage.removeItem('user')
+        localStorage.removeItem('token')
+      }
+    })
   },
   computed: {
-    ...mapGetters(['getUser', 'getNum']),
+    ...mapGetters(['getUser', 'getToken', 'getNum']),
     key() {
       return this.$route.path + Math.random()
     }
@@ -175,7 +182,7 @@ export default {
       } else {
         // 用户已经登录,获取该用户的购物车信息
         cartsAPI
-          .showCarts(val.id)
+          .showCarts(val.id, this.$store.getters.getToken)
           .then(res => {
             if (res.status === 0) {
               if (res.data === null) {
@@ -197,7 +204,7 @@ export default {
     }
   },
   methods: {
-    ...mapActions(['setUser', 'setShowLogin', 'setShoppingCart']),
+    ...mapActions(['setUser', 'setToken', 'setShoppingCart']),
     login() {
       this.$router.push({
         name: 'Login'
@@ -205,11 +212,32 @@ export default {
     },
     // 退出登录
     logout() {
-      // 清空本地登录信息
-      localStorage.setItem('user', '')
-      // 清空vuex登录信息
-      this.setUser('')
-      this.notifySucceed('成功退出登录')
+      userAPI
+        .logout(this.$store.getters.getToken)
+        .then(res => {
+          if (res.status === 200) {
+            // 清空本地登录信息
+            localStorage.removeItem('user')
+            localStorage.removeItem('token')
+            // 清空vuex登录信息
+            this.setUser('')
+            this.setToken('')
+
+            this.$notify({
+              title: '登出成功',
+              message: 'success',
+              type: 'success'
+            })
+          } else {
+            this.$notify.error({
+              title: '登出失败',
+              message: res.msg
+            })
+          }
+        })
+        .catch(err => {
+          return Promise.reject(err)
+        })
     },
     //重定向
     register() {

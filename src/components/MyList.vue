@@ -67,7 +67,7 @@ export default {
         product_id: product_id
       }
       favoriteAPI
-        .deleteFavorite(form)
+        .deleteFavorite(form, this.$store.getters.getToken)
         .then(res => {
           if (res.status === 0) {
             for (let i = 0; i < this.list.length; i++) {

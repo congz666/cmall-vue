@@ -53,6 +53,7 @@ export default {
   data() {
     return {
       form: {
+        id: 0,
         nickname: '',
         avatar: ''
       },
@@ -74,7 +75,7 @@ export default {
     },
     fnUploadRequest(option) {
       uplpadAPI
-        .UploadAvatar(option.file.name)
+        .UploadAvatar(option.file.name, this.$store.getters.getToken)
         .then(res => {
           const oReq = new XMLHttpRequest()
           oReq.open('PUT', res.data.put, true)
@@ -93,12 +94,21 @@ export default {
     },
     save() {
       userAPI
-        .updateUser(this.form)
+        .updateUser(this.form, this.$store.getters.getToken)
         .then(res => {
-          if (res.status > 0) {
+          if (res.status != 0) {
             this.$notify.error({
               title: '修改失败',
               message: res.msg
+            })
+          } else if (res.status === 20001) {
+            //token过期，需要重新登录
+            this.$notify.error({
+              title: '登录已过期，需重新登录',
+              message: res.msg
+            })
+            this.$router.push({
+              name: 'Login'
             })
           } else {
             // 登录信息存到本地
@@ -115,13 +125,14 @@ export default {
         })
         .catch(error => {
           this.$notify.error({
-            title: '修改失败惹',
+            title: '修改失败',
             message: error
           })
         })
     }
   },
   beforeMount() {
+    this.form.id = this.$store.getters.getUser.id
     this.form.nickname = this.$store.getters.getUser.nickname
     this.imageUrl = this.$store.getters.getUser.avatar
   },

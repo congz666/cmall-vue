@@ -200,7 +200,7 @@ export default {
         product_id: productID
       }
       cartsAPI
-        .deleteCart(form)
+        .deleteCart(form, this.$store.getters.getToken)
         .then(res => {
           if (res.status === 0) {
             // 更新vuex状态

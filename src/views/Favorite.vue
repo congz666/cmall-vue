@@ -62,11 +62,25 @@ export default {
     getFavorites() {
       // 获取收藏数据
       favoriteAPI
-        .showFavorites(this.$store.getters.getUser.id, this.start, this.limit)
+        .showFavorites(
+          this.$store.getters.getUser.id,
+          this.start,
+          this.limit,
+          this.$store.getters.getToken
+        )
         .then(res => {
           if (res.status === 0) {
             this.collectList = res.data.items
             this.total = res.data.total
+          } else if (res.status === 20001) {
+            //token过期，需要重新登录
+            this.$notify.error({
+              title: '登录已过期，需重新登录',
+              message: res.msg
+            })
+            this.$router.push({
+              name: 'Login'
+            })
           } else {
             this.$notify.error({
               title: '获取收藏夹失败',

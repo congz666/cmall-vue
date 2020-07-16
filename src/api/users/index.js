@@ -6,10 +6,16 @@ const postUser = form =>
 //登录
 const postLogin = form =>
   axios.post('/api/v1/user/login', form).then(res => res.data)
-//个人中心
-const getUser = () => axios.get('/api/v1/user/me').then(res => res.data)
+//检验token
+const checkToken = token =>
+  axios.get('/api/v1/ping', { params: { token } }).then(res => res.data)
 //修改信息
-const updateUser = form => axios.put('/api/v1/user', form).then(res => res.data)
-const logout = () => axios.delete('/api/v1/user/logout').then(res => res.data)
+const updateUser = (form, token) =>
+  axios.put('/api/v1/user', form, { params: { token } }).then(res => res.data)
 
-export { postUser, postLogin, getUser, updateUser, logout }
+const logout = token =>
+  axios
+    .delete('/api/v1/user/logout', { params: { token } })
+    .then(res => res.data)
+
+export { postUser, postLogin, checkToken, updateUser, logout }

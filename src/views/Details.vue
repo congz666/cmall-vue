@@ -153,7 +153,7 @@ export default {
     addShoppingCart() {
       // 判断是否登录,没有登录则显示登录组件
       if (!this.$store.getters.getUser) {
-        this.$store.dispatch('setShowLogin', true)
+        this.$router.push({ name: 'Login' })
         return
       }
       var form = {
@@ -161,7 +161,7 @@ export default {
         product_id: this.productID
       }
       cartsAPI
-        .postCart(form)
+        .postCart(form, this.$store.getters.getToken)
         .then(res => {
           switch (res.status) {
             case 0:
@@ -190,6 +190,16 @@ export default {
                 message: res.msg
               })
               break
+            case 20001:
+              //token过期，需要重新登录
+              this.$notify.error({
+                title: '登录已过期，需重新登录',
+                message: res.msg
+              })
+              this.$router.push({
+                name: 'Login'
+              })
+              break
             default:
               this.$notify.error({
                 title: '添加购物车失败',
@@ -212,13 +222,22 @@ export default {
         product_id: this.productID
       }
       favoritesAPI
-        .postFavorite(form)
+        .postFavorite(form, this.$store.getters.getToken)
         .then(res => {
           if (res.status === 0) {
             this.$notify({
               title: '添加收藏夹成功',
               message: 'success',
               type: 'success'
+            })
+          } else if (res.status === 20001) {
+            //token过期，需要重新登录
+            this.$notify.error({
+              title: '登录已过期，需重新登录',
+              message: res.msg
+            })
+            this.$router.push({
+              name: 'Login'
             })
           } else {
             this.$notify.error({
