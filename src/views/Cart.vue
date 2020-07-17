@@ -1,10 +1,11 @@
 <!--
- * @Description: 我的购物车页面组件
- * @Author: hai-27
- * @Date: 2020-02-20 01:55:47
- * @LastEditors: hai-27
- * @LastEditTime: 2020-02-27 13:36:42
- -->
+ * @Descripttion: 我的购物车页面组件
+ * @Author: congz
+ * @Date: 2020-06-04 11:22:40
+ * @LastEditors: congz
+ * @LastEditTime: 2020-07-17 10:39:25
+--> 
+
 
 <template>
   <div class="shoppingCart">
@@ -171,12 +172,21 @@ export default {
       cartsAPI
         .updateCart(form)
         .then(res => {
-          if (res.status === 0) {
+          if (res.status === 200) {
             // 更新vuex状态
             this.updateShoppingCart({
               key: key,
               prop: 'num',
               val: currentValue
+            })
+          } else if (res.status === 20001) {
+            //token过期，需要重新登录
+            this.$notify.error({
+              title: '登录已过期，需重新登录',
+              message: res.msg
+            })
+            this.$router.push({
+              name: 'Login'
             })
           } else {
             this.$notify.error({
@@ -202,13 +212,22 @@ export default {
       cartsAPI
         .deleteCart(form, this.$store.getters.getToken)
         .then(res => {
-          if (res.status === 0) {
+          if (res.status === 200) {
             // 更新vuex状态
             this.deleteShoppingCart(productID)
             this.$notify({
               title: '删除成功',
               message: 'success',
               type: 'success'
+            })
+          } else if (res.status === 20001) {
+            //token过期，需要重新登录
+            this.$notify.error({
+              title: '登录已过期，需重新登录',
+              message: res.msg
+            })
+            this.$router.push({
+              name: 'Login'
             })
           } else {
             this.$notify.error({

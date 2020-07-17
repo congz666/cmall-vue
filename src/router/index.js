@@ -1,10 +1,11 @@
 /*
- * @Description: 路由配置
- * @Author: hai-27
- * @Date: 2020-02-07 16:23:00
- * @LastEditors: hai-27
- * @LastEditTime: 2020-02-27 13:58:48
+ * @Descripttion:路由配置
+ * @Author: congz
+ * @Date: 2020-06-04 11:22:40
+ * @LastEditors: congz
+ * @LastEditTime: 2020-07-17 10:44:25
  */
+
 import Vue from 'vue'
 import Router from 'vue-router'
 

@@ -1,3 +1,11 @@
+/*
+ * @Descripttion:调用后端收藏接口的函数
+ * @Author: congz
+ * @Date: 2020-06-12 10:19:12
+ * @LastEditors: congz
+ * @LastEditTime: 2020-07-17 11:00:54
+ */
+
 import axios from 'axios'
 
 // 创建收藏

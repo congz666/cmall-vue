@@ -1,10 +1,11 @@
 <!--
- * @Description: 全部商品页面组件(包括全部商品,商品分类,商品搜索)
- * @Author: hai-27
- * @Date: 2020-02-07 16:23:00
- * @LastEditors: hai-27
- * @LastEditTime: 2020-03-08 12:11:13
- -->
+ * @Descripttion: 全部商品页面组件
+ * @Author: congz
+ * @Date: 2020-06-04 11:22:40
+ * @LastEditors: congz
+ * @LastEditTime: 2020-07-17 10:41:02
+--> 
+
 <template>
   <div class="goods" id="goods" name="goods">
     <!-- 面包屑 -->
@@ -169,7 +170,7 @@ export default {
       categoryAPI
         .listCategories()
         .then(res => {
-          if (res.status === 0) {
+          if (res.status === 200) {
             const val = {
               category_id: 0,
               category_name: '全部'
@@ -195,8 +196,15 @@ export default {
         productAPI
           .listProducts(this.start, this.limit)
           .then(res => {
-            this.product = res.data.items
-            this.total = res.data.total
+            if (res.status === 200) {
+              this.product = res.data.items
+              this.total = res.data.total
+            } else {
+              this.$notify.error({
+                title: '商品获取失败',
+                message: res.msg
+              })
+            }
           })
           .catch(err => {
             return Promise.reject(err)
@@ -205,8 +213,15 @@ export default {
         categoryAPI
           .showCategory(this.categoryID, this.start, this.limit)
           .then(res => {
-            this.product = res.data.items
-            this.total = res.data.total
+            if (res.status === 200) {
+              this.product = res.data.items
+              this.total = res.data.total
+            } else {
+              this.$notify.error({
+                title: '分类商品获取失败',
+                message: res.msg
+              })
+            }
           })
           .catch(err => {
             return Promise.reject(err)
@@ -221,7 +236,14 @@ export default {
       productAPI
         .searchProducts(form)
         .then(res => {
-          this.product = res.data
+          if (res.status === 200) {
+            this.product = res.data
+          } else {
+            this.$notify.error({
+              title: '搜索失败',
+              message: res.msg
+            })
+          }
         })
         .catch(err => {
           return Promise.reject(err)

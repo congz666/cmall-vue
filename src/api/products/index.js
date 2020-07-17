@@ -1,3 +1,11 @@
+/*
+ * @Descripttion:调用后端商品接口的函数
+ * @Author: congz
+ * @Date: 2020-06-10 18:59:36
+ * @LastEditors: congz
+ * @LastEditTime: 2020-07-17 11:01:13
+ */
+
 import axios from 'axios'
 
 // 创建商品

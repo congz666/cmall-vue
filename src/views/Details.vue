@@ -1,10 +1,11 @@
 <!--
- * @Description: 商品详情页面组件
- * @Author: hai-27
- * @Date: 2020-02-16 20:20:26
- * @LastEditors: hai-27
- * @LastEditTime: 2020-03-07 21:59:26
- -->
+ * @Descripttion: 商品详情
+ * @Author: congz
+ * @Date: 2020-06-04 11:22:40
+ * @LastEditors: congz
+ * @LastEditTime: 2020-07-17 10:40:14
+--> 
+
 <template>
   <div id="details">
     <!-- 头部 -->
@@ -164,7 +165,7 @@ export default {
         .postCart(form, this.$store.getters.getToken)
         .then(res => {
           switch (res.status) {
-            case 0:
+            case 200:
               //新加入购物车成功
               this.unshiftShoppingCart(res.data)
               this.$notify({
@@ -224,7 +225,7 @@ export default {
       favoritesAPI
         .postFavorite(form, this.$store.getters.getToken)
         .then(res => {
-          if (res.status === 0) {
+          if (res.status === 200) {
             this.$notify({
               title: '添加收藏夹成功',
               message: 'success',

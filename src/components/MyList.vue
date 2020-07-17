@@ -1,10 +1,11 @@
 <!--
- * @Description: 列表组件，用于首页、全部商品页面的商品列表
- * @Author: hai-27
- * @Date: 2020-02-07 16:23:00
- * @LastEditors: hai-27
- * @LastEditTime: 2020-04-05 13:22:22
- -->
+ * @Descripttion:展示商品列表组件 
+ * @Author: congz
+ * @Date: 2020-06-04 11:22:40
+ * @LastEditors: congz
+ * @LastEditTime: 2020-07-17 10:45:21
+--> 
+
 <template>
   <div id="myList" class="myList">
     <ul>
@@ -69,7 +70,7 @@ export default {
       favoriteAPI
         .deleteFavorite(form, this.$store.getters.getToken)
         .then(res => {
-          if (res.status === 0) {
+          if (res.status === 200) {
             for (let i = 0; i < this.list.length; i++) {
               const temp = this.list[i]
               if (temp.product_id == product_id) {
@@ -80,6 +81,15 @@ export default {
               title: '删除成功',
               message: 'success',
               type: 'success'
+            })
+          } else if (res.status === 20001) {
+            //token过期，需要重新登录
+            this.$notify.error({
+              title: '登录已过期，需重新登录',
+              message: res.msg
+            })
+            this.$router.push({
+              name: 'Login'
             })
           } else {
             this.$notify.error({

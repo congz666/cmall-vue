@@ -1,10 +1,11 @@
 <!--
- * @Description: 确认订单页面组件
- * @Author: hai-27
- * @Date: 2020-02-23 23:46:39
- * @LastEditors: hai-27
- * @LastEditTime: 2020-03-29 13:10:21
- -->
+ * @Descripttion:确认订单页面组件 
+ * @Author: congz
+ * @Date: 2020-06-04 11:22:40
+ * @LastEditors: congz
+ * @LastEditTime: 2020-07-17 10:39:58
+--> 
+
 <template>
   <div class="confirmOrder">
     <!-- 头部 -->
@@ -125,12 +126,12 @@
   </div>
 </template>
 <script>
-import { mapGetters } from "vuex";
-import { mapActions } from "vuex";
-import * as ordersAPI from '@/api/orders';
-import * as cartsAPI from '@/api/carts';
+import { mapGetters } from 'vuex'
+import { mapActions } from 'vuex'
+import * as ordersAPI from '@/api/orders'
+import * as cartsAPI from '@/api/carts'
 export default {
-  name: "",
+  name: '',
   data() {
     return {
       // 虚拟数据
@@ -139,76 +140,100 @@ export default {
       address: [
         {
           id: 1,
-          name: "陈同学",
-          phone: "13580018623",
-          address: "广东 广州市 白云区 江高镇 广东白云学院"
+          name: '陈同学',
+          phone: '13580018623',
+          address: '广东 广州市 白云区 江高镇 广东白云学院'
         },
         {
           id: 2,
-          name: "陈同学",
-          phone: "13580018623",
-          address: "广东 茂名市 化州市 杨梅镇 ***"
+          name: '陈同学',
+          phone: '13580018623',
+          address: '广东 茂名市 化州市 杨梅镇 ***'
         }
       ]
-    };
+    }
   },
   created() {
     // 如果没有勾选购物车商品直接进入确认订单页面,提示信息并返回购物车
     if (this.getCheckNum < 1) {
-      this.notifyError("请勾选商品后再结算");
-      this.$router.push({ path: "/shoppingCart" });
+      this.notifyError('请勾选商品后再结算')
+      this.$router.push({ path: '/shoppingCart' })
     }
   },
   computed: {
     // 结算的商品数量; 结算商品总计; 结算商品信息
-    ...mapGetters(["getCheckNum", "getTotalPrice", "getCheckGoods"])
+    ...mapGetters(['getCheckNum', 'getTotalPrice', 'getCheckGoods'])
   },
   methods: {
-    ...mapActions(["deleteShoppingCart"]),
+    ...mapActions(['deleteShoppingCart']),
     addOrder() {
-      let orders=this.getCheckGoods;
-      for(let i=0;i<orders.length;i++){
-        var form ={
-        user_id: this.$store.getters.getUser.id,
-        product_id: orders[i].product_id,
-        num: orders[i].num
+      let orders = this.getCheckGoods
+      for (let i = 0; i < orders.length; i++) {
+        var form = {
+          user_id: this.$store.getters.getUser.id,
+          product_id: orders[i].product_id,
+          num: orders[i].num
         }
-        ordersAPI.postOrder(form).then(res =>{
-          if (res.status===0){
-            const temp = orders[i];
-            // 删除已经结算的购物车商品
-            var form1 ={
-              user_id: this.$store.getters.getUser.id,
-              product_id: temp.product_id        
-            }
-            cartsAPI.deleteCart(form1).then(res =>{
-              if(res.status===0){
-                // 更新vuex状态
-                this.deleteShoppingCart(temp.product_id);
-              }else{
-                this.$notify.error({
-                title: '购物车删除失败',
-                message: res.msg
-                });             
+        ordersAPI
+          .postOrder(form, this.$store.getters.getToken)
+          .then(res => {
+            if (res.status === 200) {
+              const temp = orders[i]
+              // 删除已经结算的购物车商品
+              var form1 = {
+                user_id: this.$store.getters.getUser.id,
+                product_id: temp.product_id
               }
-            }).catch(err => {
-                return Promise.reject(err);
-              });
-            // 跳转我的订单页面
-            this.$router.push({ path: "/order" });
-          }else{
-            this.$notify.error({
-              title: '结算失败',
-              message: res.msg
-            });
-          }
-        }).catch(err => {
-          return Promise.reject(err);
-          });
+              cartsAPI
+                .deleteCart(form1, this.$store.getters.getToken)
+                .then(res => {
+                  if (res.status === 200) {
+                    // 更新vuex状态
+                    this.deleteShoppingCart(temp.product_id)
+                  } else if (res.status === 20001) {
+                    //token过期，需要重新登录
+                    this.$notify.error({
+                      title: '登录已过期，需重新登录',
+                      message: res.msg
+                    })
+                    this.$router.push({
+                      name: 'Login'
+                    })
+                  } else {
+                    this.$notify.error({
+                      title: '购物车删除失败',
+                      message: res.msg
+                    })
+                  }
+                })
+                .catch(err => {
+                  return Promise.reject(err)
+                })
+              // 跳转我的订单页面
+              this.$router.push({ path: '/order' })
+            } else if (res.status === 20001) {
+              //token过期，需要重新登录
+              this.$notify.error({
+                title: '登录已过期，需重新登录',
+                message: res.msg
+              })
+              this.$router.push({
+                name: 'Login'
+              })
+            } else {
+              this.$notify.error({
+                title: '结算失败',
+                message: res.msg
+              })
+            }
+          })
+          .catch(err => {
+            return Promise.reject(err)
+          })
       }
     }
   }
-};
+}
 </script>
 <style scoped>
 .confirmOrder {

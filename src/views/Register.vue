@@ -1,5 +1,13 @@
+<!--
+ * @Descripttion: 注册页面组件
+ * @Author: congz
+ * @Date: 2020-06-11 10:01:19
+ * @LastEditors: congz
+ * @LastEditTime: 2020-07-17 10:42:12
+--> 
+
 <template>
-	<div class="register">
+  <div class="register">
     <div>
       <el-card class="box-card" shadow="hover">
         <div slot="header" class="clearfix">
@@ -20,96 +28,97 @@
               <el-input v-model="form.password_confirm" placeholder="确认密码"></el-input>
             </el-form-item>
           </el-form>
-					<GtPage @ok="ok"></GtPage>
+          <GtPage @ok="ok"></GtPage>
           <el-button type="primary" style="width:300px;margin-bottom:10px;" @click="register">注册</el-button>
           <el-link type="primary" href="/#/login" style="float:right;margin-bottom:20px;">已有账号？直接登录></el-link>
         </div>
-      </el-card>    
+      </el-card>
     </div>
   </div>
 </template>
 <script>
-  import * as userAPI from '@/api/users';
-  import GtPage from '../components/GtPage.vue';
-	export default {
-		name: 'Register',
-		data() {
-			return {
-				okk: 0,
-				imageUrl: '',
-				form: {
-					nickname: '',
-					user_name: '',
-					password: '',
-					password_confirm: '',
-				},
-			};
-		},
-		methods: {
-			ok(val) {
-				this.okk = val;
-			},
-			register() {
-				if (this.okk == 1) {
-					userAPI.postUser(this.form).then((res) => {
-						if (res.status > 0) {
-							this.$notify.error({
-								title: '注册失败',
-								message: res.msg,
-							});
-						} else {
-							this.$notify({
-								title: '注册成功',
-								message: 'success',
-								type: 'success',
-							});
-							this.$router.push({
-								name: 'Login'
-							});
-						}
-
-					}).catch((error) => {
-						this.$notify.error({
-							title: '注册失败惹',
-							message: error,
-						});
-					});
-				} else {
-					this.$notify.error({
-						title: '请验证',
-						message: '',
-					});
-				}
-
-			},
-		},
-		comments: {},
-		components: {
-      GtPage,
-		},
-	};
+import * as userAPI from '@/api/users'
+import GtPage from '../components/GtPage.vue'
+export default {
+  name: 'Register',
+  data() {
+    return {
+      okk: 0,
+      imageUrl: '',
+      form: {
+        nickname: '',
+        user_name: '',
+        password: '',
+        password_confirm: ''
+      }
+    }
+  },
+  methods: {
+    ok(val) {
+      this.okk = val
+    },
+    register() {
+      if (this.okk == 1) {
+        userAPI
+          .postUser(this.form)
+          .then(res => {
+            if (res.status === 200) {
+              this.$notify({
+                title: '注册成功',
+                message: 'success',
+                type: 'success'
+              })
+              this.$router.push({
+                name: 'Login'
+              })
+            } else {
+              this.$notify.error({
+                title: '注册失败',
+                message: res.msg
+              })
+            }
+          })
+          .catch(error => {
+            this.$notify.error({
+              title: '注册失败惹',
+              message: error
+            })
+          })
+      } else {
+        this.$notify.error({
+          title: '请验证',
+          message: ''
+        })
+      }
+    }
+  },
+  comments: {},
+  components: {
+    GtPage
+  }
+}
 </script>
 
 <style >
 .text {
-	font-size: 14px;
+  font-size: 14px;
 }
 
 .item {
-	margin:0 auto;
-	width: 300px;
+  margin: 0 auto;
+  width: 300px;
 }
 
-.clearfix{
-	font-size: 20px;
+.clearfix {
+  font-size: 20px;
 }
 
 .box-card {
-	margin:0 auto;
-	text-align: center;
-	width: 400px;
-	margin-top:100px;
-	margin-bottom: 200px;
-	border-radius: 10px;
+  margin: 0 auto;
+  text-align: center;
+  width: 400px;
+  margin-top: 100px;
+  margin-bottom: 200px;
+  border-radius: 10px;
 }
 </style>

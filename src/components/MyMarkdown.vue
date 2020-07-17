@@ -1,39 +1,50 @@
 <!--
- * @Description: 渲染markdown文件
- * @Author: hai-27
- * @Date: 2020-03-12 17:30:46
- * @LastEditors: hai-27
- * @LastEditTime: 2020-03-12 18:23:58
- -->
+ * @Descripttion:渲染Markdown文档组件
+ * @Author: congz
+ * @Date: 2020-06-04 11:22:40
+ * @LastEditors: congz
+ * @LastEditTime: 2020-07-17 10:45:11
+--> 
+
 <template>
   <div id="my-markdown" class="markdown-body">
     <vue-markdown :source="md"></vue-markdown>
   </div>
 </template>
 <script>
-import VueMarkdown from "vue-markdown";
-import * as aboutAPI from '@/api/abouts';
+import VueMarkdown from 'vue-markdown'
+import * as aboutAPI from '@/api/abouts'
 export default {
-  name: "MyMarkdown",
+  name: 'MyMarkdown',
   components: {
     VueMarkdown
   },
   data() {
     return {
-      md: ""
-    };
+      md: ''
+    }
   },
   created() {
-    aboutAPI.readMe().then(res =>{
-      this.md=res.data
-    }).catch(err => {
-        return Promise.reject(err);
-      });
+    aboutAPI
+      .readMe()
+      .then(res => {
+        if (res.status === 200) {
+          this.md = res.data
+        } else {
+          this.$notify.error({
+            title: '公告获取失败',
+            message: res.msg
+          })
+        }
+      })
+      .catch(err => {
+        return Promise.reject(err)
+      })
   }
-};
+}
 </script>
 <style>
-@import "../assets/css/github-markdown.css";
+@import '../assets/css/github-markdown.css';
 .markdown-body {
   box-sizing: border-box;
   margin: 0 auto;

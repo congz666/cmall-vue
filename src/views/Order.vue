@@ -1,3 +1,11 @@
+<!--
+ * @Descripttion: 我的订单页面组件
+ * @Author: congz
+ * @Date: 2020-07-03 18:01:05
+ * @LastEditors: congz
+ * @LastEditTime: 2020-07-17 10:41:48
+--> 
+
 <template>
   <div class="order" id="order" name="order">
     <div class="order-layout">
@@ -134,7 +142,7 @@ export default {
           this.$store.getters.getToken
         )
         .then(res => {
-          if (res.status === 0) {
+          if (res.status === 200) {
             this.orders = res.data.items
             this.total = res.data.total
           } else if (res.status === 20001) {

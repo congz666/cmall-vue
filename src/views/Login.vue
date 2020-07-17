@@ -1,3 +1,11 @@
+<!--
+ * @Descripttion: 登录页面组件
+ * @Author: congz
+ * @Date: 2020-06-11 11:08:34
+ * @LastEditors: congz
+ * @LastEditTime: 2020-07-17 10:41:35
+--> 
+
 <template>
   <div class="login">
     <div>
@@ -58,12 +66,7 @@ export default {
         userAPI
           .postLogin(this.form)
           .then(res => {
-            if (res.status > 200) {
-              this.$notify.error({
-                title: '登录失败',
-                message: res.msg
-              })
-            } else {
+            if (res.status === 200) {
               // 登录信息存到本地
               let user = JSON.stringify(res.data.user)
               localStorage.setItem('user', user)
@@ -75,6 +78,11 @@ export default {
               this.notifySucceed(res.msg)
               this.$router.push({
                 name: 'Home'
+              })
+            } else {
+              this.$notify.error({
+                title: '登录失败',
+                message: res.msg
               })
             }
           })

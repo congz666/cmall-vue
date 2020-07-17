@@ -1,3 +1,11 @@
+<!--
+ * @Descripttion: 我的收藏页面组件
+ * @Author: congz
+ * @Date: 2020-07-03 22:55:29
+ * @LastEditors: congz
+ * @LastEditTime: 2020-07-17 10:40:34
+--> 
+
 <template>
   <div class="favorite" id="favorite" name="favorite">
     <div class="favorite-layout">
@@ -69,7 +77,7 @@ export default {
           this.$store.getters.getToken
         )
         .then(res => {
-          if (res.status === 0) {
+          if (res.status === 200) {
             this.collectList = res.data.items
             this.total = res.data.total
           } else if (res.status === 20001) {

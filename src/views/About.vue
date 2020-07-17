@@ -1,3 +1,12 @@
+<!--
+ * @Descripttion: 关于页面组件
+ * @Author: congz
+ * @Date: 2020-07-11 19:29:46
+ * @LastEditors: congz
+ * @LastEditTime: 2020-07-17 10:39:16
+--> 
+
+
 <template>
   <div class="about" id="about" name="about">
     <div class="about-layout">

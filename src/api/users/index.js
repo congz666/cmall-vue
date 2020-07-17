@@ -1,3 +1,11 @@
+/*
+ * @Descripttion:调用后端用户接口的函数
+ * @Author: congz
+ * @Date: 2020-06-11 09:39:58
+ * @LastEditors: congz
+ * @LastEditTime: 2020-07-17 11:01:47
+ */
+
 import axios from 'axios'
 
 //注册

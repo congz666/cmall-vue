@@ -1,3 +1,11 @@
+<!--
+ * @Descripttion: 个人信息页面组件
+ * @Author: congz
+ * @Date: 2020-07-11 14:59:00
+ * @LastEditors: congz
+ * @LastEditTime: 2020-07-17 10:42:50
+--> 
+
 <template>
   <div class="details" id="details" name="details">
     <div class="details-layout">
@@ -77,12 +85,28 @@ export default {
       uplpadAPI
         .UploadAvatar(option.file.name, this.$store.getters.getToken)
         .then(res => {
-          const oReq = new XMLHttpRequest()
-          oReq.open('PUT', res.data.put, true)
-          oReq.send(option.file)
-          oReq.onload = () => {
-            this.imageUrl = res.data.get
-            this.form.avatar = res.data.key
+          if (res.status === 200) {
+            const oReq = new XMLHttpRequest()
+            oReq.open('PUT', res.data.put, true)
+            oReq.send(option.file)
+            oReq.onload = () => {
+              this.imageUrl = res.data.get
+              this.form.avatar = res.data.key
+            }
+          } else if (res.status === 20001) {
+            //token过期，需要重新登录
+            this.$notify.error({
+              title: '登录已过期，需重新登录',
+              message: res.msg
+            })
+            this.$router.push({
+              name: 'Login'
+            })
+          } else {
+            this.$notify.error({
+              title: '上传失败',
+              message: res.msg
+            })
           }
         })
         .catch(error => {
@@ -96,21 +120,7 @@ export default {
       userAPI
         .updateUser(this.form, this.$store.getters.getToken)
         .then(res => {
-          if (res.status != 0) {
-            this.$notify.error({
-              title: '修改失败',
-              message: res.msg
-            })
-          } else if (res.status === 20001) {
-            //token过期，需要重新登录
-            this.$notify.error({
-              title: '登录已过期，需重新登录',
-              message: res.msg
-            })
-            this.$router.push({
-              name: 'Login'
-            })
-          } else {
+          if (res.status === 200) {
             // 登录信息存到本地
             let user = JSON.stringify(res.data)
             localStorage.setItem('user', user)
@@ -121,6 +131,20 @@ export default {
               type: 'success'
             })
             this.$router.go(0)
+          } else if (res.status === 20001) {
+            //token过期，需要重新登录
+            this.$notify.error({
+              title: '登录已过期，需重新登录',
+              message: res.msg
+            })
+            this.$router.push({
+              name: 'Login'
+            })
+          } else {
+            this.$notify.error({
+              title: '修改失败',
+              message: res.msg
+            })
           }
         })
         .catch(error => {

@@ -1,3 +1,11 @@
+/*
+ * @Descripttion:调用后端分类接口的函数
+ * @Author: congz
+ * @Date: 2020-06-12 22:36:05
+ * @LastEditors: congz
+ * @LastEditTime: 2020-07-17 11:00:36
+ */
+
 import axios from 'axios'
 
 // 创建分类

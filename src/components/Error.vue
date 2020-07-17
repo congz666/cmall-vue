@@ -1,10 +1,11 @@
 <!--
- * @Description: 
- * @Author: hai-27
- * @Date: 2020-02-27 13:57:14
- * @LastEditors: hai-27
- * @LastEditTime: 2020-02-27 14:11:31
- -->
+ * @Descripttion:404组件 
+ * @Author: congz
+ * @Date: 2020-06-04 11:22:40
+ * @LastEditors: congz
+ * @LastEditTime: 2020-07-17 10:46:23
+--> 
+
 <template>
   <div class="error">
     <div class="main"></div>

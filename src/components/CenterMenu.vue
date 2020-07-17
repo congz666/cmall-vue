@@ -1,3 +1,11 @@
+<!--
+ * @Descripttion:个人中心导航组件 
+ * @Author: congz
+ * @Date: 2020-07-03 09:40:21
+ * @LastEditors: congz
+ * @LastEditTime: 2020-07-17 10:46:40
+--> 
+
 <template>
   <div class="centerMenu" id="centerMenu">
     <el-col :span="4">

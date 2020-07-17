@@ -1,3 +1,11 @@
+<!--
+ * @Descripttion: 个人中心页面组件
+ * @Author: congz
+ * @Date: 2020-07-03 09:31:23
+ * @LastEditors: congz
+ * @LastEditTime: 2020-07-17 10:39:42
+--> 
+
 <template>
   <div class="center" id="center" name="center">
     <div class="center-layout">

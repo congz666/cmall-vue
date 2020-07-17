@@ -1,10 +1,11 @@
 /*
- * @Description: 用户登录状态模块
- * @Author: hai-27
- * @Date: 2020-02-19 17:42:11
- * @LastEditors: hai-27
- * @LastEditTime: 2020-02-26 23:14:32
+ * @Descripttion:用户登录状态模块
+ * @Author: congz
+ * @Date: 2020-06-04 11:22:40
+ * @LastEditors: congz
+ * @LastEditTime: 2020-07-17 10:43:53
  */
+
 export default {
   state: {
     user: '', // 登录的用户
