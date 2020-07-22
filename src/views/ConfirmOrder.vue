@@ -3,19 +3,48 @@
  * @Author: congz
  * @Date: 2020-06-04 11:22:40
  * @LastEditors: congz
- * @LastEditTime: 2020-07-17 10:39:58
+ * @LastEditTime: 2020-07-22 13:11:33
 --> 
 
 <template>
   <div class="confirmOrder">
     <!-- 头部 -->
-    <div class="confirmOrder-header">
-      <div class="header-content">
-        <p>
-          <i class="el-icon-s-order"></i>
-        </p>
-        <p>确认订单</p>
-        <router-link to></router-link>
+    <div class="top-header">
+      <div class="cart-header">
+        <div class="logo">
+          <router-link to="/">
+            <img src="../assets/imgs/clogo.png" alt />
+          </router-link>
+        </div>
+        <div class="cart-header-content">
+          <p>确认订单</p>
+        </div>
+        <div class="cart-header-right">
+          <div class="cart-header-select">
+            <el-dropdown>
+              <router-link to class="href">
+                <span style="margin-right:5px">{{this.$store.getters.getUser.nickname}}</span>
+                <i class="el-icon-caret-bottom"></i>
+              </router-link>
+              <el-dropdown-menu slot="dropdown">
+                <router-link to="/center">
+                  <el-dropdown-item class="dropdown-menu">个人中心</el-dropdown-item>
+                </router-link>
+                <router-link to="/">
+                  <el-dropdown-item class="dropdown-menu">评价晒单</el-dropdown-item>
+                </router-link>
+                <router-link to="/favorite">
+                  <el-dropdown-item class="dropdown-menu">我的收藏</el-dropdown-item>
+                </router-link>
+              </el-dropdown-menu>
+            </el-dropdown>
+          </div>
+
+          <div class="cart-header-order">
+            <span>|</span>
+            <router-link to="/order" class="href">我的订单</router-link>
+          </div>
+        </div>
       </div>
     </div>
     <!-- 头部END -->
@@ -27,15 +56,18 @@
         <p class="title">收货地址</p>
         <div class="address-body">
           <ul>
-            <li
-              :class="item.id == confirmAddress ? 'in-section' : ''"
-              v-for="item in address"
-              :key="item.id"
-            >
-              <h2>{{item.name}}</h2>
-              <p class="phone">{{item.phone}}</p>
-              <p class="address">{{item.address}}</p>
-            </li>
+            <router-link to>
+              <li
+                :class="item.id == confirmAddress ? 'in-section' : ''"
+                v-for="item in address"
+                :key="item.id"
+                @click="selectAddress(item)"
+              >
+                <h2>{{item.name}}</h2>
+                <p class="phone">{{item.phone}}</p>
+                <p class="address">{{item.address}}</p>
+              </li>
+            </router-link>
             <li class="add-address">
               <i class="el-icon-circle-plus-outline"></i>
               <p>添加新地址</p>
@@ -116,7 +148,7 @@
       <!-- 结算导航 -->
       <div class="section-bar">
         <div class="btn">
-          <router-link to="/shoppingCart" class="btn-base btn-return">返回购物车</router-link>
+          <router-link to="/cart" class="btn-base btn-return">返回购物车</router-link>
           <a href="javascript:void(0);" @click="addOrder" class="btn-base btn-primary">结算</a>
         </div>
       </div>
@@ -128,37 +160,26 @@
 <script>
 import { mapGetters } from 'vuex'
 import { mapActions } from 'vuex'
+import * as addressesAPI from '@/api/addresses'
 import * as ordersAPI from '@/api/orders'
 import * as cartsAPI from '@/api/carts'
 export default {
   name: '',
   data() {
     return {
-      // 虚拟数据
-      confirmAddress: 1, // 选择的地址id
+      // 选择的地址id
+      confirmAddress: 0,
       // 地址列表
-      address: [
-        {
-          id: 1,
-          name: '陈同学',
-          phone: '13580018623',
-          address: '广东 广州市 白云区 江高镇 广东白云学院'
-        },
-        {
-          id: 2,
-          name: '陈同学',
-          phone: '13580018623',
-          address: '广东 茂名市 化州市 杨梅镇 ***'
-        }
-      ]
+      address: []
     }
   },
   created() {
     // 如果没有勾选购物车商品直接进入确认订单页面,提示信息并返回购物车
     if (this.getCheckNum < 1) {
       this.notifyError('请勾选商品后再结算')
-      this.$router.push({ path: '/shoppingCart' })
+      this.$router.push({ path: '/cart' })
     }
+    this.getAddress()
   },
   computed: {
     // 结算的商品数量; 结算商品总计; 结算商品信息
@@ -166,13 +187,41 @@ export default {
   },
   methods: {
     ...mapActions(['deleteShoppingCart']),
+    selectAddress(item) {
+      this.confirmAddress = item.id
+    },
+    getAddress() {
+      addressesAPI
+        .showAddresses(
+          this.$store.getters.getUser.id,
+          this.$store.getters.getToken
+        )
+        .then(res => {
+          if (res.status === 200) {
+            this.address = res.data
+          } else if (res.status === 20001) {
+            //token过期，需要重新登录
+            this.loginExpired(res.msg)
+          } else {
+            this.notifyError('获取收货地址失败', res.msg)
+          }
+        })
+        .catch(err => {
+          this.notifyError('获取收货地址失败', err)
+        })
+    },
     addOrder() {
+      if (this.confirmAddress === 0) {
+        this.notifyError('请选择收货地址', null)
+        return
+      }
       let orders = this.getCheckGoods
       for (let i = 0; i < orders.length; i++) {
         var form = {
           user_id: this.$store.getters.getUser.id,
           product_id: orders[i].product_id,
-          num: orders[i].num
+          num: orders[i].num,
+          address_id: this.confirmAddress
         }
         ordersAPI
           .postOrder(form, this.$store.getters.getToken)
@@ -192,43 +241,25 @@ export default {
                     this.deleteShoppingCart(temp.product_id)
                   } else if (res.status === 20001) {
                     //token过期，需要重新登录
-                    this.$notify.error({
-                      title: '登录已过期，需重新登录',
-                      message: res.msg
-                    })
-                    this.$router.push({
-                      name: 'Login'
-                    })
+                    this.loginExpired(res.msg)
                   } else {
-                    this.$notify.error({
-                      title: '购物车删除失败',
-                      message: res.msg
-                    })
+                    this.notifyError('购物车删除失败', res.msg)
                   }
                 })
                 .catch(err => {
-                  return Promise.reject(err)
+                  this.notifyError('购物车删除失败', err)
                 })
               // 跳转我的订单页面
               this.$router.push({ path: '/order' })
             } else if (res.status === 20001) {
               //token过期，需要重新登录
-              this.$notify.error({
-                title: '登录已过期，需重新登录',
-                message: res.msg
-              })
-              this.$router.push({
-                name: 'Login'
-              })
+              this.loginExpired(res.msg)
             } else {
-              this.$notify.error({
-                title: '结算失败',
-                message: res.msg
-              })
+              this.notifyError('结算失败', res.msg)
             }
           })
           .catch(err => {
-            return Promise.reject(err)
+            this.notifyError('结算失败', err)
           })
       }
     }
@@ -240,30 +271,80 @@ export default {
   background-color: #f5f5f5;
   padding-bottom: 20px;
 }
-/* 头部CSS */
-.confirmOrder .confirmOrder-header {
-  background-color: #fff;
+/* 购物车头部CSS */
+.confirmOrder .top-header {
+  width: 100%;
+  background-color: #ffffff;
+  margin-bottom: 30px;
   border-bottom: 2px solid #ff6700;
-  margin-bottom: 20px;
 }
-.confirmOrder .confirmOrder-header .header-content {
+.confirmOrder .top-header .cart-header {
+  display: flex;
+  height: 100px;
+  background-color: #ffffff;
+  margin-bottom: 20px;
   width: 1225px;
   margin: 0 auto;
-  height: 80px;
+  position: relative;
 }
-.confirmOrder .confirmOrder-header .header-content p {
-  float: left;
-  font-size: 28px;
-  line-height: 80px;
-  color: #424242;
+.confirmOrder .top-header .cart-header .logo {
+  height: 60px;
+  width: 100px;
+  margin-top: 22px;
   margin-right: 20px;
 }
-.confirmOrder .confirmOrder-header .header-content p i {
-  font-size: 45px;
-  color: #ff6700;
-  line-height: 80px;
+.confirmOrder .top-header .cart-header .logo img {
+  height: 60px;
 }
-/* 头部CSS END */
+
+.confirmOrder .top-header .cart-header p {
+  margin-top: 23px;
+  font-size: 28px;
+  line-height: 58px;
+  float: left;
+  font-weight: normal;
+  color: #424242;
+}
+
+.confirmOrder .top-header .cart-header .cart-header-right {
+  display: flex;
+  position: absolute;
+  right: 0px;
+  float: right;
+}
+
+.confirmOrder .top-header .cart-header .cart-header-select {
+  margin-top: 40px;
+}
+
+.confirmOrder .top-header .cart-header .cart-header-select .href {
+  font-size: 13px;
+  color: #757575;
+}
+.confirmOrder .top-header .cart-header .cart-header-select .href:hover {
+  color: #ff6700;
+}
+.dropdown-menu:hover {
+  color: #ff6700;
+  background-color: #f5f5f5;
+}
+.confirmOrder .top-header .cart-header .cart-header-order {
+  margin-top: 40px;
+}
+.confirmOrder .top-header .cart-header .cart-header-order span {
+  color: #c9c7c7;
+  margin-left: 20px;
+  margin-right: 20px;
+}
+.confirmOrder .top-header .cart-header .cart-header-order .href {
+  font-size: 13px;
+  color: #757575;
+}
+.confirmOrder .top-header .cart-header .cart-header-order .href:hover {
+  color: #ff6700;
+}
+
+/* 购物车头部CSS END */
 
 /* 主要内容容器CSS */
 .confirmOrder .content {
@@ -287,7 +368,7 @@ export default {
 .confirmOrder .content .address-body li {
   float: left;
   color: #333;
-  width: 220px;
+  width: 210px;
   height: 178px;
   border: 1px solid #e0e0e0;
   padding: 15px 24px 0;

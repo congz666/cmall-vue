@@ -3,7 +3,7 @@
  * @Author: congz
  * @Date: 2020-06-04 11:22:40
  * @LastEditors: congz
- * @LastEditTime: 2020-07-17 10:43:01
+ * @LastEditTime: 2020-07-17 19:25:30
 --> 
 
 <template>
@@ -185,7 +185,7 @@ export default {
         cartsAPI
           .showCarts(val.id, this.$store.getters.getToken)
           .then(res => {
-            if (res.status === 0) {
+            if (res.status === 200) {
               if (res.data === null) {
                 this.setShoppingCart([])
               } else {
@@ -193,13 +193,7 @@ export default {
               }
             } else if (res.status === 20001) {
               //token过期，需要重新登录
-              this.$notify.error({
-                title: '登录已过期，需重新登录',
-                message: res.msg
-              })
-              this.$router.push({
-                name: 'Login'
-              })
+              this.loginExpired(res.msg)
             } else {
               this.$notify.error({
                 title: '购物车获取失败',

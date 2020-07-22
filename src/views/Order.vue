@@ -3,7 +3,7 @@
  * @Author: congz
  * @Date: 2020-07-03 18:01:05
  * @LastEditors: congz
- * @LastEditTime: 2020-07-17 10:41:48
+ * @LastEditTime: 2020-07-22 16:25:23
 --> 
 
 <template>
@@ -80,7 +80,7 @@
                       </router-link>
                     </div>
                     <div>
-                      <router-link to="/">
+                      <router-link :to="{ path: '/order/details', query: {orderID:item.id} }">
                         <el-button plain class="button-detail">订单详情</el-button>
                       </router-link>
                     </div>
@@ -135,7 +135,7 @@ export default {
     getOrders() {
       // 获取订单数据
       ordersAPI
-        .showOrders(
+        .listOrders(
           this.$store.getters.getUser.id,
           this.start,
           this.limit,
@@ -147,22 +147,13 @@ export default {
             this.total = res.data.total
           } else if (res.status === 20001) {
             //token过期，需要重新登录
-            this.$notify.error({
-              title: '登录已过期，需重新登录',
-              message: res.msg
-            })
-            this.$router.push({
-              name: 'Login'
-            })
+            this.loginExpired(res.msg)
           } else {
-            this.$notify.error({
-              title: '获取订单失败',
-              message: res.msg
-            })
+            this.notifyError('获取订单失败', res.msg)
           }
         })
         .catch(err => {
-          return Promise.reject(err)
+          this.notifyError('获取订单失败', err)
         })
     }
   },
@@ -181,6 +172,7 @@ export default {
 }
 .order-content {
   background-color: #ffffff;
+  margin-bottom: 30px;
 }
 .order-title {
   height: 100px;

@@ -3,7 +3,7 @@
  * @Author: congz
  * @Date: 2020-07-03 22:55:29
  * @LastEditors: congz
- * @LastEditTime: 2020-07-17 10:40:34
+ * @LastEditTime: 2020-07-22 16:25:48
 --> 
 
 <template>
@@ -82,22 +82,13 @@ export default {
             this.total = res.data.total
           } else if (res.status === 20001) {
             //token过期，需要重新登录
-            this.$notify.error({
-              title: '登录已过期，需重新登录',
-              message: res.msg
-            })
-            this.$router.push({
-              name: 'Login'
-            })
+            this.loginExpired(res.msg)
           } else {
-            this.$notify.error({
-              title: '获取收藏夹失败',
-              message: res.msg
-            })
+            this.notifyError('获取收藏夹失败', res.msg)
           }
         })
         .catch(err => {
-          return Promise.reject(err)
+          this.notifyError('获取收藏夹失败', err)
         })
     }
   },
@@ -116,6 +107,7 @@ export default {
 }
 .favorite-content {
   background-color: #ffffff;
+  margin-bottom: 30px;
 }
 .favorite-title {
   height: 100px;

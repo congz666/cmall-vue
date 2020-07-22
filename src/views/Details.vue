@@ -3,7 +3,7 @@
  * @Author: congz
  * @Date: 2020-06-04 11:22:40
  * @LastEditors: congz
- * @LastEditTime: 2020-07-17 10:40:14
+ * @LastEditTime: 2020-07-17 20:03:38
 --> 
 
 <template>
@@ -108,7 +108,7 @@ export default {
   data() {
     return {
       dis: false, // 控制“加入购物车按钮是否可用”
-      productID: '', // 商品id
+      productID: 0, // 商品id
       productDetails: '', // 商品详细信息
       productPictures: '' // 商品图片
     }
@@ -137,19 +137,6 @@ export default {
         this.productPictures = res.data
       })
     },
-    // 获取商品图片
-    getDetailsPicture(val) {
-      this.$axios
-        .post('/api/product/getDetailsPicture', {
-          productID: val
-        })
-        .then(res => {
-          this.productPicture = res.data.ProductPicture
-        })
-        .catch(err => {
-          return Promise.reject(err)
-        })
-    },
     // 加入购物车
     addShoppingCart() {
       // 判断是否登录,没有登录则显示登录组件
@@ -159,7 +146,7 @@ export default {
       }
       var form = {
         user_id: this.$store.getters.getUser.id,
-        product_id: this.productID
+        product_id: Number(this.productID)
       }
       cartsAPI
         .postCart(form, this.$store.getters.getToken)
@@ -168,48 +155,28 @@ export default {
             case 200:
               //新加入购物车成功
               this.unshiftShoppingCart(res.data)
-              this.$notify({
-                title: '添加购物车成功',
-                message: 'success',
-                type: 'success'
-              })
+              this.notifySucceed('添加购物车成功')
               break
-            case 1:
+            case 201:
               // 该商品已经在购物车，数量+1
               this.addShoppingCartNum(this.productID)
-              this.$notify({
-                title: '该商品已在购物车，数量+1',
-                message: 'success',
-                type: 'success'
-              })
+              this.notifySucceed('该商品已在购物车，数量+1')
               break
-            case '003':
+            case 202:
               // 商品数量达到限购数量
               this.dis = true
-              this.$notify.error({
-                title: '商品达到限购数量',
-                message: res.msg
-              })
+              this.notifyError('商品达到限购数量', res.msg)
               break
             case 20001:
               //token过期，需要重新登录
-              this.$notify.error({
-                title: '登录已过期，需重新登录',
-                message: res.msg
-              })
-              this.$router.push({
-                name: 'Login'
-              })
+              this.loginExpired(res.msg)
               break
             default:
-              this.$notify.error({
-                title: '添加购物车失败',
-                message: res.msg
-              })
+              this.notifyError('添加购物车失败', res.msg)
           }
         })
         .catch(err => {
-          return Promise.reject(err)
+          this.notifyError('添加购物车失败', err)
         })
     },
     addFavorite() {
@@ -226,29 +193,16 @@ export default {
         .postFavorite(form, this.$store.getters.getToken)
         .then(res => {
           if (res.status === 200) {
-            this.$notify({
-              title: '添加收藏夹成功',
-              message: 'success',
-              type: 'success'
-            })
+            this.notifySucceed('添加收藏夹成功')
           } else if (res.status === 20001) {
             //token过期，需要重新登录
-            this.$notify.error({
-              title: '登录已过期，需重新登录',
-              message: res.msg
-            })
-            this.$router.push({
-              name: 'Login'
-            })
+            this.loginExpired(res.msg)
           } else {
-            this.$notify.error({
-              title: '添加失败',
-              message: res.msg
-            })
+            this.notifyError('添加收藏夹失败', res.msg)
           }
         })
         .catch(err => {
-          return Promise.reject(err)
+          this.notifyError('添加收藏夹失败', err)
         })
     }
   }

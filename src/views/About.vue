@@ -3,7 +3,7 @@
  * @Author: congz
  * @Date: 2020-07-11 19:29:46
  * @LastEditors: congz
- * @LastEditTime: 2020-07-17 10:39:16
+ * @LastEditTime: 2020-07-22 16:27:23
 --> 
 
 
@@ -46,6 +46,7 @@ export default {
 }
 .about-content {
   background-color: #ffffff;
+  margin-bottom: 30px;
 }
 
 .extra {

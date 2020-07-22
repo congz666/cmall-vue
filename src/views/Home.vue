@@ -3,7 +3,7 @@
  * @Author: congz
  * @Date: 2020-06-04 11:22:40
  * @LastEditors: congz
- * @LastEditTime: 2020-07-17 10:41:15
+ * @LastEditTime: 2020-07-17 20:19:40
 --> 
 
 <template>
@@ -174,30 +174,31 @@ export default {
     }
   },
   activated() {
-    // 获取轮播图数据
+    // 获取首页数据
     this.load()
-    // 获取各类商品数据
-    //this.getPromo("保护套", "protectingShellList");
   },
   methods: {
     load() {
-      carouselsAPI.listCarousels().then(res => {
-        this.carousels = res.data
-      })
+      carouselsAPI
+        .listCarousels()
+        .then(res => {
+          if (res.status == 200) {
+            this.carousels = res.data
+          } else {
+            this.notifyError('获取轮播图失败', res.msg)
+          }
+        })
+        .catch(err => {
+          this.notifyError('获取轮播图失败', err)
+        })
       //获取手机列表
-      productsAPI.listCategories(1, this.start, this.limit).then(res => {
-        this.phonesList = res.data.items
-      })
+      this.getProduct(1, 'phonesList')
       //获取电视列表
-      productsAPI.listCategories(2, this.start, this.limit).then(res => {
-        this.televisionsList = res.data.items
-      })
-      productsAPI.listCategories(5, this.start, this.limit).then(res => {
-        this.phoneShellsList = res.data.items
-      })
-      productsAPI.listCategories(7, this.start, this.limit).then(res => {
-        this.chargersList = res.data.items
-      })
+      this.getProduct(2, 'televisionsList')
+      //获取保护套列表
+      this.getProduct(5, 'phoneShellsList')
+      //获取充电器列表
+      this.getProduct(7, 'chargersList')
     },
     // 获取家电模块子组件传过来的数据
     getChildMsg(val) {
@@ -208,17 +209,18 @@ export default {
       this.accessoryActive = val
     },
     // 获取各类商品数据方法封装
-    getPromo(categoryName, val, api) {
-      api = api != undefined ? api : '/api/product/getPromoProduct'
-      this.$axios
-        .post(api, {
-          categoryName
-        })
+    getProduct(categoryID, val) {
+      productsAPI
+        .listCategories(categoryID, this.start, this.limit)
         .then(res => {
-          this[val] = res.data.Product
+          if (res.status === 200) {
+            this[val] = res.data.items
+          } else {
+            this.notifyError('获取失败', res.msg)
+          }
         })
         .catch(err => {
-          return Promise.reject(err)
+          this.notifyError('获取失败', err)
         })
     }
   }

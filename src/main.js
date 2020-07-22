@@ -3,7 +3,7 @@
  * @Author: congz
  * @Date: 2020-06-04 11:22:40
  * @LastEditors: congz
- * @LastEditTime: 2020-07-17 10:37:52
+ * @LastEditTime: 2020-07-22 15:37:41
  */
 import Vue from 'vue'
 import App from './App.vue'
@@ -71,7 +71,7 @@ Vue.filter('dateFormat', cjsj => {
   var Y = date.getFullYear() + '-'
   var M =
     (date.getMonth() + 1 < 10
-      ? '0' + (date.getMonth() + 1) + '-'
+      ? '0' + (date.getMonth() + 1)
       : date.getMonth() + 1) + '-'
   var D =
     (date.getDate() < 10 ? '0' + date.getDate() + ':' : date.getDate()) + ' '
@@ -90,8 +90,6 @@ import MyMenu from './components/MyMenu'
 Vue.component(MyMenu.name, MyMenu)
 import MyList from './components/MyList'
 Vue.component(MyList.name, MyList)
-import MyLogin from './components/MyLogin'
-Vue.component(MyLogin.name, MyLogin)
 
 Vue.config.productionTip = false
 

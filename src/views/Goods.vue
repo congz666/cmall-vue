@@ -3,7 +3,7 @@
  * @Author: congz
  * @Date: 2020-06-04 11:22:40
  * @LastEditors: congz
- * @LastEditTime: 2020-07-17 10:41:02
+ * @LastEditTime: 2020-07-17 19:53:17
 --> 
 
 <template>
@@ -179,14 +179,11 @@ export default {
             cate.unshift(val)
             this.categoryList = cate
           } else {
-            this.$notify.error({
-              title: '分类获取失败',
-              message: res.msg
-            })
+            this.notifyError('获取分类失败', res.msg)
           }
         })
         .catch(err => {
-          return Promise.reject(err)
+          this.notifyError('获取分类失败', err)
         })
     },
     // 向后端请求全部商品或分类商品数据
@@ -200,14 +197,11 @@ export default {
               this.product = res.data.items
               this.total = res.data.total
             } else {
-              this.$notify.error({
-                title: '商品获取失败',
-                message: res.msg
-              })
+              this.notifyError('获取商品失败', res.msg)
             }
           })
           .catch(err => {
-            return Promise.reject(err)
+            this.notifyError('获取商品失败', err)
           })
       } else {
         categoryAPI
@@ -217,14 +211,11 @@ export default {
               this.product = res.data.items
               this.total = res.data.total
             } else {
-              this.$notify.error({
-                title: '分类商品获取失败',
-                message: res.msg
-              })
+              this.notifyError('获取分类商品失败', res.msg)
             }
           })
           .catch(err => {
-            return Promise.reject(err)
+            this.notifyError('获取分类商品失败', err)
           })
       }
     },
@@ -239,14 +230,11 @@ export default {
           if (res.status === 200) {
             this.product = res.data
           } else {
-            this.$notify.error({
-              title: '搜索失败',
-              message: res.msg
-            })
+            this.notifyError('搜索失败', res.msg)
           }
         })
         .catch(err => {
-          return Promise.reject(err)
+          this.notifyError('搜索失败', err)
         })
     }
   }

@@ -1,10 +1,18 @@
+<!--
+ * @Descripttion:
+ * @Author: congz
+ * @Date: 2020-07-19 14:32:14
+ * @LastEditors: congz
+ * @LastEditTime: 2020-07-22 16:31:42
+-->
+
 # CMall（小米商城）
 
 #### 基于 Vue 开发的小米商城前端界面
 
 #### 感谢 [hai-27](https://github.com/hai-27) 的开源 [vue-store](https://github.com/hai-27/vue-store) 项目提供前端页面及框架支持
 
-#### 前端一部分内容已经重写（导航栏，订单，收藏，购物车）以及加入了一些新功能（头像，个人中心）
+#### 前端一部分内容已经重写（导航栏，订单，收藏，购物车）以及加入了一些新功能（头像，个人中心，订单详情）
 
 #### 后端全部用 golang 重写接口，后端接口项目请至 [cmall-go](https://github.com/congz666/cmall-go)
 

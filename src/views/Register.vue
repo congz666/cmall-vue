@@ -3,7 +3,7 @@
  * @Author: congz
  * @Date: 2020-06-11 10:01:19
  * @LastEditors: congz
- * @LastEditTime: 2020-07-17 10:42:12
+ * @LastEditTime: 2020-07-17 20:04:11
 --> 
 
 <template>
@@ -63,32 +63,19 @@ export default {
           .postUser(this.form)
           .then(res => {
             if (res.status === 200) {
-              this.$notify({
-                title: '注册成功',
-                message: 'success',
-                type: 'success'
-              })
+              this.notifySucceed('注册成功')
               this.$router.push({
                 name: 'Login'
               })
             } else {
-              this.$notify.error({
-                title: '注册失败',
-                message: res.msg
-              })
+              this.notifyError('注册失败', res.msg)
             }
           })
           .catch(error => {
-            this.$notify.error({
-              title: '注册失败惹',
-              message: error
-            })
+            this.notifyError('注册失败', error)
           })
       } else {
-        this.$notify.error({
-          title: '请验证',
-          message: ''
-        })
+        this.notifyError('请验证', '')
       }
     }
   },

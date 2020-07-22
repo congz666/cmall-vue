@@ -3,7 +3,7 @@
  * @Author: congz
  * @Date: 2020-06-10 18:59:36
  * @LastEditors: congz
- * @LastEditTime: 2020-07-17 11:01:13
+ * @LastEditTime: 2020-07-22 11:06:54
  */
 
 import axios from 'axios'
@@ -27,8 +27,7 @@ const listCategories = category_id =>
   axios.get(`/api/v1/categories/${category_id}`).then(res => res.data)
 
 //读取商品的图片
-const showPictures = id =>
-  axios.get(`/api/v1/pictures/${id}`).then(res => res.data)
+const showPictures = id => axios.get(`/api/v1/imgs/${id}`).then(res => res.data)
 
 //搜索商品
 const searchProducts = form =>

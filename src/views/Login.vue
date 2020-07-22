@@ -3,7 +3,7 @@
  * @Author: congz
  * @Date: 2020-06-11 11:08:34
  * @LastEditors: congz
- * @LastEditTime: 2020-07-17 10:41:35
+ * @LastEditTime: 2020-07-17 19:42:19
 --> 
 
 <template>
@@ -75,28 +75,19 @@ export default {
               this.setUser(res.data.user)
               this.setToken(res.data.token)
               // 弹出通知框提示登录成功信息
-              this.notifySucceed(res.msg)
+              this.notifySucceed('登录成功')
               this.$router.push({
                 name: 'Home'
               })
             } else {
-              this.$notify.error({
-                title: '登录失败',
-                message: res.msg
-              })
+              this.notifyError('登录失败', res.msg)
             }
           })
           .catch(error => {
-            this.$notify.error({
-              title: '登录失败',
-              message: error
-            })
+            this.notifyError('登录失败', error)
           })
       } else {
-        this.$notify.error({
-          title: '请验证',
-          message: ''
-        })
+        this.notifyError('请验证', '')
       }
     }
   },

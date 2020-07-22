@@ -3,7 +3,7 @@
  * @Author: congz
  * @Date: 2020-06-04 11:22:40
  * @LastEditors: congz
- * @LastEditTime: 2020-07-17 10:45:11
+ * @LastEditTime: 2020-07-17 19:58:39
 --> 
 
 <template>
@@ -31,14 +31,11 @@ export default {
         if (res.status === 200) {
           this.md = res.data
         } else {
-          this.$notify.error({
-            title: '公告获取失败',
-            message: res.msg
-          })
+          this.notifyError('获取公告失败', res.msg)
         }
       })
       .catch(err => {
-        return Promise.reject(err)
+        this.notifyError('获取公告失败', err)
       })
   }
 }

@@ -3,7 +3,7 @@
  * @Author: congz
  * @Date: 2020-07-03 09:31:23
  * @LastEditors: congz
- * @LastEditTime: 2020-07-17 10:39:42
+ * @LastEditTime: 2020-07-22 16:25:13
 --> 
 
 <template>
@@ -107,6 +107,7 @@ export default {
 }
 .center-content {
   background-color: #ffffff;
+  margin-bottom: 30px;
 }
 .center-user {
   height: 280px;

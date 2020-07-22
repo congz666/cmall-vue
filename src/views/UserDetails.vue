@@ -3,7 +3,7 @@
  * @Author: congz
  * @Date: 2020-07-11 14:59:00
  * @LastEditors: congz
- * @LastEditTime: 2020-07-17 10:42:50
+ * @LastEditTime: 2020-07-22 16:26:38
 --> 
 
 <template>
@@ -95,25 +95,13 @@ export default {
             }
           } else if (res.status === 20001) {
             //token过期，需要重新登录
-            this.$notify.error({
-              title: '登录已过期，需重新登录',
-              message: res.msg
-            })
-            this.$router.push({
-              name: 'Login'
-            })
+            this.loginExpired(res.msg)
           } else {
-            this.$notify.error({
-              title: '上传失败',
-              message: res.msg
-            })
+            this.notifyError('上传失败', res.msg)
           }
         })
         .catch(error => {
-          this.$notify.error({
-            title: '网路错误，或者服务器宕机',
-            message: error
-          })
+          this.notifyError('修改失败', error)
         })
     },
     save() {
@@ -126,32 +114,17 @@ export default {
             localStorage.setItem('user', user)
             // 登录信息存到vuex
             this.setUser(res.data)
-            this.$notify({
-              title: '修改成功',
-              type: 'success'
-            })
+            this.notifySucceed('修改成功')
             this.$router.go(0)
           } else if (res.status === 20001) {
             //token过期，需要重新登录
-            this.$notify.error({
-              title: '登录已过期，需重新登录',
-              message: res.msg
-            })
-            this.$router.push({
-              name: 'Login'
-            })
+            this.loginExpired(res.msg)
           } else {
-            this.$notify.error({
-              title: '修改失败',
-              message: res.msg
-            })
+            this.notifyError('修改失败', res.msg)
           }
         })
         .catch(error => {
-          this.$notify.error({
-            title: '修改失败',
-            message: error
-          })
+          this.notifyError('修改失败', error)
         })
     }
   },
@@ -172,6 +145,7 @@ export default {
 }
 .details-content {
   background-color: #ffffff;
+  margin-bottom: 30px;
 }
 .details-title {
   height: 100px;

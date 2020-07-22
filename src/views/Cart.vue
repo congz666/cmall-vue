@@ -3,7 +3,7 @@
  * @Author: congz
  * @Date: 2020-06-04 11:22:40
  * @LastEditors: congz
- * @LastEditTime: 2020-07-17 10:39:25
+ * @LastEditTime: 2020-07-17 20:01:57
 --> 
 
 
@@ -170,7 +170,7 @@ export default {
         num: currentValue
       }
       cartsAPI
-        .updateCart(form)
+        .updateCart(form, this.$store.getters.getToken)
         .then(res => {
           if (res.status === 200) {
             // 更新vuex状态
@@ -181,22 +181,13 @@ export default {
             })
           } else if (res.status === 20001) {
             //token过期，需要重新登录
-            this.$notify.error({
-              title: '登录已过期，需重新登录',
-              message: res.msg
-            })
-            this.$router.push({
-              name: 'Login'
-            })
+            this.loginExpired(res.msg)
           } else {
-            this.$notify.error({
-              title: '更新失败',
-              message: res.msg
-            })
+            this.notifyError('更新失败', res.msg)
           }
         })
         .catch(err => {
-          return Promise.reject(err)
+          this.notifyError('更新失败', err)
         })
     },
     checkChange(val, key) {
@@ -215,29 +206,16 @@ export default {
           if (res.status === 200) {
             // 更新vuex状态
             this.deleteShoppingCart(productID)
-            this.$notify({
-              title: '删除成功',
-              message: 'success',
-              type: 'success'
-            })
+            this.notifySucceed('删除成功')
           } else if (res.status === 20001) {
             //token过期，需要重新登录
-            this.$notify.error({
-              title: '登录已过期，需重新登录',
-              message: res.msg
-            })
-            this.$router.push({
-              name: 'Login'
-            })
+            this.loginExpired(res.msg)
           } else {
-            this.$notify.error({
-              title: '删除失败',
-              message: res.msg
-            })
+            this.notifyError('删除失败', res.msg)
           }
         })
         .catch(err => {
-          return Promise.reject(err)
+          this.notifyError('删除失败', err)
         })
     }
   },

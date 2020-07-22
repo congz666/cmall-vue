@@ -3,7 +3,7 @@
  * @Author: congz
  * @Date: 2020-06-04 11:22:40
  * @LastEditors: congz
- * @LastEditTime: 2020-07-17 10:44:25
+ * @LastEditTime: 2020-07-22 13:17:50
  */
 
 import Vue from 'vue'
@@ -82,6 +82,15 @@ const routes = [
     path: '/confirmOrder',
     name: 'ConfirmOrder',
     component: () => import('../views/ConfirmOrder.vue'),
+    meta: {
+      showMenu: false,
+      requireAuth: true // 需要验证登录状态
+    }
+  },
+  {
+    path: '/order/details',
+    name: 'OrderDetails',
+    component: () => import('../views/OrderDetails.vue'),
     meta: {
       requireAuth: true // 需要验证登录状态
     }
