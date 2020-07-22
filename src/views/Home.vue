@@ -3,7 +3,7 @@
  * @Author: congz
  * @Date: 2020-06-04 11:22:40
  * @LastEditors: congz
- * @LastEditTime: 2020-07-17 20:19:40
+ * @LastEditTime: 2020-07-22 20:37:09
 --> 
 
 <template>
@@ -12,7 +12,7 @@
     <div class="block">
       <el-carousel height="460px">
         <el-carousel-item v-for="item in carousels" :key="item.id">
-          <img style="height:460px;" :src=" item.img_path" />
+          <img style="height:460px;" v-lazy="item.img_path" />
         </el-carousel-item>
       </el-carousel>
     </div>

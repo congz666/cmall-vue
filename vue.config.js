@@ -2,10 +2,19 @@
  * @Description: 配置文件
  * @Author: hai-27
  * @Date: 2020-02-07 16:23:00
- * @LastEditors: hai-27
- * @LastEditTime: 2020-03-05 01:41:38
+ * @LastEditors: congz
+ * @LastEditTime: 2020-07-22 21:39:29
  */
 module.exports = {
+  pwa: {
+    iconPaths: {
+      favicon32: 'favicon.ico',
+      favicon16: 'favicon.ico',
+      appleTouchIcon: 'favicon.ico',
+      maskIcon: 'favicon.ico',
+      msTileImage: 'favicon.ico'
+    }
+  },
   publicPath: './',
   devServer: {
     open: true,
@@ -13,7 +22,7 @@ module.exports = {
       '^/api': {
         target: 'http://localhost:3000',
         ws: true,
-        changeOrigin: true,
+        changeOrigin: true
       }
     }
   }

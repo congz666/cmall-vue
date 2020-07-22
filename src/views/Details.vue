@@ -3,7 +3,7 @@
  * @Author: congz
  * @Date: 2020-06-04 11:22:40
  * @LastEditors: congz
- * @LastEditTime: 2020-07-17 20:03:38
+ * @LastEditTime: 2020-07-22 23:58:37
 --> 
 
 <template>
@@ -13,17 +13,17 @@
       <div class="title">
         <p>{{productDetails.name}}</p>
         <div class="list">
-          <ul>
-            <li>
-              <router-link to>概述</router-link>
-            </li>
-            <li>
-              <router-link to>参数</router-link>
-            </li>
-            <li>
-              <router-link to>用户评价</router-link>
-            </li>
-          </ul>
+          <div class="select">
+            <el-button type="text" class="list-select" @click="goInfo">概述</el-button>
+          </div>
+          <span class="cut">|</span>
+          <div class="select">
+            <el-button type="text" class="list-select" @click="goParam">参数</el-button>
+          </div>
+          <span class="cut">|</span>
+          <div class="select">
+            <el-button type="text" class="list-select">用户评价</el-button>
+          </div>
         </div>
       </div>
     </div>
@@ -35,7 +35,7 @@
       <div class="block">
         <el-carousel height="560px" v-if="productPictures.length>1">
           <el-carousel-item v-for="item in productPictures" :key="item.id">
-            <img style="height:560px;" :src="item.img_path" />
+            <img style="height:560px;" v-lazy="item.img_path" />
           </el-carousel-item>
         </el-carousel>
         <div v-if="productPictures.length==1">
@@ -97,11 +97,20 @@
       <!-- 右侧内容区END -->
     </div>
     <!-- 主要内容END -->
+    <div class="product-select" id="product-select">
+      <el-button type="text" :class="select==0 ? 'isSelect':'notSelect'" @click="showInfoImgs">商品概述</el-button>
+      <span class="cut">|</span>
+      <el-button type="text" :class="select==1 ? 'isSelect':'notSelect'" @click="showParamImgs">商品参数</el-button>
+    </div>
+    <div class="product-img" v-for="item in imgs" :key="item.id">
+      <img v-lazy="item.img_path" />
+    </div>
   </div>
 </template>
 <script>
 import { mapActions } from 'vuex'
 import * as productsAPI from '@/api/products/'
+import * as imgsAPI from '@/api/img/'
 import * as favoritesAPI from '@/api/favorites/'
 import * as cartsAPI from '@/api/carts/'
 export default {
@@ -110,7 +119,11 @@ export default {
       dis: false, // 控制“加入购物车按钮是否可用”
       productID: 0, // 商品id
       productDetails: '', // 商品详细信息
-      productPictures: '' // 商品图片
+      productPictures: '', // 商品图片
+      imgs: '', //商品概述图片
+      infoImgs: '',
+      paramImgs: '',
+      select: 0
     }
   },
   // 通过路由获取商品id
@@ -136,6 +149,29 @@ export default {
       productsAPI.showPictures(this.productID).then(res => {
         this.productPictures = res.data
       })
+      imgsAPI.showInfoImgs(this.productID).then(res => {
+        this.infoImgs = res.data
+        this.imgs = this.infoImgs
+      })
+      imgsAPI.showParamImgs(this.productID).then(res => {
+        this.paramImgs = res.data
+      })
+    },
+    goInfo() {
+      this.showInfoImgs()
+      document.getElementById('product-select').scrollIntoView()
+    },
+    goParam() {
+      this.showParamImgs()
+      document.getElementById('product-select').scrollIntoView()
+    },
+    showInfoImgs() {
+      this.select = 0
+      this.imgs = this.infoImgs
+    },
+    showParamImgs() {
+      this.select = 1
+      this.imgs = this.paramImgs
     },
     // 加入购物车
     addShoppingCart() {
@@ -205,6 +241,20 @@ export default {
           this.notifyError('添加收藏夹失败', err)
         })
     }
+  },
+  beforeRouteEnter(to, from, next) {
+    // 添加背景色
+    document
+      .querySelector('body')
+      .setAttribute('style', 'background-color:#ffffff')
+    next()
+  },
+  beforeRouteLeave(to, from, next) {
+    // 去除背景色
+    document
+      .querySelector('body')
+      .setAttribute('style', 'background-color:#f5f5f5')
+    next()
   }
 }
 </script>
@@ -214,7 +264,7 @@ export default {
   height: 64px;
   margin-top: -20px;
   z-index: 4;
-  background: #f5f5f5;
+  background: #ffffff;
   border-bottom: 1px solid #e0e0e0;
   -webkit-box-shadow: 0px 5px 5px rgba(0, 0, 0, 0.07);
   box-shadow: 0px 5px 5px rgba(0, 0, 0, 0.07);
@@ -234,18 +284,26 @@ export default {
 #details .page-header .title .list {
   height: 64px;
   float: right;
+  display: flex;
+  align-items: center;
 }
-#details .page-header .title .list li {
+#details .page-header .title .list .select {
   float: left;
   margin-left: 20px;
 }
-#details .page-header .title .list li a {
+
+#details .page-header .title .list .select .list-select {
   font-size: 14px;
   color: #616161;
 }
-#details .page-header .title .list li a:hover {
+#details .page-header .title .list .select .list-select:hover {
   font-size: 14px;
   color: #ff6700;
+}
+#details .page-header .title .list .cut {
+  font-size: 17px;
+  color: #c9c7c7;
+  margin-left: 20px;
 }
 /* 头部CSS END */
 
@@ -255,6 +313,8 @@ export default {
   height: 560px;
   padding-top: 30px;
   margin: 0 auto;
+  padding-bottom: 30px;
+  border-bottom: 1px solid #e0e0e0;
 }
 #details .main .block {
   float: left;
@@ -307,7 +367,7 @@ export default {
   text-decoration: line-through;
 }
 #details .main .content .pro-list {
-  background: #f9f9fa;
+  background: #f9f9f9;
   padding: 30px 60px;
   margin: 50px 0 50px;
 }
@@ -361,4 +421,35 @@ export default {
   color: #b0b0b0;
 }
 /* 主要内容CSS END */
+
+/*商品概述&参数*/
+#details .product-select {
+  width: 300px;
+  margin: 0 auto;
+  height: 80px;
+  display: flex;
+  align-items: center;
+}
+#details .product-select .notSelect {
+  font-size: 19px;
+  color: #757575;
+}
+#details .product-select .isSelect {
+  font-size: 19px;
+  color: #ff6700;
+}
+#details .product-select .notSelect:hover {
+  color: #ff6700;
+}
+#details .product-select .cut {
+  font-size: 25px;
+  color: #c9c7c7;
+  margin-left: 35px;
+  margin-right: 35px;
+}
+#details .product-img img {
+  width: 100%;
+  display: block;
+}
+/*商品概述&参数END*/
 </style>

@@ -3,7 +3,7 @@
  * @Author: congz
  * @Date: 2020-06-04 11:22:40
  * @LastEditors: congz
- * @LastEditTime: 2020-07-22 15:37:41
+ * @LastEditTime: 2020-07-22 20:34:38
  */
 import Vue from 'vue'
 import App from './App.vue'
@@ -12,6 +12,22 @@ import store from './store'
 import axios from 'axios'
 import ElementUI from 'element-ui'
 import 'element-ui/lib/theme-chalk/index.css'
+import VueLazyload from 'vue-lazyload'
+
+Vue.use(VueLazyload, {
+  preLoad: 1.3,
+  attempt: 1, // 加载图片数量
+  listenEvents: [
+    'scroll',
+    'wheel',
+    'mousewheel',
+    'resize',
+    'animationend',
+    'transitionend',
+    'touchmove'
+  ]
+})
+
 Vue.use(ElementUI)
 
 Vue.config.productionTip = false
