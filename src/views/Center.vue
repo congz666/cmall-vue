@@ -3,7 +3,7 @@
  * @Author: congz
  * @Date: 2020-07-03 09:31:23
  * @LastEditors: congz
- * @LastEditTime: 2020-07-22 19:23:56
+ * @LastEditTime: 2020-07-24 11:03:16
 --> 
 
 <template>
@@ -52,7 +52,7 @@
               <div class="operate1">
                 <p class="oper-title">待支付订单：0</p>
                 <p>
-                  <a href class="oper-href">查看待支付订单 ></a>
+                  <router-link to class="oper-href">查看待支付订单 ></router-link>
                 </p>
               </div>
               <div class="operate">
@@ -61,7 +61,7 @@
               <div class="operate1">
                 <p class="oper-title">待收货订单：0</p>
                 <p>
-                  <a href class="oper-href">查看待收货订单 ></a>
+                  <router-link to class="oper-href">查看待收货订单 ></router-link>
                 </p>
               </div>
             </div>
@@ -72,7 +72,7 @@
               <div class="operate1">
                 <p class="oper-title">待评价商品：0</p>
                 <p>
-                  <a href class="oper-href">查看待评价订单 ></a>
+                  <router-link to class="oper-href">查看待评价订单 ></router-link>
                 </p>
               </div>
               <div class="operate">
@@ -81,7 +81,7 @@
               <div class="operate1">
                 <p class="oper-title">收藏的商品：0</p>
                 <p>
-                  <a href class="oper-href">查看收藏的商品 ></a>
+                  <router-link to class="oper-href">查看收藏的商品 ></router-link>
                 </p>
               </div>
             </div>

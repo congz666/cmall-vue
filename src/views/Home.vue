@@ -3,7 +3,7 @@
  * @Author: congz
  * @Date: 2020-06-04 11:22:40
  * @LastEditors: congz
- * @LastEditTime: 2020-07-22 20:37:09
+ * @LastEditTime: 2020-07-23 15:21:22
 --> 
 
 <template>
@@ -112,6 +112,7 @@
 <script>
 import * as carouselsAPI from '@/api/carousels/'
 import * as productsAPI from '@/api/products/'
+import * as rankingAPI from '@/api/ranking/'
 
 export default {
   data() {
@@ -190,6 +191,34 @@ export default {
         })
         .catch(err => {
           this.notifyError('获取轮播图失败', err)
+        })
+      //获取热门家电
+      rankingAPI
+        .listElecRanking()
+        .then(res => {
+          if (res.status === 200) {
+            this.applianceHotList = res.data
+            this.applianceList = res.data
+          } else {
+            this.notifyError('获取热门家电失败')
+          }
+        })
+        .catch(err => {
+          this.notifyError('获取热门家电失败', err)
+        })
+      //获取热门配件
+      rankingAPI
+        .listAcceRanking()
+        .then(res => {
+          if (res.status === 200) {
+            this.accessoryHotList = res.data
+            this.accessoryList = res.data
+          } else {
+            this.notifyError('获取热门配件失败')
+          }
+        })
+        .catch(err => {
+          this.notifyError('获取热门配件失败', err)
         })
       //获取手机列表
       this.getProduct(1, 'phonesList')

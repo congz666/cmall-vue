@@ -3,7 +3,7 @@
  * @Author: congz
  * @Date: 2020-06-04 11:22:40
  * @LastEditors: congz
- * @LastEditTime: 2020-07-22 20:34:38
+ * @LastEditTime: 2020-07-23 15:39:56
  */
 import Vue from 'vue'
 import App from './App.vue'
@@ -53,6 +53,11 @@ axios.interceptors.request.use(
     return Promise.reject(error)
   }
 )
+
+//跳转页面时返回顶部
+router.afterEach((to, from, next) => {
+  window.scrollTo(0, 0)
+})
 
 // 全局拦截器,在进入需要用户权限的页面前校验是否已经登录
 router.beforeResolve((to, from, next) => {

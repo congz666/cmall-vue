@@ -3,7 +3,7 @@
  * @Author: congz
  * @Date: 2020-06-04 11:22:40
  * @LastEditors: congz
- * @LastEditTime: 2020-07-22 19:16:26
+ * @LastEditTime: 2020-07-24 11:04:02
 --> 
 
 <template>
@@ -31,7 +31,7 @@
                     <i class="el-icon-caret-bottom"></i>
                   </span>
                   <el-dropdown-menu slot="dropdown">
-                    <a href="https://github.com/congz666/cmall-vue" target="_blank">
+                    <a href="https://github.com/congz666/cmall-go" target="_blank">
                       <el-dropdown-item>项目仓库</el-dropdown-item>
                     </a>
                     <router-link to="/center">
@@ -115,7 +115,7 @@
             </div>
           </div>
           <div class="github">
-            <a href="https://github.com/congz666/cmall-vue" target="_blank">
+            <a href="https://github.com/congz666/cmall-go" target="_blank">
               <div class="github-but"></div>
             </a>
           </div>

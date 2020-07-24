@@ -3,7 +3,7 @@
  * @Author: congz
  * @Date: 2020-07-03 18:01:05
  * @LastEditors: congz
- * @LastEditTime: 2020-07-22 16:25:23
+ * @LastEditTime: 2020-07-24 11:00:23
 --> 
 
 <template>
@@ -75,7 +75,7 @@
                   </div>
                   <div class="operate">
                     <div>
-                      <router-link to="/">
+                      <router-link to>
                         <el-button class="button-pay">立即付款</el-button>
                       </router-link>
                     </div>
