@@ -3,7 +3,7 @@
  * @Author: congz
  * @Date: 2020-07-11 15:12:07
  * @LastEditors: congz
- * @LastEditTime: 2020-07-22 16:26:21
+ * @LastEditTime: 2020-08-04 10:24:37
 --> 
 
 <template>
@@ -30,7 +30,7 @@
                 <router-link to>
                   <li
                     :class="item.id == confirmAddress ? 'in-section' : ''"
-                    v-for="item in address"
+                    v-for="(item,index) in address"
                     :key="item.id"
                     @mouseenter="mouseEnter(item)"
                     @mouseleave="mouseLeave(item)"
@@ -40,7 +40,7 @@
                     <p class="address">{{item.address}}</p>
                     <div class="operate" v-show="item.seen">
                       <span @click="edit(item)">修改</span>
-                      <span @click="deleteDialog(item.id)">删除</span>
+                      <span @click="deleteDialog(item.id,index)">删除</span>
                     </div>
                   </li>
                 </router-link>
@@ -62,7 +62,7 @@
             </el-form>
             <span slot="footer" class="dialog-footer">
               <el-button type="primary" @click="postEdit">确 定</el-button>
-              <el-button @click="editVisible = false">取 消</el-button>
+              <el-button @click="addVisible = false">取 消</el-button>
             </span>
           </el-dialog>
           <!-- 新建收货地址弹出框END -->
@@ -114,6 +114,7 @@ export default {
       deleteVisible: false,
       confirmAddress: 0, // 选择的地址id
       addressID: 0,
+      addressIndex: 0,
       form: {
         id: '',
         user_id: '',
@@ -159,8 +160,9 @@ export default {
       this.form = item
       this.editVisible = true
     },
-    deleteDialog(val) {
+    deleteDialog(val, index) {
       this.addressID = val
+      this.addressIndex = index
       this.deleteVisible = true
     },
     postEdit() {
@@ -169,8 +171,9 @@ export default {
         .postAddress(this.form, this.$store.getters.getToken)
         .then(res => {
           if (res.status === 200) {
+            this.address = res.data
+            this.addVisible = false
             this.notifySucceed('新建收货地址成功')
-            this.$router.go(0)
           } else if (res.status === 20001) {
             //token过期，需要重新登录
             this.loginExpired(res.msg)
@@ -188,8 +191,9 @@ export default {
         .updateAddress(this.form, this.$store.getters.getToken)
         .then(res => {
           if (res.status === 200) {
+            this.address = res.data
+            this.editVisible = false
             this.notifySucceed('修改收货地址成功')
-            this.$router.go(0)
           } else if (res.status === 20001) {
             //token过期，需要重新登录
             this.loginExpired(res.msg)
@@ -206,8 +210,9 @@ export default {
         .deleteAddress(this.addressID, this.$store.getters.getToken)
         .then(res => {
           if (res.status === 200) {
+            this.address.splice(this.addressIndex, 1)
+            this.deleteVisible = false
             this.notifySucceed('删除收货地址成功')
-            this.$router.go(0)
           } else if (res.status === 20001) {
             //token过期，需要重新登录
             this.loginExpired(res.msg)

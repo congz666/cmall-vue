@@ -3,7 +3,7 @@
  * @Author: congz
  * @Date: 2020-07-11 14:59:00
  * @LastEditors: congz
- * @LastEditTime: 2020-07-22 16:26:38
+ * @LastEditTime: 2020-08-04 09:30:44
 --> 
 
 <template>
@@ -33,7 +33,7 @@
                   >
                     <img v-if="imageUrl" :src="imageUrl" class="avatar" />
                     <i v-else class="el-icon-plus avatar-uploader-icon"></i>
-                    <div class="el-upload__tip" slot="tip">只能上传png/jpg文件，且不超过2M</div>
+                    <div class="el-upload__tip" slot="tip">点击上传头像,只能上传png/jpg文件，且不超过2M</div>
                   </el-upload>
                 </el-form-item>
                 <el-form-item label="昵称:   ">
@@ -41,7 +41,6 @@
                 </el-form-item>
                 <el-form-item>
                   <el-button type="primary" style="margin-bottom:83px" @click="save">保存</el-button>
-                  <el-button>取消</el-button>
                 </el-form-item>
               </el-form>
             </div>
@@ -115,7 +114,9 @@ export default {
             // 登录信息存到vuex
             this.setUser(res.data)
             this.notifySucceed('修改成功')
-            this.$router.go(0)
+            this.$router.push({
+              name: 'Center'
+            })
           } else if (res.status === 20001) {
             //token过期，需要重新登录
             this.loginExpired(res.msg)

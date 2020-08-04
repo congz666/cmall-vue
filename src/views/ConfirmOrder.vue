@@ -3,7 +3,7 @@
  * @Author: congz
  * @Date: 2020-06-04 11:22:40
  * @LastEditors: congz
- * @LastEditTime: 2020-07-22 13:11:33
+ * @LastEditTime: 2020-08-04 11:48:20
 --> 
 
 <template>
@@ -27,6 +27,9 @@
                 <i class="el-icon-caret-bottom"></i>
               </router-link>
               <el-dropdown-menu slot="dropdown">
+                <router-link to="/">
+                  <el-dropdown-item class="dropdown-menu">首页</el-dropdown-item>
+                </router-link>
                 <router-link to="/center">
                   <el-dropdown-item class="dropdown-menu">个人中心</el-dropdown-item>
                 </router-link>
@@ -68,7 +71,7 @@
                 <p class="address">{{item.address}}</p>
               </li>
             </router-link>
-            <li class="add-address">
+            <li class="add-address" @click="addVisible=true">
               <i class="el-icon-circle-plus-outline"></i>
               <p>添加新地址</p>
             </li>
@@ -85,7 +88,8 @@
             <li v-for="item in getCheckGoods" :key="item.id">
               <img :src="item.img_path" />
               <span class="pro-name">{{item.name}}</span>
-              <span class="pro-price">{{item.discount_price}}元 x {{item.num}}</span>
+              <span class="pro-price">{{item.discount_price}}元</span>
+              <span class="pro-num">x {{item.num}}</span>
               <span class="pro-status"></span>
               <span class="pro-total">{{item.discount_price * item.num}}元</span>
             </li>
@@ -155,6 +159,25 @@
       <!-- 结算导航END -->
     </div>
     <!-- 主要内容容器END -->
+    <!-- 新建收货地址弹出框 -->
+    <el-dialog title="新建收货地址" :visible.sync="addVisible" width="30%">
+      <el-form ref="form" :model="form" label-width="70px">
+        <el-form-item label="姓名">
+          <el-input v-model="form.name"></el-input>
+        </el-form-item>
+        <el-form-item label="手机号">
+          <el-input v-model="form.phone"></el-input>
+        </el-form-item>
+        <el-form-item label="详细地址">
+          <el-input type="textarea" rows="5" v-model="form.address"></el-input>
+        </el-form-item>
+      </el-form>
+      <span slot="footer" class="dialog-footer">
+        <el-button type="primary" @click="postEdit">确 定</el-button>
+        <el-button @click="addVisible = false">取 消</el-button>
+      </span>
+    </el-dialog>
+    <!-- 新建收货地址弹出框END -->
   </div>
 </template>
 <script>
@@ -170,7 +193,14 @@ export default {
       // 选择的地址id
       confirmAddress: 0,
       // 地址列表
-      address: []
+      address: [],
+      addVisible: false,
+      form: {
+        user_id: '',
+        name: '',
+        phone: '',
+        address: ''
+      }
     }
   },
   created() {
@@ -262,6 +292,26 @@ export default {
             this.notifyError('结算失败', err)
           })
       }
+    },
+    postEdit() {
+      this.form.user_id = this.$store.getters.getUser.id
+      addressesAPI
+        .postAddress(this.form, this.$store.getters.getToken)
+        .then(res => {
+          if (res.status === 200) {
+            this.address = res.data
+            this.addVisible = false
+            this.notifySucceed('新建收货地址成功')
+          } else if (res.status === 20001) {
+            //token过期，需要重新登录
+            this.loginExpired(res.msg)
+          } else {
+            this.notifyError('新建收货地址失败', res.msg)
+          }
+        })
+        .catch(err => {
+          this.notifyError('新建收货地址失败', err)
+        })
     }
   }
 }
@@ -438,7 +488,12 @@ export default {
 }
 .confirmOrder .content .section-goods .goods-list li .pro-price {
   float: left;
-  width: 150px;
+  width: 120px;
+  line-height: 30px;
+}
+.confirmOrder .content .section-goods .goods-list li .pro-num {
+  float: left;
+  width: 30px;
   text-align: center;
   line-height: 30px;
 }
@@ -562,6 +617,7 @@ export default {
 .confirmOrder .content .section-bar .btn .btn-return {
   color: rgba(0, 0, 0, 0.27);
   border-color: rgba(0, 0, 0, 0.27);
+  color: #757575;
 }
 .confirmOrder .content .section-bar .btn .btn-primary {
   background: #ff6700;

@@ -3,17 +3,17 @@
  * @Author: congz
  * @Date: 2020-06-04 11:22:40
  * @LastEditors: congz
- * @LastEditTime: 2020-07-17 20:05:07
+ * @LastEditTime: 2020-08-04 09:48:29
 --> 
 
 <template>
   <div id="myList" class="myList">
     <ul>
-      <li v-for="item in list" :key="item.id">
+      <li v-for="(item,index) in list" :key="item.id">
         <el-popover placement="top">
           <p>确定删除吗？</p>
           <div style="text-align: right; margin: 10px 0 0">
-            <el-button type="primary" size="mini" @click="deleteFavorite(item.id)">确定</el-button>
+            <el-button type="primary" size="mini" @click="deleteFavorite(item.id,index)">确定</el-button>
           </div>
           <i class="el-icon-close delete" slot="reference" v-show="isDelete"></i>
         </el-popover>
@@ -62,7 +62,7 @@ export default {
     }
   },
   methods: {
-    deleteFavorite(product_id) {
+    deleteFavorite(product_id, index) {
       var form = {
         user_id: this.$store.getters.getUser.id,
         product_id: product_id
@@ -71,12 +71,7 @@ export default {
         .deleteFavorite(form, this.$store.getters.getToken)
         .then(res => {
           if (res.status === 200) {
-            for (let i = 0; i < this.list.length; i++) {
-              const temp = this.list[i]
-              if (temp.product_id == product_id) {
-                this.list.splice(i, 1)
-              }
-            }
+            this.list.splice(index, 1)
             this.notifySucceed('删除成功')
           } else if (res.status === 20001) {
             //token过期，需要重新登录

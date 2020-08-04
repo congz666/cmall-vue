@@ -3,7 +3,7 @@
  * @Author: congz
  * @Date: 2020-06-04 11:22:40
  * @LastEditors: congz
- * @LastEditTime: 2020-07-24 11:04:02
+ * @LastEditTime: 2020-08-04 12:06:33
 --> 
 
 <template>
@@ -83,7 +83,9 @@
           <el-menu-item index="/">首页</el-menu-item>
           <el-menu-item index="/goods">全部商品</el-menu-item>
           <el-menu-item index="/about">关于我们</el-menu-item>
-
+          <a href="https://congz666.gitee.io/" target="_blank">
+            <el-menu-item :index="0">个人博客</el-menu-item>
+          </a>
           <div class="so">
             <el-input placeholder="请输入搜索内容" v-model="search">
               <el-button slot="append" icon="el-icon-search" @click="searchClick"></el-button>
@@ -127,7 +129,8 @@
               <span>|</span>
               <router-link to="/about">关于我们</router-link>
             </p>
-            <p class="coty">商城版权所有 &copy; 2012-2021</p>
+            <p>Copyright ©2020, congz.top 本网站设计内容大部分属小米商城</p>
+            <a href="http://www.beian.miit.gov.cn/" target="_blank">粤ICP备20067893号</a>
           </div>
         </div>
       </el-footer>
@@ -396,7 +399,7 @@ a:hover {
 }
 .el-header .so {
   width: 300px;
-  margin-left: 537px;
+  margin-left: 437px;
 }
 /* 顶栏容器CSS END */
 
@@ -455,6 +458,9 @@ a:hover {
 }
 .footer .mod_help p span {
   padding: 0 22px;
+}
+.footer .mod_help a {
+  color: #888888;
 }
 /* 底栏容器CSS END */
 </style>

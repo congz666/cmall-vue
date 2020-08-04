@@ -3,7 +3,7 @@
  * @Author: congz
  * @Date: 2020-06-11 10:01:19
  * @LastEditors: congz
- * @LastEditTime: 2020-07-17 20:04:11
+ * @LastEditTime: 2020-08-04 09:24:24
 --> 
 
 <template>
@@ -22,10 +22,10 @@
               <el-input v-model="form.user_name" placeholder="用户名"></el-input>
             </el-form-item>
             <el-form-item>
-              <el-input v-model="form.password" placeholder="密码"></el-input>
+              <el-input v-model="form.password" placeholder="密码" type="password"></el-input>
             </el-form-item>
             <el-form-item>
-              <el-input v-model="form.password_confirm" placeholder="确认密码"></el-input>
+              <el-input v-model="form.password_confirm" placeholder="确认密码" type="password"></el-input>
             </el-form-item>
           </el-form>
           <GtPage @ok="ok"></GtPage>

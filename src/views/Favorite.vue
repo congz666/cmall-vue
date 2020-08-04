@@ -3,7 +3,7 @@
  * @Author: congz
  * @Date: 2020-07-03 22:55:29
  * @LastEditors: congz
- * @LastEditTime: 2020-07-22 16:25:48
+ * @LastEditTime: 2020-08-03 14:11:43
 --> 
 
 <template>
@@ -39,7 +39,7 @@
             </div>
             <!-- 订单为空的时候显示的内容 -->
             <div v-else class="empty">
-              <p>你暂未收藏任何商品。</p>
+              <p>你暂未收藏任何商品</p>
             </div>
             <!-- 订单为空的时候显示的内容END -->
           </div>

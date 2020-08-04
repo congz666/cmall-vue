@@ -3,7 +3,7 @@
  * @Author: congz
  * @Date: 2020-06-04 11:22:40
  * @LastEditors: congz
- * @LastEditTime: 2020-07-17 20:01:57
+ * @LastEditTime: 2020-08-04 11:47:56
 --> 
 
 
@@ -29,6 +29,9 @@
                 <i class="el-icon-caret-bottom"></i>
               </router-link>
               <el-dropdown-menu slot="dropdown">
+                <router-link to="/">
+                  <el-dropdown-item class="dropdown-menu">首页</el-dropdown-item>
+                </router-link>
                 <router-link to="/center">
                   <el-dropdown-item class="dropdown-menu">个人中心</el-dropdown-item>
                 </router-link>
@@ -414,6 +417,7 @@ export default {
   height: 50px;
   line-height: 50px;
   background-color: #fff;
+  margin-bottom: 150px;
 }
 .shoppingCart .cart-bar .cart-bar-left {
   float: left;

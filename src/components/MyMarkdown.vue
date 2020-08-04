@@ -3,17 +3,17 @@
  * @Author: congz
  * @Date: 2020-06-04 11:22:40
  * @LastEditors: congz
- * @LastEditTime: 2020-07-17 19:58:39
+ * @LastEditTime: 2020-08-04 11:16:50
 --> 
 
 <template>
   <div id="my-markdown" class="markdown-body">
-    <vue-markdown :source="md"></vue-markdown>
+    <vue-markdown :source="notice"></vue-markdown>
   </div>
 </template>
 <script>
 import VueMarkdown from 'vue-markdown'
-import * as aboutAPI from '@/api/abouts'
+import * as noticeAPI from '@/api/notice'
 export default {
   name: 'MyMarkdown',
   components: {
@@ -21,15 +21,15 @@ export default {
   },
   data() {
     return {
-      md: ''
+      notice: ''
     }
   },
   created() {
-    aboutAPI
-      .readMe()
+    noticeAPI
+      .showNotice()
       .then(res => {
         if (res.status === 200) {
-          this.md = res.data
+          this.notice = res.data.text
         } else {
           this.notifyError('获取公告失败', res.msg)
         }

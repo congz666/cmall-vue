@@ -3,7 +3,7 @@
  * @Author: congz
  * @Date: 2020-07-03 18:01:05
  * @LastEditors: congz
- * @LastEditTime: 2020-07-24 11:00:23
+ * @LastEditTime: 2020-08-04 12:00:08
 --> 
 
 <template>
@@ -46,7 +46,7 @@
                       <span class="cut">|</span>
                       <span class="info">严伟聪</span>
                       <span class="cut">|</span>
-                      <span class="info">订单号：{{item.order_id}}</span>
+                      <span class="info">订单号：{{item.order_num}}</span>
                       <span class="cut">|</span>
                       <span class="info">在线支付</span>
                     </div>
@@ -103,7 +103,7 @@
             <!-- 分页END -->
             <!-- 订单为空的时候显示的内容 -->
             <div v-else class="empty">
-              <p>你暂未购买任何商品。</p>
+              <p>你暂未购买任何商品</p>
               <p>快去购物吧！</p>
             </div>
             <!-- 订单为空的时候显示的内容END -->
@@ -196,12 +196,13 @@ export default {
 .order-select .select {
   font-size: 17px;
   color: #757575;
+  margin-right: 10px;
 }
 .order-select .cut {
   font-size: 22px;
   color: #c9c7c7;
-  margin-left: 15px;
   margin-right: 15px;
+  font-weight: 300;
 }
 .order-select .search {
   width: 300px;
@@ -231,6 +232,7 @@ export default {
   margin: 0 auto;
   margin-top: 5px;
   display: flex;
+  align-items: center;
 }
 .order-list-head .order-info .info {
   font-size: 15px;
@@ -241,6 +243,7 @@ export default {
   color: #c9c7c7;
   margin-left: 10px;
   margin-right: 10px;
+  font-weight: 300;
 }
 .order-list-head .order-info .money {
   font-size: 25px;

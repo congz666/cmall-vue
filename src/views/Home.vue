@@ -3,7 +3,7 @@
  * @Author: congz
  * @Date: 2020-06-04 11:22:40
  * @LastEditors: congz
- * @LastEditTime: 2020-07-23 15:21:22
+ * @LastEditTime: 2020-08-03 13:56:56
 --> 
 
 <template>
@@ -252,6 +252,20 @@ export default {
           this.notifyError('获取失败', err)
         })
     }
+  },
+  beforeRouteEnter(to, from, next) {
+    // 添加背景色
+    document
+      .querySelector('body')
+      .setAttribute('style', 'background-color:#ffffff')
+    next()
+  },
+  beforeRouteLeave(to, from, next) {
+    // 去除背景色
+    document
+      .querySelector('body')
+      .setAttribute('style', 'background-color:#f5f5f5')
+    next()
   }
 }
 </script>

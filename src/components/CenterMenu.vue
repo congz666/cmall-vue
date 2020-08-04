@@ -3,7 +3,7 @@
  * @Author: congz
  * @Date: 2020-07-03 09:40:21
  * @LastEditors: congz
- * @LastEditTime: 2020-07-24 11:15:57
+ * @LastEditTime: 2020-08-04 10:44:30
 --> 
 
 <template>
@@ -81,7 +81,7 @@ export default {
   background-color: #ffffff;
 }
 .menu-content {
-  width: 100px;
+  width: 120px;
   margin: 0 auto;
 }
 .submenu {
