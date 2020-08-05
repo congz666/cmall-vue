@@ -3,7 +3,7 @@
  * @Author: congz
  * @Date: 2020-06-11 09:39:58
  * @LastEditors: congz
- * @LastEditTime: 2020-07-17 11:01:47
+ * @LastEditTime: 2020-08-05 15:37:00
  */
 
 import axios from 'axios'
@@ -15,15 +15,13 @@ const postUser = form =>
 const postLogin = form =>
   axios.post('/api/v1/user/login', form).then(res => res.data)
 //检验token
-const checkToken = token =>
-  axios.get('/api/v1/ping', { params: { token } }).then(res => res.data)
+const checkToken = () => axios.get('/api/v1/ping').then(res => res.data)
 //修改信息
-const updateUser = (form, token) =>
-  axios.put('/api/v1/user', form, { params: { token } }).then(res => res.data)
+const updateUser = form => axios.put('/api/v1/user', form).then(res => res.data)
 
-const logout = token =>
-  axios
-    .delete('/api/v1/user/logout', { params: { token } })
-    .then(res => res.data)
+const logout = () => axios.delete('/api/v1/user/logout').then(res => res.data)
 
-export { postUser, postLogin, checkToken, updateUser, logout }
+//极验初始化
+const geetest = () => axios.get('/api/v1/geetest').then(res => res.data)
+
+export { postUser, postLogin, checkToken, updateUser, logout, geetest }

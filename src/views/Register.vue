@@ -3,7 +3,7 @@
  * @Author: congz
  * @Date: 2020-06-11 10:01:19
  * @LastEditors: congz
- * @LastEditTime: 2020-08-04 09:24:24
+ * @LastEditTime: 2020-08-05 14:09:39
 --> 
 
 <template>
@@ -28,41 +28,55 @@
               <el-input v-model="form.password_confirm" placeholder="确认密码" type="password"></el-input>
             </el-form-item>
           </el-form>
-          <GtPage @ok="ok"></GtPage>
-          <el-button type="primary" style="width:300px;margin-bottom:10px;" @click="register">注册</el-button>
+          <div id="captcha">
+            <p id="wait">正在加载验证码...</p>
+          </div>
+          <div style="margin-top:15px">
+            <a href="#" class="btn-gradient blue block" @click="register">注册</a>
+          </div>
           <el-link type="primary" href="/#/login" style="float:right;margin-bottom:20px;">已有账号？直接登录></el-link>
         </div>
       </el-card>
     </div>
   </div>
 </template>
+<script src="../assets/gt.js"></script>
 <script>
 import * as userAPI from '@/api/users'
-import GtPage from '../components/GtPage.vue'
+require('../assets/gt.js')
+var captcha
 export default {
   name: 'Register',
   data() {
     return {
-      okk: 0,
       imageUrl: '',
       form: {
         nickname: '',
         user_name: '',
         password: '',
-        password_confirm: ''
+        password_confirm: '',
+        challenge: '',
+        validate: '',
+        seccode: ''
       }
     }
   },
   methods: {
-    ok(val) {
-      this.okk = val
-    },
     register() {
-      if (this.okk == 1) {
+      var result = captcha.getValidate()
+      if (!result) {
+        this.notifyError('请验证', null)
+        return
+      }
+      ;(this.form.challenge = result.geetest_challenge),
+        (this.form.validate = result.geetest_validate),
+        (this.form.seccode = result.geetest_seccode),
         userAPI
           .postUser(this.form)
           .then(res => {
-            if (res.status === 200) {
+            if (res.status === 404) {
+              this.notifyError('验证失败', res.msg)
+            } else if (res.status === 200) {
               this.notifySucceed('注册成功')
               this.$router.push({
                 name: 'Login'
@@ -74,19 +88,38 @@ export default {
           .catch(error => {
             this.notifyError('注册失败', error)
           })
-      } else {
-        this.notifyError('请验证', '')
-      }
+    },
+    init_geetest() {
+      userAPI.geetest().then(res => {
+        window.initGeetest(
+          {
+            gt: res.gt,
+            challenge: res.challenge,
+            new_captcha: res.new_captcha,
+            offline: !res.success,
+            product: 'popup',
+            width: '100%'
+          },
+          function(captchaObj) {
+            captcha = captchaObj
+            captchaObj.appendTo('#captcha')
+            captchaObj.onReady(function() {
+              document.getElementById('wait').style.display = 'none'
+            })
+          }
+        )
+      })
     }
   },
-  comments: {},
-  components: {
-    GtPage
-  }
+  mounted() {
+    this.init_geetest()
+  },
+  components: {}
 }
 </script>
 
 <style >
+@import '../assets/css/button.css';
 .text {
   font-size: 14px;
 }

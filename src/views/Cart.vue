@@ -3,7 +3,7 @@
  * @Author: congz
  * @Date: 2020-06-04 11:22:40
  * @LastEditors: congz
- * @LastEditTime: 2020-08-04 11:47:56
+ * @LastEditTime: 2020-08-05 15:43:34
 --> 
 
 
@@ -173,7 +173,7 @@ export default {
         num: currentValue
       }
       cartsAPI
-        .updateCart(form, this.$store.getters.getToken)
+        .updateCart(form)
         .then(res => {
           if (res.status === 200) {
             // 更新vuex状态
@@ -204,7 +204,7 @@ export default {
         product_id: productID
       }
       cartsAPI
-        .deleteCart(form, this.$store.getters.getToken)
+        .deleteCart(form)
         .then(res => {
           if (res.status === 200) {
             // 更新vuex状态

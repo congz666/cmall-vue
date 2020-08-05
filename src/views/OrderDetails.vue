@@ -3,7 +3,7 @@
  * @Author: congz
  * @Date: 2020-07-22 13:14:57
  * @LastEditors: congz
- * @LastEditTime: 2020-07-22 16:24:54
+ * @LastEditTime: 2020-08-05 15:40:34
 --> 
 <template>
   <div class="order-details" id="order-details" name="order-details">
@@ -67,9 +67,9 @@
                 <p>收货地址：</p>
               </div>
               <div class="order-address-data">
-                <p>{{address.name}}</p>
-                <p>{{address.phone}}</p>
-                <p>{{address.address}}</p>
+                <p>{{order.address_name}}</p>
+                <p>{{order.address_phone}}</p>
+                <p>{{order.address}}</p>
               </div>
             </div>
             <div class="order-address-title">支付方式</div>
@@ -159,11 +159,10 @@ export default {
   methods: {
     load() {
       ordersAPI
-        .showOrder(this.orderID, this.$store.getters.getToken)
+        .showOrder(this.orderID)
         .then(res => {
           if (res.status === 200) {
-            this.order = res.data.order
-            this.address = res.data.address
+            this.order = res.data
           } else if (res.status === 20001) {
             //token过期，需要重新登录
             this.loginExpired(res.msg)

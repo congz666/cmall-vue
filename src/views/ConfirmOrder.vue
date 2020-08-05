@@ -3,7 +3,7 @@
  * @Author: congz
  * @Date: 2020-06-04 11:22:40
  * @LastEditors: congz
- * @LastEditTime: 2020-08-04 11:48:20
+ * @LastEditTime: 2020-08-05 15:42:36
 --> 
 
 <template>
@@ -222,10 +222,7 @@ export default {
     },
     getAddress() {
       addressesAPI
-        .showAddresses(
-          this.$store.getters.getUser.id,
-          this.$store.getters.getToken
-        )
+        .showAddresses(this.$store.getters.getUser.id)
         .then(res => {
           if (res.status === 200) {
             this.address = res.data
@@ -254,7 +251,7 @@ export default {
           address_id: this.confirmAddress
         }
         ordersAPI
-          .postOrder(form, this.$store.getters.getToken)
+          .postOrder(form)
           .then(res => {
             if (res.status === 200) {
               const temp = orders[i]
@@ -264,7 +261,7 @@ export default {
                 product_id: temp.product_id
               }
               cartsAPI
-                .deleteCart(form1, this.$store.getters.getToken)
+                .deleteCart(form1)
                 .then(res => {
                   if (res.status === 200) {
                     // 更新vuex状态
@@ -296,7 +293,7 @@ export default {
     postEdit() {
       this.form.user_id = this.$store.getters.getUser.id
       addressesAPI
-        .postAddress(this.form, this.$store.getters.getToken)
+        .postAddress(this.form)
         .then(res => {
           if (res.status === 200) {
             this.address = res.data

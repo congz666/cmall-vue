@@ -3,7 +3,7 @@
  * @Author: congz
  * @Date: 2020-07-11 15:12:07
  * @LastEditors: congz
- * @LastEditTime: 2020-08-04 10:24:37
+ * @LastEditTime: 2020-08-05 15:40:11
 --> 
 
 <template>
@@ -130,10 +130,7 @@ export default {
   methods: {
     getAddress() {
       addressesAPI
-        .showAddresses(
-          this.$store.getters.getUser.id,
-          this.$store.getters.getToken
-        )
+        .showAddresses(this.$store.getters.getUser.id)
         .then(res => {
           if (res.status === 200) {
             this.address = res.data
@@ -168,7 +165,7 @@ export default {
     postEdit() {
       this.form.user_id = this.$store.getters.getUser.id
       addressesAPI
-        .postAddress(this.form, this.$store.getters.getToken)
+        .postAddress(this.form)
         .then(res => {
           if (res.status === 200) {
             this.address = res.data
@@ -188,7 +185,7 @@ export default {
     saveEdit() {
       this.form.user_id = this.$store.getters.getUser.id
       addressesAPI
-        .updateAddress(this.form, this.$store.getters.getToken)
+        .updateAddress(this.form)
         .then(res => {
           if (res.status === 200) {
             this.address = res.data
@@ -207,7 +204,7 @@ export default {
     },
     deleteAddress() {
       addressesAPI
-        .deleteAddress(this.addressID, this.$store.getters.getToken)
+        .deleteAddress(this.addressID)
         .then(res => {
           if (res.status === 200) {
             this.address.splice(this.addressIndex, 1)

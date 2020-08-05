@@ -3,7 +3,7 @@
  * @Author: congz
  * @Date: 2020-07-03 22:55:29
  * @LastEditors: congz
- * @LastEditTime: 2020-08-03 14:11:43
+ * @LastEditTime: 2020-08-05 15:41:53
 --> 
 
 <template>
@@ -70,12 +70,7 @@ export default {
     getFavorites() {
       // 获取收藏数据
       favoriteAPI
-        .showFavorites(
-          this.$store.getters.getUser.id,
-          this.start,
-          this.limit,
-          this.$store.getters.getToken
-        )
+        .showFavorites(this.$store.getters.getUser.id, this.start, this.limit)
         .then(res => {
           if (res.status === 200) {
             this.collectList = res.data.items

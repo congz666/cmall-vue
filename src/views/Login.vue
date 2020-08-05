@@ -3,7 +3,7 @@
  * @Author: congz
  * @Date: 2020-06-11 11:08:34
  * @LastEditors: congz
- * @LastEditTime: 2020-08-04 09:24:37
+ * @LastEditTime: 2020-08-05 14:24:25
 --> 
 
 <template>
@@ -25,48 +25,58 @@
               <el-input type="password" v-model="form.password" placeholder="密码"></el-input>
             </el-form-item>
           </el-form>
-          <GtPage @ok="ok"></GtPage>
+          <div id="captcha">
+            <p id="wait">正在加载验证码...</p>
+          </div>
+          <div style="margin-top:15px">
+            <a href="#" class="btn-gradient blue block" @click="login">登录</a>
+          </div>
           <el-link
             type="primary"
             href="/#/register"
-            style="float:right;margin-bottom:20px;"
+            style="float:right;margin-bottom:10px;"
           >没有账号？请先注册></el-link>
-          <el-button type="primary" style="width:100px;margin-right:90px" @click="login">登录</el-button>
-          <el-button style="width:100px;" @click="goBack">返回</el-button>
         </div>
       </el-card>
     </div>
   </div>
 </template>
+<script src="../assets/gt.js"></script>
 <script>
 import { mapActions } from 'vuex'
 import * as userAPI from '@/api/users'
-import GtPage from '../components/GtPage.vue'
+require('../assets/gt.js')
+var captcha
 export default {
   name: 'Login',
   data() {
     return {
-      okk: 0,
       form: {
         user_name: '',
-        password: ''
+        password: '',
+        challenge: '',
+        validate: '',
+        seccode: ''
       }
     }
   },
   methods: {
-    ok(val) {
-      this.okk = val
-    },
     ...mapActions(['setUser', 'setToken']),
-    goBack() {
-      this.$router.go(-1)
-    },
     login() {
-      if (this.okk == 1) {
+      var result = captcha.getValidate()
+      if (!result) {
+        this.notifyError('请验证', null)
+        return
+      }
+      ;(this.form.challenge = result.geetest_challenge),
+        (this.form.validate = result.geetest_validate),
+        (this.form.seccode = result.geetest_seccode),
         userAPI
           .postLogin(this.form)
           .then(res => {
-            if (res.status === 200) {
+            if (res.status === 404) {
+              this.notifyError('验证失败', res.msg)
+            } else if (res.status === 200) {
               // 登录信息存到本地
               let user = JSON.stringify(res.data.user)
               localStorage.setItem('user', user)
@@ -86,19 +96,39 @@ export default {
           .catch(error => {
             this.notifyError('登录失败', error)
           })
-      } else {
-        this.notifyError('请验证', '')
-      }
+    },
+    init_geetest() {
+      userAPI.geetest().then(res => {
+        window.initGeetest(
+          {
+            gt: res.gt,
+            challenge: res.challenge,
+            new_captcha: res.new_captcha,
+            offline: !res.success,
+            product: 'popup',
+            width: '100%'
+          },
+          function(captchaObj) {
+            captcha = captchaObj
+            captchaObj.appendTo('#captcha')
+            captchaObj.onReady(function() {
+              document.getElementById('wait').style.display = 'none'
+            })
+          }
+        )
+      })
     }
   },
-  comments: {},
-  components: {
-    GtPage
-  }
+  mounted() {
+    this.init_geetest()
+  },
+
+  components: {}
 }
 </script>
 
 <style scoped>
+@import '../assets/css/button.css';
 .text {
   font-size: 14px;
 }

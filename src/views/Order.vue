@@ -3,7 +3,7 @@
  * @Author: congz
  * @Date: 2020-07-03 18:01:05
  * @LastEditors: congz
- * @LastEditTime: 2020-08-04 12:00:08
+ * @LastEditTime: 2020-08-05 15:46:37
 --> 
 
 <template>
@@ -44,13 +44,13 @@
                     <div style="width:650px;">
                       <span class="info">{{item.created_at | dateFormat}}</span>
                       <span class="cut">|</span>
-                      <span class="info">严伟聪</span>
+                      <span class="info">{{item.address_name}}</span>
                       <span class="cut">|</span>
                       <span class="info">订单号：{{item.order_num}}</span>
                       <span class="cut">|</span>
                       <span class="info">在线支付</span>
                     </div>
-                    <span class="info" style="margin-left:50px">应付金额：</span>
+                    <span class="info" style="margin-left:30px">应付金额：</span>
                     <span class="money">{{item.discount_price*item.num}}</span>
                     <span class="info">元</span>
                   </div>
@@ -135,12 +135,7 @@ export default {
     getOrders() {
       // 获取订单数据
       ordersAPI
-        .listOrders(
-          this.$store.getters.getUser.id,
-          this.start,
-          this.limit,
-          this.$store.getters.getToken
-        )
+        .listOrders(this.$store.getters.getUser.id, this.start, this.limit)
         .then(res => {
           if (res.status === 200) {
             this.orders = res.data.items
@@ -249,6 +244,7 @@ export default {
   font-size: 25px;
   color: #000000;
   margin-right: 5px;
+  margin-left: 10px;
 }
 /*订单头部END*/
 /*订单商品*/

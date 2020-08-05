@@ -3,7 +3,7 @@
  * @Author: congz
  * @Date: 2020-07-11 14:59:00
  * @LastEditors: congz
- * @LastEditTime: 2020-08-04 09:30:44
+ * @LastEditTime: 2020-08-05 15:39:25
 --> 
 
 <template>
@@ -82,7 +82,7 @@ export default {
     },
     fnUploadRequest(option) {
       uplpadAPI
-        .UploadAvatar(option.file.name, this.$store.getters.getToken)
+        .UploadAvatar(option.file.name)
         .then(res => {
           if (res.status === 200) {
             const oReq = new XMLHttpRequest()
@@ -105,7 +105,7 @@ export default {
     },
     save() {
       userAPI
-        .updateUser(this.form, this.$store.getters.getToken)
+        .updateUser(this.form)
         .then(res => {
           if (res.status === 200) {
             // 登录信息存到本地

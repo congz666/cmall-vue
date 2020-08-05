@@ -3,7 +3,7 @@
  * @Author: congz
  * @Date: 2020-06-04 11:22:40
  * @LastEditors: congz
- * @LastEditTime: 2020-07-22 23:58:37
+ * @LastEditTime: 2020-08-05 15:44:15
 --> 
 
 <template>
@@ -185,7 +185,7 @@ export default {
         product_id: Number(this.productID)
       }
       cartsAPI
-        .postCart(form, this.$store.getters.getToken)
+        .postCart(form)
         .then(res => {
           switch (res.status) {
             case 200:
@@ -223,10 +223,10 @@ export default {
       }
       var form = {
         user_id: this.$store.getters.getUser.id,
-        product_id: this.productID
+        product_id: Number(this.productID)
       }
       favoritesAPI
-        .postFavorite(form, this.$store.getters.getToken)
+        .postFavorite(form)
         .then(res => {
           if (res.status === 200) {
             this.notifySucceed('添加收藏夹成功')

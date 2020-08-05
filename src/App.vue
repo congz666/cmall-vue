@@ -3,7 +3,7 @@
  * @Author: congz
  * @Date: 2020-06-04 11:22:40
  * @LastEditors: congz
- * @LastEditTime: 2020-08-04 12:06:33
+ * @LastEditTime: 2020-08-05 15:38:24
 --> 
 
 <template>
@@ -186,7 +186,7 @@ export default {
       } else {
         // 用户已经登录,获取该用户的购物车信息
         cartsAPI
-          .showCarts(val.id, this.$store.getters.getToken)
+          .showCarts(val.id)
           .then(res => {
             if (res.status === 200) {
               if (res.data === null) {
@@ -220,7 +220,7 @@ export default {
     // 退出登录
     logout() {
       userAPI
-        .logout(this.$store.getters.getToken)
+        .logout()
         .then(res => {
           if (res.status === 200) {
             // 清空本地登录信息
@@ -230,20 +230,13 @@ export default {
             this.setUser('')
             this.setToken('')
 
-            this.$notify({
-              title: '登出成功',
-              message: 'success',
-              type: 'success'
-            })
+            this.notifySucceed('登出成功')
           } else {
-            this.$notify.error({
-              title: '登出失败',
-              message: res.msg
-            })
+            this.notifyError('登出失败', res.msg)
           }
         })
-        .catch(err => {
-          return Promise.reject(err)
+        .catch(error => {
+          this.notifyError('登出失败', error)
         })
     },
     //重定向

@@ -3,7 +3,7 @@
  * @Author: congz
  * @Date: 2020-06-04 11:22:40
  * @LastEditors: congz
- * @LastEditTime: 2020-08-04 09:48:29
+ * @LastEditTime: 2020-08-05 15:44:31
 --> 
 
 <template>
@@ -68,7 +68,7 @@ export default {
         product_id: product_id
       }
       favoriteAPI
-        .deleteFavorite(form, this.$store.getters.getToken)
+        .deleteFavorite(form)
         .then(res => {
           if (res.status === 200) {
             this.list.splice(index, 1)
