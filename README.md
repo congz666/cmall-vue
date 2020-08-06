@@ -18,22 +18,15 @@
 
 ## 运行
 
-前端接口地址是`:8080`
-
 ```
-//克隆项目
 git clone https://github.com/congz666/cmall-vue.git
 
-//创建项目
 cd cmall-vue
-npm install
-
-//创建相关依赖
-npn run build
-
 //运行
 npm run serve
 ```
+
+项目运行后启动在 8080 端口
 
 ## 图片展示
 
