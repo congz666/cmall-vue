@@ -3,16 +3,16 @@
  * @Author: congz
  * @Date: 2020-06-11 11:08:34
  * @LastEditors: congz
- * @LastEditTime: 2020-08-05 14:24:25
+ * @LastEditTime: 2020-08-06 10:28:10
 --> 
 
 <template>
   <div class="login">
     <div>
       <el-card class="box-card" shadow="hover">
-        <div>
+        <router-link to="/">
           <img src="../assets/imgs/clogo.png" alt />
-        </div>
+        </router-link>
         <div class="clearfix">
           <span>使用CMall账号 登录网站</span>
         </div>
@@ -61,7 +61,7 @@ export default {
     }
   },
   methods: {
-    ...mapActions(['setUser', 'setToken']),
+    ...mapActions(['setUser']),
     login() {
       var result = captcha.getValidate()
       if (!result) {
@@ -83,7 +83,6 @@ export default {
               localStorage.setItem('token', res.data.token)
               // 登录信息存到vuex
               this.setUser(res.data.user)
-              this.setToken(res.data.token)
               // 弹出通知框提示登录成功信息
               this.notifySucceed('登录成功')
               this.$router.push({

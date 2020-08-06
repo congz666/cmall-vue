@@ -3,7 +3,7 @@
  * @Author: congz
  * @Date: 2020-06-04 11:22:40
  * @LastEditors: congz
- * @LastEditTime: 2020-08-03 13:56:56
+ * @LastEditTime: 2020-08-06 20:48:54
 --> 
 
 <template>
@@ -26,7 +26,7 @@
           </div>
           <div class="box-bd">
             <div class="promo-list">
-              <router-link to>
+              <router-link :to="{ path: '/goods/details', query: {productID:14} }">
                 <img :src="'http://47.115.85.237:3000/public/imgs/phone/phone.png'" />
               </router-link>
             </div>
@@ -51,16 +51,20 @@
           <div class="box-bd">
             <div class="promo-list">
               <ul>
-                <li>
-                  <img
-                    :src="'http://47.115.85.237:3000/public/imgs/appliance/appliance-promo1.png'"
-                  />
-                </li>
-                <li>
-                  <img
-                    :src="'http://47.115.85.237:3000/public/imgs/appliance/appliance-promo2.png'"
-                  />
-                </li>
+                <router-link :to="{ path: '/goods/details', query: {productID:21} }">
+                  <li>
+                    <img
+                      :src="'http://47.115.85.237:3000/public/imgs/appliance/appliance-promo1.png'"
+                    />
+                  </li>
+                </router-link>
+                <router-link :to="{ path: '/goods/details', query: {productID:22} }">
+                  <li>
+                    <img
+                      :src="'http://47.115.85.237:3000/public/imgs/appliance/appliance-promo2.png'"
+                    />
+                  </li>
+                </router-link>
               </ul>
             </div>
             <div class="list">
@@ -85,18 +89,22 @@
           <div class="box-bd">
             <div class="promo-list">
               <ul>
-                <li>
-                  <img
-                    :src="'http://47.115.85.237:3000/public/imgs/accessory/accessory-promo1.png'"
-                    alt
-                  />
-                </li>
-                <li>
-                  <img
-                    :src="'http://47.115.85.237:3000/public/imgs/accessory/accessory-promo2.png'"
-                    alt
-                  />
-                </li>
+                <router-link :to="{ path: '/goods/details', query: {productID:30} }">
+                  <li>
+                    <img
+                      :src="'http://47.115.85.237:3000/public/imgs/accessory/accessory-promo1.png'"
+                      alt
+                    />
+                  </li>
+                </router-link>
+                <router-link :to="{ path: '/goods/details', query: {productID:32} }">
+                  <li>
+                    <img
+                      :src="'http://47.115.85.237:3000/public/imgs/accessory/accessory-promo2.png'"
+                      alt
+                    />
+                  </li>
+                </router-link>
               </ul>
             </div>
             <div class="list">

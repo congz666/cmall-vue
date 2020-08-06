@@ -3,23 +3,23 @@
  * @Author: congz
  * @Date: 2020-07-11 14:59:00
  * @LastEditors: congz
- * @LastEditTime: 2020-08-05 15:39:25
+ * @LastEditTime: 2020-08-06 11:08:50
 --> 
 
 <template>
-  <div class="details" id="details" name="details">
-    <div class="details-layout">
+  <div class="user-details" id="user-details" name="user-details">
+    <div class="user-details-layout">
       <el-row :gutter="10">
         <div>
           <CenterMenu></CenterMenu>
         </div>
         <el-col :span="20">
-          <div class="details-content">
+          <div class="user-details-content">
             <div class="extra"></div>
-            <div class="details-title">
+            <div class="user-details-title">
               <p>个人信息</p>
             </div>
-            <div class="details-form">
+            <div class="user-details-form">
               <el-form ref="form" :model="form" label-width="80px">
                 <el-form-item label="头像:">
                   <el-upload
@@ -139,26 +139,26 @@ export default {
   }
 }
 </script>
-<style >
-.details-layout {
+<style>
+.user-details-layout {
   max-width: 1225px;
   margin: 0 auto;
 }
-.details-content {
+.user-details-content {
   background-color: #ffffff;
   margin-bottom: 30px;
 }
-.details-title {
+.user-details-title {
   height: 100px;
   display: flex;
   align-items: center;
 }
-.details-title p {
+.user-details-title p {
   font-size: 30px;
   color: #757575;
   margin-left: 50px;
 }
-.details-form {
+.user-details-form {
   width: 500px;
 }
 .avatar-uploader .el-upload {

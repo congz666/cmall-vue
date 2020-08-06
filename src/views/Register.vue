@@ -3,7 +3,7 @@
  * @Author: congz
  * @Date: 2020-06-11 10:01:19
  * @LastEditors: congz
- * @LastEditTime: 2020-08-05 14:09:39
+ * @LastEditTime: 2020-08-06 10:24:25
 --> 
 
 <template>
@@ -118,7 +118,7 @@ export default {
 }
 </script>
 
-<style >
+<style scoped>
 @import '../assets/css/button.css';
 .text {
   font-size: 14px;

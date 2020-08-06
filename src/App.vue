@@ -3,7 +3,7 @@
  * @Author: congz
  * @Date: 2020-06-04 11:22:40
  * @LastEditors: congz
- * @LastEditTime: 2020-08-05 15:38:24
+ * @LastEditTime: 2020-08-06 10:17:25
 --> 
 
 <template>
@@ -164,7 +164,6 @@ export default {
       // 如果已经登录，设置vuex登录状态
       if (res.status == 200) {
         this.setUser(JSON.parse(localStorage.getItem('user')))
-        this.setToken(localStorage.getItem('token'))
       } else {
         localStorage.removeItem('user')
         localStorage.removeItem('token')
@@ -172,7 +171,7 @@ export default {
     })
   },
   computed: {
-    ...mapGetters(['getUser', 'getToken', 'getNum']),
+    ...mapGetters(['getUser', 'getNum']),
     key() {
       return this.$route.path + Math.random()
     }
@@ -211,7 +210,7 @@ export default {
     }
   },
   methods: {
-    ...mapActions(['setUser', 'setToken', 'setShoppingCart']),
+    ...mapActions(['setUser', 'setShoppingCart']),
     login() {
       this.$router.push({
         name: 'Login'
@@ -228,7 +227,6 @@ export default {
             localStorage.removeItem('token')
             // 清空vuex登录信息
             this.setUser('')
-            this.setToken('')
 
             this.notifySucceed('登出成功')
           } else {

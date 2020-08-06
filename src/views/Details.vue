@@ -3,7 +3,7 @@
  * @Author: congz
  * @Date: 2020-06-04 11:22:40
  * @LastEditors: congz
- * @LastEditTime: 2020-08-05 15:44:15
+ * @LastEditTime: 2020-08-06 10:35:25
 --> 
 
 <template>
@@ -30,9 +30,9 @@
     <!-- 头部END -->
 
     <!-- 主要内容 -->
-    <div class="main">
+    <div class="details-main">
       <!-- 左侧商品轮播图 -->
-      <div class="block">
+      <div class="details-block">
         <el-carousel height="560px" v-if="productPictures.length>1">
           <el-carousel-item v-for="item in productPictures" :key="item.id">
             <img style="height:560px;" v-lazy="item.img_path" />
@@ -45,7 +45,7 @@
       <!-- 左侧商品轮播图END -->
 
       <!-- 右侧内容区 -->
-      <div class="content">
+      <div class="details-content">
         <h1 class="name">{{productDetails.name}}</h1>
         <li class="view">
           <i class="el-icon-view"></i>
@@ -258,7 +258,7 @@ export default {
   }
 }
 </script>
-<style>
+<style scoped>
 /* 头部CSS */
 #details .page-header {
   height: 64px;
@@ -308,7 +308,7 @@ export default {
 /* 头部CSS END */
 
 /* 主要内容CSS */
-#details .main {
+#details .details-main {
   width: 1225px;
   height: 560px;
   padding-top: 30px;
@@ -316,7 +316,7 @@ export default {
   padding-bottom: 30px;
   border-bottom: 1px solid #e0e0e0;
 }
-#details .main .block {
+#details .details-main .details-block {
   float: left;
   width: 560px;
   height: 560px;
@@ -324,13 +324,13 @@ export default {
 #details .el-carousel .el-carousel__indicator .el-carousel__button {
   background-color: rgba(163, 163, 163, 0.8);
 }
-#details .main .content {
+#details .details-main .details-content {
   float: left;
   margin-left: 25px;
   width: 640px;
 }
 
-#details .main .content .name {
+#details .details-main .details-content .name {
   line-height: 30px;
   font-size: 24px;
   font-weight: normal;
@@ -338,60 +338,60 @@ export default {
   display: inline;
 }
 
-#details .main .content .view {
+#details .details-main .details-content .view {
   color: #b0b0b0;
   float: right;
   padding-top: 5px;
   font-size: 18px;
 }
 
-#details .main .content .intro {
+#details .details-main .details-content .intro {
   color: #b0b0b0;
   padding-top: 10px;
 }
-#details .main .content .store {
+#details .details-main .details-content .store {
   color: #ff6700;
   padding-top: 10px;
 }
-#details .main .content .price {
+#details .details-main .details-content .price {
   display: block;
   font-size: 18px;
   color: #ff6700;
   border-bottom: 1px solid #e0e0e0;
   padding: 25px 0 25px;
 }
-#details .main .content .price .del {
+#details .details-main .details-content .price .del {
   font-size: 14px;
   margin-left: 10px;
   color: #b0b0b0;
   text-decoration: line-through;
 }
-#details .main .content .pro-list {
+#details .details-main .details-content .pro-list {
   background: #f9f9f9;
   padding: 30px 60px;
   margin: 50px 0 50px;
 }
-#details .main .content .pro-list span {
+#details .details-main .details-content .pro-list span {
   line-height: 30px;
   color: #616161;
 }
-#details .main .content .pro-list .pro-price {
+#details .details-main .details-content .pro-list .pro-price {
   float: right;
 }
-#details .main .content .pro-list .pro-price .pro-del {
+#details .details-main .details-content .pro-list .pro-price .pro-del {
   margin-left: 10px;
   text-decoration: line-through;
 }
-#details .main .content .pro-list .price-sum {
+#details .details-main .details-content .pro-list .price-sum {
   color: #ff6700;
   font-size: 24px;
   padding-top: 20px;
 }
-#details .main .content .button {
+#details .details-main .details-content .button {
   height: 55px;
   margin: 10px 0 20px 0;
 }
-#details .main .content .button .el-button {
+#details .details-main .details-content .button .el-button {
   float: left;
   height: 55px;
   font-size: 16px;
@@ -399,23 +399,23 @@ export default {
   border: none;
   text-align: center;
 }
-#details .main .content .button .shop-cart {
+#details .details-main .details-content .button .shop-cart {
   width: 340px;
   background-color: #ff6700;
 }
-#details .main .content .button .shop-cart:hover {
+#details .details-main .details-content .button .shop-cart:hover {
   background-color: #f25807;
 }
 
-#details .main .content .button .like {
+#details .details-main .details-content .button .like {
   width: 260px;
   margin-left: 40px;
   background-color: #b0b0b0;
 }
-#details .main .content .button .like:hover {
+#details .details-main .details-content .button .like:hover {
   background-color: #757575;
 }
-#details .main .content .pro-policy li {
+#details .details-main .details-content .pro-policy li {
   float: left;
   margin-right: 20px;
   color: #b0b0b0;

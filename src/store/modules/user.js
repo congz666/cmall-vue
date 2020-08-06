@@ -3,36 +3,26 @@
  * @Author: congz
  * @Date: 2020-06-04 11:22:40
  * @LastEditors: congz
- * @LastEditTime: 2020-07-17 10:43:53
+ * @LastEditTime: 2020-08-06 10:18:08
  */
 
 export default {
   state: {
-    user: '', // 登录的用户
-    token: '' // token
+    user: '' // 登录的用户
   },
   getters: {
     getUser(state) {
       return state.user
-    },
-    getToken(state) {
-      return state.token
     }
   },
   mutations: {
     setUser(state, data) {
       state.user = data
-    },
-    setToken(state, data) {
-      state.token = data
     }
   },
   actions: {
     setUser({ commit }, data) {
       commit('setUser', data)
-    },
-    setToken({ commit }, data) {
-      commit('setToken', data)
     }
   }
 }

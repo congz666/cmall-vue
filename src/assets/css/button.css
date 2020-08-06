@@ -1,25 +1,3 @@
-* {
-  box-sizing: border-box;
-}
-body {
-  margin: 0;
-  background: #eaedf1;
-  font-family: 'Lato', sans-serif;
-}
-.header {
-  background: white;
-  padding: 30px;
-  text-align: center;
-}
-.header h1 {
-  font-weight: 300;
-  display: inline;
-}
-h2 {
-  color: #89867e;
-  text-align: center;
-  font-weight: 300;
-}
 .color {
   width: 350px;
   margin: 0 auto;
@@ -105,6 +83,7 @@ pre .val {
   margin: 9px;
 }
 .btn-gradient {
+  box-sizing: border-box;
   margin: 5px;
 }
 a[class*='btn'] {

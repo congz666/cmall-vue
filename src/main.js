@@ -3,7 +3,7 @@
  * @Author: congz
  * @Date: 2020-06-04 11:22:40
  * @LastEditors: congz
- * @LastEditTime: 2020-08-05 15:28:35
+ * @LastEditTime: 2020-08-06 10:15:09
  */
 import Vue from 'vue'
 import App from './App.vue'
@@ -44,22 +44,21 @@ Vue.use(Global)
 
 // 全局请求拦截器
 axios.interceptors.request.use(
-  function(config) {
+  config => {
     let token = window.localStorage.getItem('token')
     if (token) {
       //将token放到请求头发送给服务器,将tokenkey放在请求头中
       config.headers.Authorization = token
       //也可以这种写法
       // config.headers['accessToken'] = Token;
-      return config
     }
+    return config
   },
-  function(error) {
+  error => {
     // Do something with request error
     return Promise.reject(error)
   }
 )
-
 //跳转页面时返回顶部
 router.afterEach((to, from, next) => {
   window.scrollTo(0, 0)
