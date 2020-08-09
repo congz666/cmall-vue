@@ -3,14 +3,13 @@
  * @Author: congz
  * @Date: 2020-06-04 11:22:40
  * @LastEditors: congz
- * @LastEditTime: 2020-08-04 11:20:52
+ * @LastEditTime: 2020-08-09 13:01:12
  */
 
 import Vue from 'vue'
 import Router from 'vue-router'
 
 Vue.use(Router)
-
 const routes = [
   {
     path: '/',
@@ -112,11 +111,27 @@ const routes = [
     }
   },
   {
+    path: '/user/pass',
+    name: 'UserPass',
+    component: () => import('../views/UserPass.vue'),
+    meta: {
+      requireAuth: true // 需要验证登录状态
+    }
+  },
+  {
     path: '/user/address',
     name: 'UserAddress',
     component: () => import('../views/UserAddress.vue'),
     meta: {
       requireAuth: true // 需要验证登录状态
+    }
+  },
+  {
+    path: `/vaild/email/:token`,
+    name: 'VaildEmail',
+    component: () => import('../views/VaildEmail.vue'),
+    meta: {
+      showMenu: false
     }
   }
 ]

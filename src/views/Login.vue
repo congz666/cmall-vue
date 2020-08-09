@@ -3,7 +3,7 @@
  * @Author: congz
  * @Date: 2020-06-11 11:08:34
  * @LastEditors: congz
- * @LastEditTime: 2020-08-06 10:28:10
+ * @LastEditTime: 2020-08-09 20:51:06
 --> 
 
 <template>
@@ -17,11 +17,11 @@
           <span>使用CMall账号 登录网站</span>
         </div>
         <div class="item">
-          <el-form ref="form" :model="form">
-            <el-form-item>
+          <el-form :model="form" status-icon :rules="rules" ref="form">
+            <el-form-item prop="user_name">
               <el-input v-model="form.user_name" placeholder="用户名"></el-input>
             </el-form-item>
-            <el-form-item>
+            <el-form-item prop="password">
               <el-input type="password" v-model="form.password" placeholder="密码"></el-input>
             </el-form-item>
           </el-form>
@@ -29,7 +29,7 @@
             <p id="wait">正在加载验证码...</p>
           </div>
           <div style="margin-top:15px">
-            <a href="#" class="btn-gradient blue block" @click="login">登录</a>
+            <a href="#" class="btn-gradient blue block" @click="login('form')">登录</a>
           </div>
           <el-link
             type="primary"
@@ -50,6 +50,18 @@ var captcha
 export default {
   name: 'Login',
   data() {
+    var validateUser = (rule, value, callback) => {
+      if (value === '') {
+        callback(new Error('请输入用户名'))
+      }
+      callback()
+    }
+    var validatePass = (rule, value, callback) => {
+      if (value === '') {
+        callback(new Error('请输入密码'))
+      }
+      callback()
+    }
     return {
       form: {
         user_name: '',
@@ -57,44 +69,53 @@ export default {
         challenge: '',
         validate: '',
         seccode: ''
+      },
+      rules: {
+        user_name: [{ validator: validateUser, trigger: 'blur' }],
+        password: [{ validator: validatePass, trigger: 'blur' }]
       }
     }
   },
   methods: {
     ...mapActions(['setUser']),
-    login() {
-      var result = captcha.getValidate()
-      if (!result) {
-        this.notifyError('请验证', null)
-        return
-      }
-      ;(this.form.challenge = result.geetest_challenge),
-        (this.form.validate = result.geetest_validate),
-        (this.form.seccode = result.geetest_seccode),
-        userAPI
-          .postLogin(this.form)
-          .then(res => {
-            if (res.status === 404) {
-              this.notifyError('验证失败', res.msg)
-            } else if (res.status === 200) {
-              // 登录信息存到本地
-              let user = JSON.stringify(res.data.user)
-              localStorage.setItem('user', user)
-              localStorage.setItem('token', res.data.token)
-              // 登录信息存到vuex
-              this.setUser(res.data.user)
-              // 弹出通知框提示登录成功信息
-              this.notifySucceed('登录成功')
-              this.$router.push({
-                name: 'Home'
-              })
-            } else {
-              this.notifyError('登录失败', res.msg)
-            }
-          })
-          .catch(error => {
-            this.notifyError('登录失败', error)
-          })
+    login(formName) {
+      this.$refs[formName].validate(valid => {
+        if (!valid) {
+          return
+        }
+        var result = captcha.getValidate()
+        if (!result) {
+          this.notifyError('请验证', null)
+          return
+        }
+        ;(this.form.challenge = result.geetest_challenge),
+          (this.form.validate = result.geetest_validate),
+          (this.form.seccode = result.geetest_seccode),
+          userAPI
+            .postLogin(this.form)
+            .then(res => {
+              if (res.status === 404) {
+                this.notifyError('验证失败', res.msg)
+              } else if (res.status === 200) {
+                // 登录信息存到本地
+                let user = JSON.stringify(res.data.user)
+                localStorage.setItem('user', user)
+                localStorage.setItem('token', res.data.token)
+                // 登录信息存到vuex
+                this.setUser(res.data.user)
+                // 弹出通知框提示登录成功信息
+                this.notifySucceed('登录成功')
+                this.$router.push({
+                  name: 'Home'
+                })
+              } else {
+                this.notifyError('登录失败', res.msg)
+              }
+            })
+            .catch(error => {
+              this.notifyError('登录失败', error)
+            })
+      })
     },
     init_geetest() {
       userAPI.geetest().then(res => {

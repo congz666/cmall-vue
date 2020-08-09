@@ -3,7 +3,7 @@
  * @Author: congz
  * @Date: 2020-07-03 09:40:21
  * @LastEditors: congz
- * @LastEditTime: 2020-08-04 10:44:30
+ * @LastEditTime: 2020-08-09 13:02:14
 --> 
 
 <template>
@@ -33,7 +33,7 @@
                 <router-link to="/user/details" class="menu-a">个人信息</router-link>
               </li>
               <li>
-                <router-link to class="menu-a">修改密码</router-link>
+                <router-link to="/user/pass" class="menu-a">修改密码</router-link>
               </li>
               <li>
                 <router-link to="/user/address" class="menu-a">收货地址</router-link>
