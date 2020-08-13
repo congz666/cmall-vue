@@ -3,7 +3,7 @@
  * @Author: congz
  * @Date: 2020-06-12 22:36:05
  * @LastEditors: congz
- * @LastEditTime: 2020-07-17 11:00:36
+ * @LastEditTime: 2020-08-12 20:56:52
  */
 
 import axios from 'axios'
@@ -16,10 +16,4 @@ const postCategory = form =>
 const listCategories = () =>
   axios.get('/api/v1/categories').then(res => res.data)
 
-// 读取分类商品列表
-const showCategory = (category_id, start, limit) =>
-  axios
-    .get(`/api/v1/categories/${category_id}`, { params: { start, limit } })
-    .then(res => res.data)
-
-export { postCategory, listCategories, showCategory }
+export { postCategory, listCategories }

@@ -3,7 +3,7 @@
  * @Author: congz
  * @Date: 2020-06-14 14:24:12
  * @LastEditors: congz
- * @LastEditTime: 2020-08-05 15:35:30
+ * @LastEditTime: 2020-08-12 20:03:36
  */
 
 import axios from 'axios'
@@ -13,9 +13,11 @@ const postOrder = form =>
   axios.post('/api/v1/orders', form).then(res => res.data)
 
 // 读取订单
-const listOrders = (user_id, start, limit) =>
+const listOrders = (user_id, type, start, limit) =>
   axios
-    .get(`/api/v1/user/${user_id}/orders`, { params: { start, limit } })
+    .get(`/api/v1/user/${user_id}/orders`, {
+      params: { type, start, limit }
+    })
     .then(res => res.data)
 
 // 读取订单详情

@@ -3,7 +3,7 @@
  * @Author: congz
  * @Date: 2020-07-11 14:59:00
  * @LastEditors: congz
- * @LastEditTime: 2020-08-06 11:08:50
+ * @LastEditTime: 2020-08-13 11:30:55
 --> 
 
 <template>
@@ -20,7 +20,7 @@
               <p>个人信息</p>
             </div>
             <div class="user-details-form">
-              <el-form ref="form" :model="form" label-width="80px">
+              <el-form ref="form" :model="form" status-icon :rules="rules" label-width="80px">
                 <el-form-item label="头像:">
                   <el-upload
                     class="avatar-uploader"
@@ -36,11 +36,14 @@
                     <div class="el-upload__tip" slot="tip">点击上传头像,只能上传png/jpg文件，且不超过2M</div>
                   </el-upload>
                 </el-form-item>
-                <el-form-item label="昵称:   ">
+                <el-form-item prop="nickname" label="昵称:   ">
                   <el-input v-model="form.nickname"></el-input>
                 </el-form-item>
+                <el-form-item prop="user_name" label="用户名:   ">
+                  <el-input v-model="form.user_name"></el-input>
+                </el-form-item>
                 <el-form-item>
-                  <el-button type="primary" style="margin-bottom:83px" @click="save">保存</el-button>
+                  <el-button type="primary" style="margin-bottom:83px" @click="save('form')">保存</el-button>
                 </el-form-item>
               </el-form>
             </div>
@@ -58,13 +61,34 @@ import * as userAPI from '@/api/users/'
 export default {
   name: 'Details',
   data() {
+    var validateNick = (rule, value, callback) => {
+      if (value === '') {
+        callback(new Error('请输入昵称'))
+      } else if (value.length < 2 || value.length > 10) {
+        callback(new Error('昵称长度需在2到10之间'))
+      }
+      callback()
+    }
+    var validateUser = (rule, value, callback) => {
+      if (value === '') {
+        callback(new Error('请输入用户名'))
+      } else if (value.length < 5 || value.length > 15) {
+        callback(new Error('用户名长度需在5到15之间'))
+      }
+      callback()
+    }
     return {
+      imageUrl: '',
       form: {
         id: 0,
         nickname: '',
-        avatar: ''
+        avatar: '',
+        user_name: ''
       },
-      imageUrl: ''
+      rules: {
+        nickname: [{ validator: validateNick, trigger: 'blur' }],
+        user_name: [{ validator: validateUser, trigger: 'blur' }]
+      }
     }
   },
   methods: {
@@ -103,34 +127,40 @@ export default {
           this.notifyError('修改失败', error)
         })
     },
-    save() {
-      userAPI
-        .updateUser(this.form)
-        .then(res => {
-          if (res.status === 200) {
-            // 登录信息存到本地
-            let user = JSON.stringify(res.data)
-            localStorage.setItem('user', user)
-            // 登录信息存到vuex
-            this.setUser(res.data)
-            this.notifySucceed('修改成功')
-            this.$router.push({
-              name: 'Center'
-            })
-          } else if (res.status === 20001) {
-            //token过期，需要重新登录
-            this.loginExpired(res.msg)
-          } else {
-            this.notifyError('修改失败', res.msg)
-          }
-        })
-        .catch(error => {
-          this.notifyError('修改失败', error)
-        })
+    save(formName) {
+      this.$refs[formName].validate(valid => {
+        if (!valid) {
+          return
+        }
+        userAPI
+          .updateUser(this.form)
+          .then(res => {
+            if (res.status === 200) {
+              // 登录信息存到本地
+              let user = JSON.stringify(res.data)
+              localStorage.setItem('user', user)
+              // 登录信息存到vuex
+              this.setUser(res.data)
+              this.notifySucceed('修改成功')
+              this.$router.push({
+                name: 'Center'
+              })
+            } else if (res.status === 20001) {
+              //token过期，需要重新登录
+              this.loginExpired(res.msg)
+            } else {
+              this.notifyError('修改失败', res.msg)
+            }
+          })
+          .catch(error => {
+            this.notifyError('修改失败', error)
+          })
+      })
     }
   },
   beforeMount() {
     this.form.id = this.$store.getters.getUser.id
+    this.form.user_name = this.$store.getters.getUser.user_name
     this.form.nickname = this.$store.getters.getUser.nickname
     this.imageUrl = this.$store.getters.getUser.avatar
   },

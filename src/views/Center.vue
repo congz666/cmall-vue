@@ -3,7 +3,7 @@
  * @Author: congz
  * @Date: 2020-07-03 09:31:23
  * @LastEditors: congz
- * @LastEditTime: 2020-08-09 21:06:19
+ * @LastEditTime: 2020-08-13 10:14:49
 --> 
 
 <template>
@@ -60,18 +60,18 @@
                 <img src="https://s01.mifile.cn/i/user/portal-icon-1.png" />
               </div>
               <div class="operate1">
-                <p class="oper-title">待支付订单：0</p>
+                <p class="oper-title">待支付订单：{{notPayTotal}}</p>
                 <p>
-                  <router-link to class="oper-href">查看待支付订单 ></router-link>
+                  <router-link :to="{ path: '/order', query: {type:1} }" class="oper-href">查看待支付订单 ></router-link>
                 </p>
               </div>
               <div class="operate">
                 <img src="https://s01.mifile.cn/i/user/portal-icon-2.png" />
               </div>
               <div class="operate1">
-                <p class="oper-title">待收货订单：0</p>
+                <p class="oper-title">已付款订单：{{payTotal}}</p>
                 <p>
-                  <router-link to class="oper-href">查看待收货订单 ></router-link>
+                  <router-link :to="{ path: '/order', query: {type:2} }" class="oper-href">查看已付款订单 ></router-link>
                 </p>
               </div>
             </div>
@@ -89,9 +89,9 @@
                 <img src="https://s01.mifile.cn/i/user/portal-icon-4.png" />
               </div>
               <div class="operate1">
-                <p class="oper-title">收藏的商品：0</p>
+                <p class="oper-title">收藏的商品：{{favoriteTotal}}</p>
                 <p>
-                  <router-link to class="oper-href">查看收藏的商品 ></router-link>
+                  <router-link :to="{ path: '/favorite'}" class="oper-href">查看收藏的商品 ></router-link>
                 </p>
               </div>
             </div>
@@ -136,10 +136,14 @@
 <script>
 import CenterMenu from '../components/CenterMenu'
 import * as userAPI from '@/api/users'
+import * as countAPI from '@/api/count'
 export default {
   name: 'Center',
   data() {
     return {
+      favoriteTotal: 0,
+      notPayTotal: 0,
+      payTotal: 0,
       addVisible: false,
       deleteVisible: false,
       content: '发送验证邮件',
@@ -178,22 +182,20 @@ export default {
     },
     postEmail(formName) {
       this.$refs[formName].validate(valid => {
-        if (valid) {
-          this.countDown()
-          this.form.operation_type = 1
-          this.form.user_id = this.$store.getters.getUser.id
-          userAPI.sendEmail(this.form).then(res => {
-            if (res.status === 200) {
-              this.message =
-                '验证邮件已发送到您的邮箱，15分钟内有效，如果没有收到，请检查垃圾邮件,如果还是没有收到，请重新填写邮箱'
-            } else {
-              this.notifyError('发送邮件失败', res.msg)
-            }
-          })
-        } else {
-          console.log('error submit!!')
+        if (!valid) {
           return false
         }
+        this.countDown()
+        this.form.operation_type = 1
+        this.form.user_id = this.$store.getters.getUser.id
+        userAPI.sendEmail(this.form).then(res => {
+          if (res.status === 200) {
+            this.message =
+              '验证邮件已发送到您的邮箱，15分钟内有效，如果没有收到，请检查垃圾邮件,如果还是没有收到，请重新填写邮箱'
+          } else {
+            this.notifyError('发送邮件失败', res.msg)
+          }
+        })
       })
     },
     deleteEmail() {
@@ -209,7 +211,29 @@ export default {
           this.notifyError('发送邮件失败', res.msg)
         }
       })
+    },
+    getCount() {
+      countAPI
+        .showCount(this.$store.getters.getUser.id)
+        .then(res => {
+          if (res.status === 200) {
+            this.favoriteTotal = res.data.favorite_total
+            this.notPayTotal = res.data.not_pay_total
+            this.payTotal = res.data.pay_total
+          } else if (res.status === 20001) {
+            //token过期，需要重新登录
+            this.loginExpired(res.msg)
+          } else {
+            this.notifyError('获取数量失败', res.msg)
+          }
+        })
+        .catch(err => {
+          this.notifyError('获取数量失败', err)
+        })
     }
+  },
+  created() {
+    this.getCount()
   },
   components: {
     CenterMenu

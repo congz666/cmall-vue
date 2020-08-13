@@ -3,7 +3,7 @@
  * @Author: congz
  * @Date: 2020-07-03 18:01:05
  * @LastEditors: congz
- * @LastEditTime: 2020-08-05 15:46:37
+ * @LastEditTime: 2020-08-13 09:40:25
 --> 
 
 <template>
@@ -21,13 +21,19 @@
               <p>我的订单</p>
             </div>
             <div class="order-select">
-              <span class="select">全部有效订单</span>
+              <router-link :to="{ path: '/order'}">
+                <span :class="type==0?'select':'no-select'">全部有效订单</span>
+              </router-link>
               <span class="cut">|</span>
-              <span class="select">待支付</span>
+              <router-link :to="{ path: '/order', query: {type:1} }">
+                <span :class="type==1?'select':'no-select'">待支付</span>
+              </router-link>
               <span class="cut">|</span>
-              <span class="select">待收货</span>
+              <router-link :to="{ path: '/order', query: {type:2} }">
+                <span :class="type==2?'select':'no-select'">已支付</span>
+              </router-link>
               <span class="cut">|</span>
-              <span class="select">订单回收站</span>
+              <span class="no-select">订单回收站</span>
               <div class="search">
                 <el-input placeholder="输入商品名称、订单号" v-model="search">
                   <el-button slot="append" icon="el-icon-search" @click="searchClick"></el-button>
@@ -39,7 +45,8 @@
               <!--订单列表-->
               <div class="order-list" v-for="(item,index) in orders" :key="index">
                 <div class="order-list-head">
-                  <div class="order-pay">等待付款</div>
+                  <div class="order-pay" v-if="item.type==1">等待付款</div>
+                  <div class="order-pay" v-else>已付款</div>
                   <div class="order-info">
                     <div style="width:650px;">
                       <span class="info">{{item.created_at | dateFormat}}</span>
@@ -74,14 +81,23 @@
                     <span>{{item.num}}</span>
                   </div>
                   <div class="operate">
-                    <div>
-                      <router-link to>
+                    <div v-if="item.type==1">
+                      <router-link :to="{ path: '/payment', query: {orderNum:item.order_num} }">
                         <el-button class="button-pay">立即付款</el-button>
                       </router-link>
                     </div>
                     <div>
-                      <router-link :to="{ path: '/order/details', query: {orderID:item.id} }">
+                      <router-link
+                        :to="{ path: '/order/details', query: {orderNum:item.order_num} }"
+                      >
                         <el-button plain class="button-detail">订单详情</el-button>
+                      </router-link>
+                    </div>
+                    <div v-if="item.type==2">
+                      <router-link
+                        :to="{ path: '/order/details', query: {orderNum:item.order_num} }"
+                      >
+                        <el-button type="info" class="button-detail">删除订单</el-button>
                       </router-link>
                     </div>
                   </div>
@@ -124,7 +140,21 @@ export default {
       pageSize: 5,
       total: 0,
       start: 0,
-      limit: 5
+      limit: 5,
+      type: ''
+    }
+  },
+  activated() {
+    if (this.$route.query.type != undefined) {
+      this.type = this.$route.query.type
+    } else {
+      this.type = 0
+    }
+  },
+  watch: {
+    // 监听订单类型的变化，请求后端获取商品数据
+    type: function() {
+      this.getOrders()
     }
   },
   methods: {
@@ -135,7 +165,12 @@ export default {
     getOrders() {
       // 获取订单数据
       ordersAPI
-        .listOrders(this.$store.getters.getUser.id, this.start, this.limit)
+        .listOrders(
+          this.$store.getters.getUser.id,
+          this.type,
+          this.start,
+          this.limit
+        )
         .then(res => {
           if (res.status === 200) {
             this.orders = res.data.items
@@ -151,9 +186,6 @@ export default {
           this.notifyError('获取订单失败', err)
         })
     }
-  },
-  activated() {
-    this.getOrders()
   },
   components: {
     CenterMenu
@@ -188,9 +220,14 @@ export default {
   display: flex;
   align-items: center;
 }
-.order-select .select {
+.order-select .no-select {
   font-size: 17px;
   color: #757575;
+  margin-right: 10px;
+}
+.order-select .select {
+  font-size: 17px;
+  color: #ff6700;
   margin-right: 10px;
 }
 .order-select .cut {
@@ -218,6 +255,13 @@ export default {
 .order-list-head .order-pay {
   font-size: 19px;
   color: #ff6700;
+  margin-left: 30px;
+  margin-top: 20px;
+  margin-bottom: 10px;
+}
+.order-list-head .order-success-pay {
+  font-size: 19px;
+  color: #00a724;
   margin-left: 30px;
   margin-top: 20px;
   margin-bottom: 10px;

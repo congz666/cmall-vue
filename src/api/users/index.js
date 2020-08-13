@@ -3,7 +3,7 @@
  * @Author: congz
  * @Date: 2020-06-11 09:39:58
  * @LastEditors: congz
- * @LastEditTime: 2020-08-09 11:14:41
+ * @LastEditTime: 2020-08-13 13:50:35
  */
 
 import axios from 'axios'
@@ -29,6 +29,7 @@ const sendEmail = form =>
 const vaildEmail = val =>
   axios.post('/api/v1/user/vaild-email', { token: val }).then(res => res.data)
 
+const qqLogin = () => axios.get('/api/v1/qq/login').then(res => res.data)
 //极验初始化
 const geetest = () => axios.get('/api/v1/geetest').then(res => res.data)
 
@@ -40,5 +41,6 @@ export {
   logout,
   sendEmail,
   vaildEmail,
+  qqLogin,
   geetest
 }

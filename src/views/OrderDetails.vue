@@ -3,11 +3,11 @@
  * @Author: congz
  * @Date: 2020-07-22 13:14:57
  * @LastEditors: congz
- * @LastEditTime: 2020-08-05 15:40:34
+ * @LastEditTime: 2020-08-13 10:34:49
 --> 
 <template>
   <div class="order-details" id="order-details" name="order-details">
-    <div class="order-details-layout">
+    <div class="order-details-layout" v-if="order">
       <el-row :gutter="10">
         <div>
           <CenterMenu></CenterMenu>
@@ -20,16 +20,25 @@
             </div>
             <div class="order-operate">
               <div class="order-num">订单号：{{order.order_num}}</div>
-              <div class="order-button">
+              <div class="order-button" v-if="order.type==1">
                 <el-button class="cancel" type="info" size="small" style="width:120px" plain>取消订单</el-button>
-                <el-button class="pay" size="small" style="width:120px">立即付款</el-button>
+                <router-link :to="{ path: '/payment', query: {orderNum:order.order_num}}">
+                  <el-button class="pay" size="small" style="width:120px">立即付款</el-button>
+                </router-link>
               </div>
             </div>
-            <div class="order-step-info">等待付款</div>
+            <div class="order-step-info" v-if="order.type==1">等待付款</div>
+            <div class="order-success-info" v-else>已付款</div>
             <div class="order-step">
-              <el-steps :space="200" :active="1" finish-status="success" align-center>
+              <el-steps
+                :space="200"
+                :active="order.type==1?1:5"
+                finish-status="success"
+                align-center
+              >
                 <el-step title="下单" :description="order.created_at| dateFormat"></el-step>
-                <el-step title="付款"></el-step>
+                <el-step title="付款" v-if="order.type==1"></el-step>
+                <el-step title="付款" :description="order.updated_at| dateFormat" v-else></el-step>
                 <el-step title="配货"></el-step>
                 <el-step title="出库"></el-step>
                 <el-step title="交易成功"></el-step>
@@ -131,6 +140,7 @@
         </el-col>
       </el-row>
     </div>
+    <div class="not-found" v-else>查询不到该订单</div>
   </div>
 </template>
 <script>
@@ -140,26 +150,26 @@ export default {
   name: 'OrderDetails',
   data() {
     return {
-      orderID: 0, // 订单id,
+      orderNum: '', // 订单num,
       order: '',
       address: ''
     }
   },
   activated() {
-    if (this.$route.query.orderID != undefined) {
-      this.orderID = this.$route.query.orderID
+    if (this.$route.query.orderNum != undefined) {
+      this.orderNum = this.$route.query.orderNum
     }
   },
   watch: {
     // 监听商品id的变化，请求后端获取商品数据
-    orderID: function() {
+    orderNum: function() {
       this.load()
     }
   },
   methods: {
     load() {
       ordersAPI
-        .showOrder(this.orderID)
+        .showOrder(this.orderNum)
         .then(res => {
           if (res.status === 200) {
             this.order = res.data
@@ -219,6 +229,7 @@ export default {
   margin-left: 170px;
 }
 .order-details-content .order-operate .order-button .pay {
+  margin-left: 10px;
   background-color: #ff6700;
   color: #ffffff;
 }
@@ -228,6 +239,13 @@ export default {
   width: 920px;
   margin: 0 auto;
   color: #ff6700;
+  font-size: 18px;
+  margin-top: 20px;
+}
+.order-details-content .order-success-info {
+  width: 920px;
+  margin: 0 auto;
+  color: #00a724;
   font-size: 18px;
   margin-top: 20px;
 }
@@ -337,4 +355,11 @@ export default {
   font-size: 30px;
 }
 /* 结算列表CSS END */
+
+/*v-else*/
+.order-details .not-found {
+  height: 500px;
+  text-align: center;
+}
+/*v-else END*/
 </style>

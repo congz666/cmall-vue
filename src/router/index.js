@@ -3,7 +3,7 @@
  * @Author: congz
  * @Date: 2020-06-04 11:22:40
  * @LastEditors: congz
- * @LastEditTime: 2020-08-09 13:01:12
+ * @LastEditTime: 2020-08-12 15:38:49
  */
 
 import Vue from 'vue'
@@ -132,6 +132,14 @@ const routes = [
     component: () => import('../views/VaildEmail.vue'),
     meta: {
       showMenu: false
+    }
+  },
+  {
+    path: '/payment',
+    name: 'Payment',
+    component: () => import('../views/Payment.vue'),
+    meta: {
+      requireAuth: true // 需要验证登录状态
     }
   }
 ]

@@ -3,7 +3,7 @@
  * @Author: congz
  * @Date: 2020-06-10 18:59:36
  * @LastEditors: congz
- * @LastEditTime: 2020-08-06 15:40:33
+ * @LastEditTime: 2020-08-12 20:57:07
  */
 
 import axios from 'axios'
@@ -17,15 +17,9 @@ const showProduct = id =>
   axios.get(`/api/v1/products/${id}`).then(res => res.data)
 
 // 读取商品列表
-const listProducts = (start, limit) =>
+const listProducts = (category_id, start, limit) =>
   axios
-    .get('/api/v1/products', { params: { start, limit } })
-    .then(res => res.data)
-
-//读取不同分类商品
-const listCategories = (category_id, start, limit) =>
-  axios
-    .get(`/api/v1/categories/${category_id}`, { params: { start, limit } })
+    .get('/api/v1/products', { params: { category_id, start, limit } })
     .then(res => res.data)
 
 //读取商品的图片
@@ -42,7 +36,6 @@ export {
   postProduct,
   showProduct,
   listProducts,
-  listCategories,
   showPictures,
   searchProducts,
   showRanking

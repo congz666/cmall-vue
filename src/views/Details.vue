@@ -3,11 +3,11 @@
  * @Author: congz
  * @Date: 2020-06-04 11:22:40
  * @LastEditors: congz
- * @LastEditTime: 2020-08-06 10:35:25
+ * @LastEditTime: 2020-08-12 20:26:06
 --> 
 
 <template>
-  <div id="details">
+  <div id="details" v-if="productDetails">
     <!-- 头部 -->
     <div class="page-header">
       <div class="title">
@@ -106,6 +106,7 @@
       <img v-lazy="item.img_path" />
     </div>
   </div>
+  <div class="not-found" v-else>查询不到该商品</div>
 </template>
 <script>
 import { mapActions } from 'vuex'
@@ -452,4 +453,11 @@ export default {
   display: block;
 }
 /*商品概述&参数END*/
+
+/*v-else*/
+.not-found {
+  height: 500px;
+  text-align: center;
+}
+/*v-else END*/
 </style>

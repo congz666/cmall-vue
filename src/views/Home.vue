@@ -3,7 +3,7 @@
  * @Author: congz
  * @Date: 2020-06-04 11:22:40
  * @LastEditors: congz
- * @LastEditTime: 2020-08-06 20:48:54
+ * @LastEditTime: 2020-08-12 21:20:08
 --> 
 
 <template>
@@ -12,7 +12,9 @@
     <div class="block">
       <el-carousel height="460px">
         <el-carousel-item v-for="item in carousels" :key="item.id">
-          <img style="height:460px;" v-lazy="item.img_path" />
+          <router-link :to="{ path: '/goods/details', query: {productID:item.product_id} }">
+            <img style="height:460px;" v-lazy="item.img_path" />
+          </router-link>
         </el-carousel-item>
       </el-carousel>
     </div>
@@ -248,7 +250,7 @@ export default {
     // 获取各类商品数据方法封装
     getProduct(categoryID, val) {
       productsAPI
-        .listCategories(categoryID, this.start, this.limit)
+        .listProducts(categoryID, this.start, this.limit)
         .then(res => {
           if (res.status === 200) {
             this[val] = res.data.items

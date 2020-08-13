@@ -3,7 +3,7 @@
  * @Author: congz
  * @Date: 2020-06-11 11:08:34
  * @LastEditors: congz
- * @LastEditTime: 2020-08-09 20:51:06
+ * @LastEditTime: 2020-08-13 13:53:35
 --> 
 
 <template>
@@ -36,6 +36,15 @@
             href="/#/register"
             style="float:right;margin-bottom:10px;"
           >没有账号？请先注册></el-link>
+        </div>
+        <div class="line"></div>
+        <div class="logo">
+          <div class="logo-info">其他账号登录:</div>
+          <div class="logo-login">
+            <div @click="qqlogin">
+              <img src="../assets/imgs/QQlogo.png" alt />
+            </div>
+          </div>
         </div>
       </el-card>
     </div>
@@ -117,6 +126,13 @@ export default {
             })
       })
     },
+    qqlogin() {
+      userAPI.qqLogin().then(res => {
+        if (res.status === 200) {
+          window.location.href = res.data
+        }
+      })
+    },
     init_geetest() {
       userAPI.geetest().then(res => {
         window.initGeetest(
@@ -171,4 +187,27 @@ export default {
   margin-bottom: 300px;
   border-radius: 10px;
 }
+.box-card .line {
+  height: 30px;
+  width: 300px;
+  margin: 0 auto;
+  border-bottom: 1px solid #c0c0c0;
+}
+/*其他账号登录*/
+.box-card .logo {
+  width: 300px;
+  margin: 0 auto;
+  height: 30px;
+  display: flex;
+  align-items: center;
+}
+.box-card .logo .logo-info {
+  font-size: 14px;
+  color: #757575;
+}
+.box-card .logo .logo-login {
+  height: 15px;
+  margin-left: 10px;
+}
+/*其他账号登录END*/
 </style>

@@ -3,7 +3,7 @@
  * @Author: congz
  * @Date: 2020-06-04 11:22:40
  * @LastEditors: congz
- * @LastEditTime: 2020-07-17 19:53:17
+ * @LastEditTime: 2020-08-12 20:56:01
 --> 
 
 <template>
@@ -191,7 +191,7 @@ export default {
       // 如果分类列表为空则请求全部商品数据，否则请求分类商品数据
       if (this.categoryID.length === 0) {
         productAPI
-          .listProducts(this.start, this.limit)
+          .listProducts(0, this.start, this.limit)
           .then(res => {
             if (res.status === 200) {
               this.product = res.data.items
@@ -204,8 +204,9 @@ export default {
             this.notifyError('获取商品失败', err)
           })
       } else {
-        categoryAPI
-          .showCategory(this.categoryID, this.start, this.limit)
+        let id = this.categoryID[0]
+        productAPI
+          .listProducts(id, this.start, this.limit)
           .then(res => {
             if (res.status === 200) {
               this.product = res.data.items
