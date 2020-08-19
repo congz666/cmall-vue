@@ -3,7 +3,7 @@
  * @Author: congz
  * @Date: 2020-06-11 09:39:58
  * @LastEditors: congz
- * @LastEditTime: 2020-08-13 13:50:35
+ * @LastEditTime: 2020-08-19 10:16:06
  */
 
 import axios from 'axios'
@@ -19,8 +19,6 @@ const checkToken = () => axios.get('/api/v1/ping').then(res => res.data)
 //修改信息
 const updateUser = form => axios.put('/api/v1/user', form).then(res => res.data)
 
-const logout = () => axios.delete('/api/v1/user/logout').then(res => res.data)
-
 //发送邮件
 const sendEmail = form =>
   axios.post('/api/v1/user/sending-email', form).then(res => res.data)
@@ -29,7 +27,13 @@ const sendEmail = form =>
 const vaildEmail = val =>
   axios.post('/api/v1/user/vaild-email', { token: val }).then(res => res.data)
 
-const qqLogin = () => axios.get('/api/v1/qq/login').then(res => res.data)
+//QQ初始化
+const qqInit = () => axios.get('/api/v1/qq/login').then(res => res.data)
+//QQ登录
+const qqLogin = code =>
+  axios
+    .post('/api/v1/qq/login', { authorization_code: code })
+    .then(res => res.data)
 //极验初始化
 const geetest = () => axios.get('/api/v1/geetest').then(res => res.data)
 
@@ -38,9 +42,9 @@ export {
   postLogin,
   checkToken,
   updateUser,
-  logout,
   sendEmail,
   vaildEmail,
+  qqInit,
   qqLogin,
   geetest
 }

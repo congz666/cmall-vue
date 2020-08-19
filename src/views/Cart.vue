@@ -3,7 +3,7 @@
  * @Author: congz
  * @Date: 2020-06-04 11:22:40
  * @LastEditors: congz
- * @LastEditTime: 2020-08-05 15:43:34
+ * @LastEditTime: 2020-08-17 10:55:06
 --> 
 
 
@@ -55,10 +55,10 @@
     <!-- 购物车头部END -->
 
     <!-- 购物车主要内容区 -->
-    <div class="content" v-if="getShoppingCart.length>0">
+    <div class="cart-content" v-if="getShoppingCart.length>0">
       <ul>
         <!-- 购物车表头 -->
-        <li class="header">
+        <li class="content-header">
           <div class="pro-check">
             <el-checkbox v-model="isAllCheck">全选</el-checkbox>
           </div>
@@ -329,84 +329,84 @@ export default {
 /* 购物车头部CSS END */
 
 /* 购物车主要内容区CSS */
-.shoppingCart .content {
+.shoppingCart .cart-content {
   width: 1225px;
   margin: 0 auto;
   background-color: #fff;
 }
 
-.shoppingCart .content ul {
+.shoppingCart .cart-content ul {
   background-color: #fff;
   color: #424242;
   line-height: 85px;
 }
 /* 购物车表头及CSS */
-.shoppingCart .content ul .header {
+.shoppingCart .cart-content ul .content-header {
   height: 60px;
   padding-right: 26px;
   color: #424242;
   display: flex;
   align-items: center;
 }
-.shoppingCart .content ul .product-list {
+.shoppingCart .cart-content ul .product-list {
   height: 85px;
   padding: 15px 26px 15px 0;
   border-top: 1px solid #e0e0e0;
 }
-.shoppingCart .content ul .pro-check {
+.shoppingCart .cart-content ul .pro-check {
   float: left;
   height: 85px;
   width: 110px;
 }
-.shoppingCart .content ul .pro-check .el-checkbox {
+.shoppingCart .cart-content ul .pro-check .el-checkbox {
   font-size: 16px;
   margin-left: 24px;
 }
-.shoppingCart .content ul .pro-img {
+.shoppingCart .cart-content ul .pro-img {
   float: left;
   height: 85px;
   width: 120px;
 }
-.shoppingCart .content ul .pro-img img {
+.shoppingCart .cart-content ul .pro-img img {
   height: 80px;
   width: 80px;
 }
-.shoppingCart .content ul .pro-name {
+.shoppingCart .cart-content ul .pro-name {
   float: left;
   width: 380px;
 }
-.shoppingCart .content ul .pro-name a {
+.shoppingCart .cart-content ul .pro-name a {
   color: #424242;
 }
-.shoppingCart .content ul .pro-name a:hover {
+.shoppingCart .cart-content ul .pro-name a:hover {
   color: #ff6700;
 }
-.shoppingCart .content ul .pro-price {
+.shoppingCart .cart-content ul .pro-price {
   float: left;
   width: 140px;
   padding-right: 18px;
   text-align: center;
 }
-.shoppingCart .content ul .pro-num {
+.shoppingCart .cart-content ul .pro-num {
   float: left;
   width: 150px;
   text-align: center;
 }
-.shoppingCart .content ul .pro-total {
+.shoppingCart .cart-content ul .pro-total {
   float: left;
   width: 120px;
   padding-right: 81px;
   text-align: right;
 }
-.shoppingCart .content ul .pro-total-in {
+.shoppingCart .cart-content ul .pro-total-in {
   color: #ff6700;
 }
-.shoppingCart .content ul .pro-action {
+.shoppingCart .cart-content ul .pro-action {
   float: left;
   width: 80px;
   text-align: center;
 }
-.shoppingCart .content ul .pro-action i:hover {
+.shoppingCart .cart-content ul .pro-action i:hover {
   color: #ff6700;
 }
 /* 购物车表头及CSS END */

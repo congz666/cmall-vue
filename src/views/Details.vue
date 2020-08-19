@@ -3,22 +3,26 @@
  * @Author: congz
  * @Date: 2020-06-04 11:22:40
  * @LastEditors: congz
- * @LastEditTime: 2020-08-12 20:26:06
---> 
+ * @LastEditTime: 2020-08-14 14:18:15
+-->
 
 <template>
   <div id="details" v-if="productDetails">
     <!-- 头部 -->
     <div class="page-header">
       <div class="title">
-        <p>{{productDetails.name}}</p>
+        <p>{{ productDetails.name }}</p>
         <div class="list">
           <div class="select">
-            <el-button type="text" class="list-select" @click="goInfo">概述</el-button>
+            <el-button type="text" class="list-select" @click="goInfo">
+              概述
+            </el-button>
           </div>
           <span class="cut">|</span>
           <div class="select">
-            <el-button type="text" class="list-select" @click="goParam">参数</el-button>
+            <el-button type="text" class="list-select" @click="goParam">
+              参数
+            </el-button>
           </div>
           <span class="cut">|</span>
           <div class="select">
@@ -33,63 +37,73 @@
     <div class="details-main">
       <!-- 左侧商品轮播图 -->
       <div class="details-block">
-        <el-carousel height="560px" v-if="productPictures.length>1">
+        <el-carousel height="560px" v-if="productPictures.length > 1">
           <el-carousel-item v-for="item in productPictures" :key="item.id">
-            <img style="height:560px;" v-lazy="item.img_path" />
+            <img style="height: 560px;" v-lazy="item.img_path" />
           </el-carousel-item>
         </el-carousel>
-        <div v-if="productPictures.length==1">
-          <img style="height:560px;" :src="productPictures[0].img_path" />
+        <div v-if="productPictures.length == 1">
+          <img style="height: 560px;" :src="productPictures[0].img_path" />
         </div>
       </div>
       <!-- 左侧商品轮播图END -->
 
       <!-- 右侧内容区 -->
       <div class="details-content">
-        <h1 class="name">{{productDetails.name}}</h1>
+        <h1 class="name">{{ productDetails.name }}</h1>
         <li class="view">
           <i class="el-icon-view"></i>
-          {{productDetails.view}}
+          {{ productDetails.view }}
         </li>
-        <p class="intro">{{productDetails.info}}</p>
+        <p class="intro">{{ productDetails.info }}</p>
         <p class="store">小米自营</p>
         <div class="price">
-          <span>{{productDetails.discount_price}}元</span>
+          <span>{{ productDetails.discount_price }}元</span>
           <span
             v-show="productDetails.price != productDetails.discount_price"
             class="del"
-          >{{productDetails.price}}元</span>
+          >
+            {{ productDetails.price }}元
+          </span>
         </div>
         <div class="pro-list">
-          <span class="pro-name">{{productDetails.name}}</span>
+          <span class="pro-name">{{ productDetails.name }}</span>
           <span class="pro-price">
-            <span>{{productDetails.discount_price}}元</span>
+            <span>{{ productDetails.discount_price }}元</span>
             <span
               v-show="productDetails.price != productDetails.discount_price"
               class="pro-del"
-            >{{productDetails.price}}元</span>
+            >
+              {{ productDetails.price }}元
+            </span>
           </span>
-          <p class="price-sum">总计 : {{productDetails.discount_price}}元</p>
+          <p class="price-sum">总计 : {{ productDetails.discount_price }}元</p>
         </div>
         <!-- 内容区底部按钮 -->
         <div class="button">
-          <el-button class="shop-cart" :disabled="dis" @click="addShoppingCart">加入购物车</el-button>
+          <el-button class="shop-cart" :disabled="dis" @click="addShoppingCart">
+            加入购物车
+          </el-button>
           <el-button class="like" @click="addFavorite">喜欢</el-button>
         </div>
         <!-- 内容区底部按钮END -->
         <div class="pro-policy">
           <ul>
             <li>
-              <i class="el-icon-circle-check"></i> 小米自营
+              <i class="el-icon-circle-check"></i>
+              小米自营
             </li>
             <li>
-              <i class="el-icon-circle-check"></i> 小米发货
+              <i class="el-icon-circle-check"></i>
+              小米发货
             </li>
             <li>
-              <i class="el-icon-circle-check"></i> 7天无理由退货
+              <i class="el-icon-circle-check"></i>
+              7天无理由退货
             </li>
             <li>
-              <i class="el-icon-circle-check"></i> 7天价格保护
+              <i class="el-icon-circle-check"></i>
+              7天价格保护
             </li>
           </ul>
         </div>
@@ -98,9 +112,21 @@
     </div>
     <!-- 主要内容END -->
     <div class="product-select" id="product-select">
-      <el-button type="text" :class="select==0 ? 'isSelect':'notSelect'" @click="showInfoImgs">商品概述</el-button>
+      <el-button
+        type="text"
+        :class="select == 0 ? 'isSelect' : 'notSelect'"
+        @click="showInfoImgs"
+      >
+        商品概述
+      </el-button>
       <span class="cut">|</span>
-      <el-button type="text" :class="select==1 ? 'isSelect':'notSelect'" @click="showParamImgs">商品参数</el-button>
+      <el-button
+        type="text"
+        :class="select == 1 ? 'isSelect' : 'notSelect'"
+        @click="showParamImgs"
+      >
+        商品参数
+      </el-button>
     </div>
     <div class="product-img" v-for="item in imgs" :key="item.id">
       <img v-lazy="item.img_path" />
@@ -124,7 +150,7 @@ export default {
       imgs: '', //商品概述图片
       infoImgs: '',
       paramImgs: '',
-      select: 0
+      select: 0,
     }
   },
   // 通过路由获取商品id
@@ -135,26 +161,26 @@ export default {
   },
   watch: {
     // 监听商品id的变化，请求后端获取商品数据
-    productID: function() {
+    productID: function () {
       this.load()
       //this.getDetailsPicture(val);
-    }
+    },
   },
   methods: {
     ...mapActions(['unshiftShoppingCart', 'addShoppingCartNum']),
     // 获取商品详细信息
     load() {
-      productsAPI.showProduct(this.productID).then(res => {
+      productsAPI.showProduct(this.productID).then((res) => {
         this.productDetails = res.data
       })
-      productsAPI.showPictures(this.productID).then(res => {
+      productsAPI.showPictures(this.productID).then((res) => {
         this.productPictures = res.data
       })
-      imgsAPI.showInfoImgs(this.productID).then(res => {
+      imgsAPI.showInfoImgs(this.productID).then((res) => {
         this.infoImgs = res.data
         this.imgs = this.infoImgs
       })
-      imgsAPI.showParamImgs(this.productID).then(res => {
+      imgsAPI.showParamImgs(this.productID).then((res) => {
         this.paramImgs = res.data
       })
     },
@@ -183,11 +209,11 @@ export default {
       }
       var form = {
         user_id: this.$store.getters.getUser.id,
-        product_id: Number(this.productID)
+        product_id: Number(this.productID),
       }
       cartsAPI
         .postCart(form)
-        .then(res => {
+        .then((res) => {
           switch (res.status) {
             case 200:
               //新加入购物车成功
@@ -212,7 +238,7 @@ export default {
               this.notifyError('添加购物车失败', res.msg)
           }
         })
-        .catch(err => {
+        .catch((err) => {
           this.notifyError('添加购物车失败', err)
         })
     },
@@ -224,11 +250,11 @@ export default {
       }
       var form = {
         user_id: this.$store.getters.getUser.id,
-        product_id: Number(this.productID)
+        product_id: Number(this.productID),
       }
       favoritesAPI
         .postFavorite(form)
-        .then(res => {
+        .then((res) => {
           if (res.status === 200) {
             this.notifySucceed('添加收藏夹成功')
           } else if (res.status === 20001) {
@@ -238,10 +264,10 @@ export default {
             this.notifyError('添加收藏夹失败', res.msg)
           }
         })
-        .catch(err => {
+        .catch((err) => {
           this.notifyError('添加收藏夹失败', err)
         })
-    }
+    },
   },
   beforeRouteEnter(to, from, next) {
     // 添加背景色
@@ -256,7 +282,7 @@ export default {
       .querySelector('body')
       .setAttribute('style', 'background-color:#f5f5f5')
     next()
-  }
+  },
 }
 </script>
 <style scoped>
@@ -449,8 +475,9 @@ export default {
   margin-right: 35px;
 }
 #details .product-img img {
-  width: 100%;
+  width: 1225px;
   display: block;
+  margin: 0 auto;
 }
 /*商品概述&参数END*/
 

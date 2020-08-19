@@ -3,7 +3,7 @@
  * @Author: congz
  * @Date: 2020-06-11 10:01:19
  * @LastEditors: congz
- * @LastEditTime: 2020-08-09 21:28:33
+ * @LastEditTime: 2020-08-18 19:58:16
 --> 
 
 <template>
@@ -32,7 +32,7 @@
             <p id="wait">正在加载验证码...</p>
           </div>
           <div style="margin-top:15px">
-            <a href="#" class="btn-gradient blue block" @click="register('form')">注册</a>
+            <a href="javascript:;" class="btn-gradient blue block" @click="register('form')">注册</a>
           </div>
           <el-link type="primary" href="/#/login" style="float:right;margin-bottom:20px;">已有账号？直接登录></el-link>
         </div>

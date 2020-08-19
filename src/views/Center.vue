@@ -3,7 +3,7 @@
  * @Author: congz
  * @Date: 2020-07-03 09:31:23
  * @LastEditors: congz
- * @LastEditTime: 2020-08-13 10:14:49
+ * @LastEditTime: 2020-08-19 11:38:48
 --> 
 
 <template>
@@ -24,7 +24,6 @@
                 <p
                   style="font-size:25px;font-weight:100;color:#464547"
                 >{{this.$store.getters.getUser.nickname}}</p>
-                <p style="font-size:13px;color:#999999">早上好～</p>
                 <p>
                   <router-link to="/user/details" style="font-size:13px;color:#ff6700;">修改个人信息 ></router-link>
                 </p>
@@ -32,7 +31,7 @@
               <div class="user-message">
                 <ul>
                   <li>账户安全：</li>
-                  <li>绑定手机：</li>
+                  <li>绑定QQ：</li>
                   <li>绑定邮箱：</li>
                 </ul>
               </div>
@@ -266,7 +265,7 @@ export default {
   border: 1px solid #ddd;
 }
 .user-info {
-  width: 300px;
+  width: 260px;
   line-height: 30px;
   margin-left: 15px;
   padding: 0;
@@ -330,7 +329,5 @@ export default {
 
 .email-pop-out {
   text-align: center;
-}
-.email-pop-out p {
 }
 </style>

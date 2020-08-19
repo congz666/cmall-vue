@@ -3,7 +3,7 @@
  * @Author: congz
  * @Date: 2020-06-11 11:08:34
  * @LastEditors: congz
- * @LastEditTime: 2020-08-13 10:36:25
+ * @LastEditTime: 2020-08-18 23:15:35
 --> 
 
 <template>
@@ -16,6 +16,7 @@
         <div class="payment-item">
           <div class="payment-tips">
             <span>温馨提示:您的支付会用作捐赠，不会发货，如需购买商品，请移至小米商城官网</span>
+            <p>注意：微信支付功能还未完善，请尽量使用支付宝支付</p>
           </div>
           <el-form :model="form" :rules="rules" ref="form" label-width="100px" class="payment-form">
             <el-form-item label="捐赠金额" prop="amount">

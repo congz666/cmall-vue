@@ -3,7 +3,7 @@
  * @Author: congz
  * @Date: 2020-06-04 11:22:40
  * @LastEditors: congz
- * @LastEditTime: 2020-08-12 15:38:49
+ * @LastEditTime: 2020-08-18 19:42:54
  */
 
 import Vue from 'vue'
@@ -140,6 +140,14 @@ const routes = [
     component: () => import('../views/Payment.vue'),
     meta: {
       requireAuth: true // 需要验证登录状态
+    }
+  },
+  {
+    path: '/callback/qq',
+    name: 'CallbackQQ',
+    component: () => import('../views/CallbackQQ.vue'),
+    meta: {
+      showMenu: false
     }
   }
 ]

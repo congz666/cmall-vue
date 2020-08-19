@@ -3,7 +3,7 @@
  * @Author: congz
  * @Date: 2020-06-11 11:08:34
  * @LastEditors: congz
- * @LastEditTime: 2020-08-13 13:53:35
+ * @LastEditTime: 2020-08-19 10:14:30
 --> 
 
 <template>
@@ -29,7 +29,7 @@
             <p id="wait">正在加载验证码...</p>
           </div>
           <div style="margin-top:15px">
-            <a href="#" class="btn-gradient blue block" @click="login('form')">登录</a>
+            <a href="javascript:;" class="btn-gradient blue block" @click="login('form')">登录</a>
           </div>
           <el-link
             type="primary"
@@ -41,7 +41,7 @@
         <div class="logo">
           <div class="logo-info">其他账号登录:</div>
           <div class="logo-login">
-            <div @click="qqlogin">
+            <div @click="qqInit">
               <img src="../assets/imgs/QQlogo.png" alt />
             </div>
           </div>
@@ -62,12 +62,16 @@ export default {
     var validateUser = (rule, value, callback) => {
       if (value === '') {
         callback(new Error('请输入用户名'))
+      } else if (value.length < 5 || value.length > 15) {
+        callback(new Error('用户名长度需在5到15之间'))
       }
       callback()
     }
     var validatePass = (rule, value, callback) => {
       if (value === '') {
         callback(new Error('请输入密码'))
+      } else if (value.length < 8 || value.length > 16) {
+        callback(new Error('密码长度需在8到16之间'))
       }
       callback()
     }
@@ -126,8 +130,8 @@ export default {
             })
       })
     },
-    qqlogin() {
-      userAPI.qqLogin().then(res => {
+    qqInit() {
+      userAPI.qqInit().then(res => {
         if (res.status === 200) {
           window.location.href = res.data
         }

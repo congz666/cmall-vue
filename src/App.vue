@@ -3,7 +3,7 @@
  * @Author: congz
  * @Date: 2020-06-04 11:22:40
  * @LastEditors: congz
- * @LastEditTime: 2020-08-09 21:44:59
+ * @LastEditTime: 2020-08-18 23:06:46
 --> 
 
 <template>
@@ -218,26 +218,15 @@ export default {
     },
     // 退出登录
     logout() {
-      userAPI
-        .logout()
-        .then(res => {
-          if (res.status === 200) {
-            // 清空本地登录信息
-            localStorage.removeItem('user')
-            localStorage.removeItem('token')
-            // 清空vuex登录信息
-            this.setUser('')
-            this.$router.push({
-              name: 'Home'
-            })
-            this.notifySucceed('登出成功')
-          } else {
-            this.notifyError('登出失败', res.msg)
-          }
-        })
-        .catch(error => {
-          this.notifyError('登出失败', error)
-        })
+      // 清空本地登录信息
+      localStorage.removeItem('user')
+      localStorage.removeItem('token')
+      // 清空vuex登录信息
+      this.setUser('')
+      this.$router.push({
+        name: 'Home'
+      })
+      this.notifySucceed('登出成功')
     },
     //重定向
     register() {

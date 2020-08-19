@@ -3,7 +3,7 @@
  * @Author: congz
  * @Date: 2020-07-03 18:01:05
  * @LastEditors: congz
- * @LastEditTime: 2020-08-13 09:40:25
+ * @LastEditTime: 2020-08-19 10:55:03
 --> 
 
 <template>
@@ -94,11 +94,7 @@
                       </router-link>
                     </div>
                     <div v-if="item.type==2">
-                      <router-link
-                        :to="{ path: '/order/details', query: {orderNum:item.order_num} }"
-                      >
-                        <el-button type="info" class="button-detail">删除订单</el-button>
-                      </router-link>
+                      <el-button type="info" class="button-detail">删除订单</el-button>
                     </div>
                   </div>
                 </div>

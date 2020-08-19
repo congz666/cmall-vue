@@ -3,7 +3,7 @@
  * @Author: congz
  * @Date: 2020-06-04 11:22:40
  * @LastEditors: congz
- * @LastEditTime: 2020-08-05 15:42:36
+ * @LastEditTime: 2020-08-17 11:04:34
 --> 
 
 <template>
@@ -53,7 +53,7 @@
     <!-- 头部END -->
 
     <!-- 主要内容容器 -->
-    <div class="content">
+    <div class="confirm-content">
       <!-- 选择地址 -->
       <div class="section-address">
         <p class="title">收货地址</p>
@@ -394,7 +394,7 @@ export default {
 /* 购物车头部CSS END */
 
 /* 主要内容容器CSS */
-.confirmOrder .content {
+.confirmOrder .confirm-content {
   width: 1225px;
   margin: 0 auto;
   padding: 48px 0 0;
@@ -402,17 +402,17 @@ export default {
 }
 
 /* 选择地址CSS */
-.confirmOrder .content .section-address {
+.confirmOrder .confirm-content .section-address {
   margin: 0 48px;
   overflow: hidden;
 }
-.confirmOrder .content .section-address .title {
+.confirmOrder .confirm-content .section-address .title {
   color: #333;
   font-size: 18px;
   line-height: 20px;
   margin-bottom: 20px;
 }
-.confirmOrder .content .address-body li {
+.confirmOrder .confirm-content .address-body li {
   float: left;
   color: #333;
   width: 210px;
@@ -422,31 +422,31 @@ export default {
   margin-right: 17px;
   margin-bottom: 24px;
 }
-.confirmOrder .content .address-body .in-section {
+.confirmOrder .confirm-content .address-body .in-section {
   border: 1px solid #ff6700;
 }
-.confirmOrder .content .address-body li h2 {
+.confirmOrder .confirm-content .address-body li h2 {
   font-size: 18px;
   font-weight: normal;
   line-height: 30px;
   margin-bottom: 10px;
 }
-.confirmOrder .content .address-body li p {
+.confirmOrder .confirm-content .address-body li p {
   font-size: 14px;
   color: #757575;
 }
-.confirmOrder .content .address-body li .address {
+.confirmOrder .confirm-content .address-body li .address {
   padding: 10px 0;
   max-width: 180px;
   max-height: 88px;
   line-height: 22px;
   overflow: hidden;
 }
-.confirmOrder .content .address-body .add-address {
+.confirmOrder .confirm-content .address-body .add-address {
   text-align: center;
   line-height: 30px;
 }
-.confirmOrder .content .address-body .add-address i {
+.confirmOrder .confirm-content .address-body .add-address i {
   font-size: 30px;
   padding-top: 50px;
   text-align: center;
@@ -454,54 +454,54 @@ export default {
 /* 选择地址CSS END */
 
 /* 商品及优惠券CSS */
-.confirmOrder .content .section-goods {
+.confirmOrder .confirm-content .section-goods {
   margin: 0 48px;
 }
-.confirmOrder .content .section-goods p.title {
+.confirmOrder .confirm-content .section-goods p.title {
   color: #333;
   font-size: 18px;
   line-height: 40px;
 }
-.confirmOrder .content .section-goods .goods-list {
+.confirmOrder .confirm-content .section-goods .goods-list {
   padding: 5px 0;
   border-top: 1px solid #e0e0e0;
   border-bottom: 1px solid #e0e0e0;
 }
-.confirmOrder .content .section-goods .goods-list li {
+.confirmOrder .confirm-content .section-goods .goods-list li {
   padding: 10px 0;
   color: #424242;
   overflow: hidden;
 }
-.confirmOrder .content .section-goods .goods-list li img {
+.confirmOrder .confirm-content .section-goods .goods-list li img {
   float: left;
   width: 30px;
   height: 30px;
   margin-right: 10px;
 }
-.confirmOrder .content .section-goods .goods-list li .pro-name {
+.confirmOrder .confirm-content .section-goods .goods-list li .pro-name {
   float: left;
   width: 650px;
   line-height: 30px;
 }
-.confirmOrder .content .section-goods .goods-list li .pro-price {
+.confirmOrder .confirm-content .section-goods .goods-list li .pro-price {
   float: left;
   width: 120px;
   line-height: 30px;
 }
-.confirmOrder .content .section-goods .goods-list li .pro-num {
+.confirmOrder .confirm-content .section-goods .goods-list li .pro-num {
   float: left;
   width: 30px;
   text-align: center;
   line-height: 30px;
 }
-.confirmOrder .content .section-goods .goods-list li .pro-status {
+.confirmOrder .confirm-content .section-goods .goods-list li .pro-status {
   float: left;
   width: 99px;
   height: 30px;
   text-align: center;
   line-height: 30px;
 }
-.confirmOrder .content .section-goods .goods-list li .pro-total {
+.confirmOrder .confirm-content .section-goods .goods-list li .pro-total {
   float: left;
   width: 190px;
   text-align: center;
@@ -511,20 +511,20 @@ export default {
 /* 商品及优惠券CSS END */
 
 /* 配送方式CSS */
-.confirmOrder .content .section-shipment {
+.confirmOrder .confirm-content .section-shipment {
   margin: 0 48px;
   padding: 25px 0;
   border-bottom: 1px solid #e0e0e0;
   overflow: hidden;
 }
-.confirmOrder .content .section-shipment .title {
+.confirmOrder .confirm-content .section-shipment .title {
   float: left;
   width: 150px;
   color: #333;
   font-size: 18px;
   line-height: 38px;
 }
-.confirmOrder .content .section-shipment .shipment {
+.confirmOrder .confirm-content .section-shipment .shipment {
   float: left;
   line-height: 38px;
   font-size: 14px;
@@ -533,20 +533,20 @@ export default {
 /* 配送方式CSS END */
 
 /* 发票CSS */
-.confirmOrder .content .section-invoice {
+.confirmOrder .confirm-content .section-invoice {
   margin: 0 48px;
   padding: 25px 0;
   border-bottom: 1px solid #e0e0e0;
   overflow: hidden;
 }
-.confirmOrder .content .section-invoice .title {
+.confirmOrder .confirm-content .section-invoice .title {
   float: left;
   width: 150px;
   color: #333;
   font-size: 18px;
   line-height: 38px;
 }
-.confirmOrder .content .section-invoice .invoice {
+.confirmOrder .confirm-content .section-invoice .invoice {
   float: left;
   line-height: 38px;
   font-size: 14px;
@@ -556,16 +556,16 @@ export default {
 /* 发票CSS END */
 
 /* 结算列表CSS */
-.confirmOrder .content .section-count {
+.confirmOrder .confirm-content .section-count {
   margin: 0 48px;
   padding: 20px 0;
   overflow: hidden;
 }
-.confirmOrder .content .section-count .money-box {
+.confirmOrder .confirm-content .section-count .money-box {
   float: right;
   text-align: right;
 }
-.confirmOrder .content .section-count .money-box .title {
+.confirmOrder .confirm-content .section-count .money-box .title {
   float: left;
   width: 126px;
   height: 30px;
@@ -573,7 +573,7 @@ export default {
   line-height: 30px;
   color: #757575;
 }
-.confirmOrder .content .section-count .money-box .value {
+.confirmOrder .confirm-content .section-count .money-box .value {
   float: left;
   min-width: 105px;
   height: 30px;
@@ -581,27 +581,27 @@ export default {
   line-height: 30px;
   color: #ff6700;
 }
-.confirmOrder .content .section-count .money-box .total .title {
+.confirmOrder .confirm-content .section-count .money-box .total .title {
   padding-top: 15px;
 }
-.confirmOrder .content .section-count .money-box .total .value {
+.confirmOrder .confirm-content .section-count .money-box .total .value {
   padding-top: 10px;
 }
-.confirmOrder .content .section-count .money-box .total-price {
+.confirmOrder .confirm-content .section-count .money-box .total-price {
   font-size: 30px;
 }
 /* 结算列表CSS END */
 
 /* 结算导航CSS */
-.confirmOrder .content .section-bar {
+.confirmOrder .confirm-content .section-bar {
   padding: 20px 48px;
   border-top: 2px solid #f5f5f5;
   overflow: hidden;
 }
-.confirmOrder .content .section-bar .btn {
+.confirmOrder .confirm-content .section-bar .btn {
   float: right;
 }
-.confirmOrder .content .section-bar .btn .btn-base {
+.confirmOrder .confirm-content .section-bar .btn .btn-base {
   float: left;
   margin-left: 30px;
   width: 158px;
@@ -611,12 +611,12 @@ export default {
   line-height: 38px;
   text-align: center;
 }
-.confirmOrder .content .section-bar .btn .btn-return {
+.confirmOrder .confirm-content .section-bar .btn .btn-return {
   color: rgba(0, 0, 0, 0.27);
   border-color: rgba(0, 0, 0, 0.27);
   color: #757575;
 }
-.confirmOrder .content .section-bar .btn .btn-primary {
+.confirmOrder .confirm-content .section-bar .btn .btn-primary {
   background: #ff6700;
   border-color: #ff6700;
   color: #fff;
