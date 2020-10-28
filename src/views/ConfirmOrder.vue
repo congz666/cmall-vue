@@ -3,7 +3,7 @@
  * @Author: congz
  * @Date: 2020-06-04 11:22:40
  * @LastEditors: congz
- * @LastEditTime: 2020-08-17 11:04:34
+ * @LastEditTime: 2020-10-28 12:20:28
 --> 
 
 <template>
@@ -278,6 +278,7 @@ export default {
                 })
               // 跳转我的订单页面
               this.$router.push({ path: '/order' })
+              this.notifySucceed('未付款的订单将于15分钟后删除')
             } else if (res.status === 20001) {
               //token过期，需要重新登录
               this.loginExpired(res.msg)

@@ -3,7 +3,7 @@
  * @Author: congz
  * @Date: 2020-06-04 11:22:40
  * @LastEditors: congz
- * @LastEditTime: 2020-08-18 23:06:46
+ * @LastEditTime: 2020-09-01 14:34:14
 --> 
 
 <template>
@@ -129,7 +129,17 @@
               <span>|</span>
               <router-link to="/about">关于我们</router-link>
             </p>
-            <p>Copyright ©2020, congz.top 本网站设计内容大部分属小米商城</p>
+            <p>
+              Copyright ©2020, congz.top 本网站设计内容大部分属小米商城
+              <iframe
+                style="margin-left: 2px; margin-bottom:-5px;"
+                frameborder="0"
+                scrolling="0"
+                width="91px"
+                height="20px"
+                src="https://ghbtns.com/github-btn.html?user=congz666&repo=cmall-go&type=star&count=true"
+              ></iframe>
+            </p>
             <a href="http://www.beian.miit.gov.cn/" target="_blank">粤ICP备20067893号</a>
           </div>
         </div>

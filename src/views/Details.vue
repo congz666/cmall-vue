@@ -3,7 +3,7 @@
  * @Author: congz
  * @Date: 2020-06-04 11:22:40
  * @LastEditors: congz
- * @LastEditTime: 2020-08-14 14:18:15
+ * @LastEditTime: 2020-10-28 12:05:31
 -->
 
 <template>
@@ -14,15 +14,11 @@
         <p>{{ productDetails.name }}</p>
         <div class="list">
           <div class="select">
-            <el-button type="text" class="list-select" @click="goInfo">
-              概述
-            </el-button>
+            <el-button type="text" class="list-select" @click="goInfo">概述</el-button>
           </div>
           <span class="cut">|</span>
           <div class="select">
-            <el-button type="text" class="list-select" @click="goParam">
-              参数
-            </el-button>
+            <el-button type="text" class="list-select" @click="goParam">参数</el-button>
           </div>
           <span class="cut">|</span>
           <div class="select">
@@ -62,9 +58,7 @@
           <span
             v-show="productDetails.price != productDetails.discount_price"
             class="del"
-          >
-            {{ productDetails.price }}元
-          </span>
+          >{{ productDetails.price }}元</span>
         </div>
         <div class="pro-list">
           <span class="pro-name">{{ productDetails.name }}</span>
@@ -73,17 +67,13 @@
             <span
               v-show="productDetails.price != productDetails.discount_price"
               class="pro-del"
-            >
-              {{ productDetails.price }}元
-            </span>
+            >{{ productDetails.price }}元</span>
           </span>
           <p class="price-sum">总计 : {{ productDetails.discount_price }}元</p>
         </div>
         <!-- 内容区底部按钮 -->
         <div class="button">
-          <el-button class="shop-cart" :disabled="dis" @click="addShoppingCart">
-            加入购物车
-          </el-button>
+          <el-button class="shop-cart" :disabled="dis" @click="addShoppingCart">加入购物车</el-button>
           <el-button class="like" @click="addFavorite">喜欢</el-button>
         </div>
         <!-- 内容区底部按钮END -->
@@ -116,17 +106,13 @@
         type="text"
         :class="select == 0 ? 'isSelect' : 'notSelect'"
         @click="showInfoImgs"
-      >
-        商品概述
-      </el-button>
+      >商品概述</el-button>
       <span class="cut">|</span>
       <el-button
         type="text"
         :class="select == 1 ? 'isSelect' : 'notSelect'"
         @click="showParamImgs"
-      >
-        商品参数
-      </el-button>
+      >商品参数</el-button>
     </div>
     <div class="product-img" v-for="item in imgs" :key="item.id">
       <img v-lazy="item.img_path" />
@@ -150,7 +136,7 @@ export default {
       imgs: '', //商品概述图片
       infoImgs: '',
       paramImgs: '',
-      select: 0,
+      select: 0
     }
   },
   // 通过路由获取商品id
@@ -161,26 +147,26 @@ export default {
   },
   watch: {
     // 监听商品id的变化，请求后端获取商品数据
-    productID: function () {
+    productID: function() {
       this.load()
       //this.getDetailsPicture(val);
-    },
+    }
   },
   methods: {
     ...mapActions(['unshiftShoppingCart', 'addShoppingCartNum']),
     // 获取商品详细信息
     load() {
-      productsAPI.showProduct(this.productID).then((res) => {
+      productsAPI.showProduct(this.productID).then(res => {
         this.productDetails = res.data
       })
-      productsAPI.showPictures(this.productID).then((res) => {
+      productsAPI.showPictures(this.productID).then(res => {
         this.productPictures = res.data
       })
-      imgsAPI.showInfoImgs(this.productID).then((res) => {
+      imgsAPI.showInfoImgs(this.productID).then(res => {
         this.infoImgs = res.data
         this.imgs = this.infoImgs
       })
-      imgsAPI.showParamImgs(this.productID).then((res) => {
+      imgsAPI.showParamImgs(this.productID).then(res => {
         this.paramImgs = res.data
       })
     },
@@ -209,11 +195,11 @@ export default {
       }
       var form = {
         user_id: this.$store.getters.getUser.id,
-        product_id: Number(this.productID),
+        product_id: Number(this.productID)
       }
       cartsAPI
         .postCart(form)
-        .then((res) => {
+        .then(res => {
           switch (res.status) {
             case 200:
               //新加入购物车成功
@@ -238,7 +224,7 @@ export default {
               this.notifyError('添加购物车失败', res.msg)
           }
         })
-        .catch((err) => {
+        .catch(err => {
           this.notifyError('添加购物车失败', err)
         })
     },
@@ -250,11 +236,11 @@ export default {
       }
       var form = {
         user_id: this.$store.getters.getUser.id,
-        product_id: Number(this.productID),
+        product_id: Number(this.productID)
       }
       favoritesAPI
         .postFavorite(form)
-        .then((res) => {
+        .then(res => {
           if (res.status === 200) {
             this.notifySucceed('添加收藏夹成功')
           } else if (res.status === 20001) {
@@ -264,10 +250,10 @@ export default {
             this.notifyError('添加收藏夹失败', res.msg)
           }
         })
-        .catch((err) => {
+        .catch(err => {
           this.notifyError('添加收藏夹失败', err)
         })
-    },
+    }
   },
   beforeRouteEnter(to, from, next) {
     // 添加背景色
@@ -282,7 +268,7 @@ export default {
       .querySelector('body')
       .setAttribute('style', 'background-color:#f5f5f5')
     next()
-  },
+  }
 }
 </script>
 <style scoped>
